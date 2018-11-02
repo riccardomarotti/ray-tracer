@@ -139,3 +139,18 @@ func TestNormalization(t *testing.T) {
 	assertTupleEqual(Vector(1, 2, 3).Normalize(), Vector(1/math.Sqrt(14), 2/math.Sqrt(14), 3/math.Sqrt(14)), t)
 	assertEqual(1, Vector(1, 2, 3).Normalize().Magnitude(), t)
 }
+
+func TestTuplesDotProduct(t *testing.T) {
+	a := Vector(1, 2, 3)
+	b := Vector(2, 3, 4)
+
+	assertEqual(20, a.Dot(b), t)
+}
+
+func TestTuplesCrossProduct(t *testing.T) {
+	a := Vector(1, 2, 3)
+	b := Vector(2, 3, 4)
+
+	assertTupleEqual(Vector(-1, 2, -1), a.Cross(b), t)
+	assertTupleEqual(Vector(1, -2, 1), b.Cross(a), t)
+}

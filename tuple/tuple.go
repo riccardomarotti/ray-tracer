@@ -66,3 +66,16 @@ func (t Tuple) Normalize() Tuple {
 		t.z / t.Magnitude(),
 		t.w / t.Magnitude()}
 }
+
+// Dot calculates dot product
+func (t Tuple) Dot(a Tuple) float64 {
+	return t.x*a.x + t.y*a.y + t.z*a.z + t.w*a.w
+}
+
+// Cross calculates cross product
+// It works only on three dimensional Tuples!
+func (t Tuple) Cross(a Tuple) Tuple {
+	return Vector(t.y*a.z-t.z*a.y,
+		t.z*a.x-t.x*a.z,
+		t.x*a.y-t.y*a.x)
+}

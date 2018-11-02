@@ -6,13 +6,18 @@ type Tuple struct {
 }
 
 // IsPoint checks if the tuple is a point
-func (t *Tuple) IsPoint() bool {
+func (t Tuple) IsPoint() bool {
 	return t.w == 1.0
 }
 
 // IsVector checks if the tuple is a vector
-func (t *Tuple) IsVector() bool {
+func (t Tuple) IsVector() bool {
 	return t.w == 0.0
+}
+
+// Negate negates a tuple
+func (t Tuple) Negate() Tuple {
+	return Subtract(Tuple{0, 0, 0, 0}, t)
 }
 
 // Point creates a point tuple
@@ -33,4 +38,14 @@ func Sum(a1 Tuple, a2 Tuple) Tuple {
 // Subtract subtracts two tuples
 func Subtract(a1 Tuple, a2 Tuple) Tuple {
 	return Tuple{a1.x - a2.x, a1.y - a2.y, a1.z - a2.z, a1.w - a2.w}
+}
+
+// Multiply multiplies a tuple by a scalar
+func Multiply(a Tuple, s float64) Tuple {
+	return Tuple{a.x * s, a.y * s, a.z * s, a.w * s}
+}
+
+// Divide divides a tuple by a scalar
+func Divide(a Tuple, s float64) Tuple {
+	return Tuple{a.x / s, a.y / s, a.z / s, a.w / s}
 }

@@ -106,3 +106,21 @@ func TestSubtractVectors(t *testing.T) {
 
 	assertTupleEqual(Vector(-2, -4, -6), diff, t)
 }
+
+func TestNegatingATuple(t *testing.T) {
+	a := Tuple{1, -2, 3, -4}
+
+	assertTupleEqual(Tuple{-1, 2, -3, 4}, a.Negate(), t)
+}
+
+func TestScalarMultiply(t *testing.T) {
+	a := Tuple{1, -2, 3, -4}
+
+	assertTupleEqual(Tuple{0.5, -1, 1.5, -2}, Multiply(a, 0.5), t)
+}
+
+func TestScalarDivision(t *testing.T) {
+	a := Tuple{1, -2, 3, -4}
+
+	assertTupleEqual(Tuple{0.5, -1, 1.5, -2}, Divide(a, 2), t)
+}

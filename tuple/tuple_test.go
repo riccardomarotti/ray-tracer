@@ -124,3 +124,12 @@ func TestScalarDivision(t *testing.T) {
 
 	assertTupleEqual(Tuple{0.5, -1, 1.5, -2}, a.Divide(2), t)
 }
+
+func TestMagnitude(t *testing.T) {
+	assertEqual(1, Vector(1, 0, 0).Magnitude(), t)
+	assertEqual(1, Vector(0, 1, 0).Magnitude(), t)
+	assertEqual(1, Vector(0, 0, 1).Magnitude(), t)
+
+	assertEqual(math.Sqrt(14), Vector(1, 2, 3).Magnitude(), t)
+	assertEqual(math.Sqrt(14), Vector(-1, -2, -3).Magnitude(), t)
+}

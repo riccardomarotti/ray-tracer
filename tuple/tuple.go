@@ -1,5 +1,9 @@
 package tuple
 
+import (
+	"math"
+)
+
 // Tuple represents a tuple
 type Tuple struct {
 	x, y, z, w float64
@@ -48,4 +52,9 @@ func (t Tuple) Multiply(s float64) Tuple {
 // Divide divides a tuple by a scalar
 func (t Tuple) Divide(s float64) Tuple {
 	return Tuple{t.x / s, t.y / s, t.z / s, t.w / s}
+}
+
+// Magnitude calculates a tuple's magnitude
+func (t Tuple) Magnitude() float64 {
+	return math.Sqrt(t.x*t.x + t.y*t.y + t.z*t.z)
 }

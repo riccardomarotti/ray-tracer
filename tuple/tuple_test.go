@@ -133,3 +133,9 @@ func TestMagnitude(t *testing.T) {
 	assertEqual(math.Sqrt(14), Vector(1, 2, 3).Magnitude(), t)
 	assertEqual(math.Sqrt(14), Vector(-1, -2, -3).Magnitude(), t)
 }
+
+func TestNormalization(t *testing.T) {
+	assertTupleEqual(Vector(4, 0, 0).Normalize(), Vector(1, 0, 0), t)
+	assertTupleEqual(Vector(1, 2, 3).Normalize(), Vector(1/math.Sqrt(14), 2/math.Sqrt(14), 3/math.Sqrt(14)), t)
+	assertEqual(1, Vector(1, 2, 3).Normalize().Magnitude(), t)
+}

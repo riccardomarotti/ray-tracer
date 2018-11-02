@@ -24,3 +24,13 @@ func Point(x, y, z float64) Tuple {
 func Vector(x, y, z float64) Tuple {
 	return Tuple{x, y, z, 0}
 }
+
+// Sum sums two tuples
+func Sum(a1 Tuple, a2 Tuple) Tuple {
+	return Tuple{a1.x + a2.x, a1.y + a2.y, a1.z + a2.z, a1.w + a2.w}
+}
+
+// Subtract subtracts two tuples
+func Subtract(a1 Tuple, a2 Tuple) Tuple {
+	return Tuple{a1.x - a2.x, a1.y - a2.y, a1.z - a2.z, a1.w - a2.w}
+}

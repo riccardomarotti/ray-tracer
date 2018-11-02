@@ -14,3 +14,13 @@ func (t *Tuple) IsPoint() bool {
 func (t *Tuple) IsVector() bool {
 	return t.w == 0.0
 }
+
+// Point creates a point tuple
+func Point(x, y, z float64) Tuple {
+	return Tuple{x, y, z, 1}
+}
+
+// Vector creates a vector tuple
+func Vector(x, y, z float64) Tuple {
+	return Tuple{x, y, z, 0}
+}

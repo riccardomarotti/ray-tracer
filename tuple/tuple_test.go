@@ -45,3 +45,21 @@ func TestVectorTuple(t *testing.T) {
 		t.Errorf("Tuple is not expected to be a point.")
 	}
 }
+
+func TestPoint(t *testing.T) {
+	p := Point(4, -4, 3)
+
+	assertEqual(4.0, p.x, t)
+	assertEqual(-4.0, p.y, t)
+	assertEqual(3.0, p.z, t)
+	assertEqual(1.0, p.w, t)
+}
+
+func TestVector(t *testing.T) {
+	p := Vector(4, -4, 3)
+
+	assertEqual(4.0, p.x, t)
+	assertEqual(-4.0, p.y, t)
+	assertEqual(3.0, p.z, t)
+	assertEqual(0.0, p.w, t)
+}

@@ -1,29 +1,47 @@
 package tuple
 
 import (
+	"math"
 	"testing"
 )
 
-func TestPointTuple(t *testing.T) {
-	a := []float32{4.3, -4.2, 3.1, 1.0}
+func assertEqual(expected float64, actual float64, t *testing.T) {
+	epsilon := 0.00001
 
-	if IsPoint(a) != true {
-		t.Errorf("Tuple %v is expected to be a point.", a)
+	areEqual := math.Abs(expected-actual) < epsilon
+	if !areEqual {
+		t.Errorf("Expected value was %f, but received %f", expected, actual)
+	}
+}
+
+func TestPointTuple(t *testing.T) {
+	a := Tuple{4.3, -4.2, 3.1, 1.0}
+
+	assertEqual(4.3, a.x, t)
+	assertEqual(-4.2, a.y, t)
+	assertEqual(3.1, a.z, t)
+
+	if a.IsPoint() == false {
+		t.Errorf("Tuple is expected to be a point.")
 	}
 
-	if IsVector(a) != false {
-		t.Errorf("Tuple %v is not expected to be a vector.", a)
+	if a.IsVector() == true {
+		t.Errorf("Tuple is not expected to be a vector.")
 	}
 }
 
 func TestVectorTuple(t *testing.T) {
-	a := []float32{4.3, -4.2, 3.1, 0.0}
+	a := Tuple{4.3, -4.2, 3.1, 0.0}
 
-	if IsVector(a) != true {
-		t.Errorf("Tuple %v is expected to be a vector.", a)
+	assertEqual(4.3, a.x, t)
+	assertEqual(-4.2, a.y, t)
+	assertEqual(3.1, a.z, t)
+
+	if a.IsVector() == false {
+		t.Errorf("Tuple is expected to be a vector.")
 	}
 
-	if IsPoint(a) != false {
-		t.Errorf("Tuple %v is not expected to be a point.", a)
+	if a.IsPoint() == true {
+		t.Errorf("Tuple is not expected to be a point.")
 	}
 }

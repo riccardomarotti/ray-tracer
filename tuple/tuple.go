@@ -1,11 +1,16 @@
 package tuple
 
-// IsPoint checks if the passed tuple is a point
-func IsPoint(tuple []float32) bool {
-	return tuple[len(tuple)-1] == 1.0
+// Tuple represents a tuple
+type Tuple struct {
+	x, y, z, w float64
 }
 
-// IsVector checks if the passed tuple is a vector
-func IsVector(tuple []float32) bool {
-	return tuple[len(tuple)-1] == 0.0
+// IsPoint checks if the tuple is a point
+func (t *Tuple) IsPoint() bool {
+	return t.w == 1.0
+}
+
+// IsVector checks if the tuple is a vector
+func (t *Tuple) IsVector() bool {
+	return t.w == 0.0
 }

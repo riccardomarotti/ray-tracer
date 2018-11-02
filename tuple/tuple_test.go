@@ -75,7 +75,7 @@ func TestAddTuples(t *testing.T) {
 	p := Point(3, -2, 5)
 	v := Vector(-2, 3, 1)
 
-	pTranslated := Sum(p, v)
+	pTranslated := p.Add(v)
 
 	assertTupleEqual(Tuple{1, 1, 6, 1}, pTranslated, t)
 }
@@ -84,7 +84,7 @@ func TestSubtractPoints(t *testing.T) {
 	p1 := Point(3, 2, 1)
 	p2 := Point(5, 6, 7)
 
-	diff := Subtract(p1, p2)
+	diff := p1.Subtract(p2)
 
 	assertTupleEqual(Vector(-2, -4, -6), diff, t)
 }
@@ -93,7 +93,7 @@ func TestSubtractAVectorFromAPoint(t *testing.T) {
 	p := Point(3, 2, 1)
 	v := Vector(5, 6, 7)
 
-	diff := Subtract(p, v)
+	diff := p.Subtract(v)
 
 	assertTupleEqual(Point(-2, -4, -6), diff, t)
 }
@@ -102,7 +102,7 @@ func TestSubtractVectors(t *testing.T) {
 	v1 := Vector(3, 2, 1)
 	v2 := Vector(5, 6, 7)
 
-	diff := Subtract(v1, v2)
+	diff := v1.Subtract(v2)
 
 	assertTupleEqual(Vector(-2, -4, -6), diff, t)
 }
@@ -116,11 +116,11 @@ func TestNegatingATuple(t *testing.T) {
 func TestScalarMultiply(t *testing.T) {
 	a := Tuple{1, -2, 3, -4}
 
-	assertTupleEqual(Tuple{0.5, -1, 1.5, -2}, Multiply(a, 0.5), t)
+	assertTupleEqual(Tuple{0.5, -1, 1.5, -2}, a.Multiply(0.5), t)
 }
 
 func TestScalarDivision(t *testing.T) {
 	a := Tuple{1, -2, 3, -4}
 
-	assertTupleEqual(Tuple{0.5, -1, 1.5, -2}, Divide(a, 2), t)
+	assertTupleEqual(Tuple{0.5, -1, 1.5, -2}, a.Divide(2), t)
 }

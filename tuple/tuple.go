@@ -17,7 +17,7 @@ func (t Tuple) IsVector() bool {
 
 // Negate negates a tuple
 func (t Tuple) Negate() Tuple {
-	return Subtract(Tuple{0, 0, 0, 0}, t)
+	return Tuple{0, 0, 0, 0}.Subtract(t)
 }
 
 // Point creates a point tuple
@@ -30,22 +30,22 @@ func Vector(x, y, z float64) Tuple {
 	return Tuple{x, y, z, 0}
 }
 
-// Sum sums two tuples
-func Sum(a1 Tuple, a2 Tuple) Tuple {
-	return Tuple{a1.x + a2.x, a1.y + a2.y, a1.z + a2.z, a1.w + a2.w}
+// Add sums two tuples
+func (t Tuple) Add(a Tuple) Tuple {
+	return Tuple{t.x + a.x, t.y + a.y, t.z + a.z, t.w + a.w}
 }
 
 // Subtract subtracts two tuples
-func Subtract(a1 Tuple, a2 Tuple) Tuple {
-	return Tuple{a1.x - a2.x, a1.y - a2.y, a1.z - a2.z, a1.w - a2.w}
+func (t Tuple) Subtract(a Tuple) Tuple {
+	return Tuple{t.x - a.x, t.y - a.y, t.z - a.z, t.w - a.w}
 }
 
 // Multiply multiplies a tuple by a scalar
-func Multiply(a Tuple, s float64) Tuple {
-	return Tuple{a.x * s, a.y * s, a.z * s, a.w * s}
+func (t Tuple) Multiply(s float64) Tuple {
+	return Tuple{t.x * s, t.y * s, t.z * s, t.w * s}
 }
 
 // Divide divides a tuple by a scalar
-func Divide(a Tuple, s float64) Tuple {
-	return Tuple{a.x / s, a.y / s, a.z / s, a.w / s}
+func (t Tuple) Divide(s float64) Tuple {
+	return Tuple{t.x / s, t.y / s, t.z / s, t.w / s}
 }

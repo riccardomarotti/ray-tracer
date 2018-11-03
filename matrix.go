@@ -47,3 +47,19 @@ func (A Matrix) Multiply(B Matrix) Matrix {
 
 	return MakeMatrix(A.rows, A.cols, values)
 }
+
+// MultiplyByTuple multiplies a matrix by a tuple
+func (A Matrix) MultiplyByTuple(b Tuple) Tuple {
+	result := make([]float64, 4)
+	for row := 0; row < 4; row++ {
+		var value float64
+		value += A.At(row, 0) * b.x
+		value += A.At(row, 1) * b.y
+		value += A.At(row, 2) * b.z
+		value += A.At(row, 3) * b.w
+
+		result[row] = value
+	}
+
+	return Tuple{result[0], result[1], result[2], result[3]}
+}

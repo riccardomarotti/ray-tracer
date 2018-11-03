@@ -51,3 +51,13 @@ func TestMatrixMultiplication(t *testing.T) {
 	actualProduct := A.Multiply(B)
 	Assert(actualProduct.Equals(AB), fmt.Sprintf("Expected:\n%v\nBut was:\n%v", AB, actualProduct), t)
 }
+
+func TestMatrixTupleMultiplication(t *testing.T) {
+	A := MakeMatrix(4, 4, []float64{1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1})
+	b := Tuple{1, 2, 3, 1}
+
+	Ab := A.MultiplyByTuple(b)
+	expectedTuple := Tuple{18, 24, 33, 1}
+
+	AssertTupleEqual(expectedTuple, Ab, t)
+}

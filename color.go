@@ -1,4 +1,4 @@
-package color
+package main
 
 // Color represents a color
 type Color struct {

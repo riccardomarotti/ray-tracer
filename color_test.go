@@ -1,24 +1,9 @@
-package color
+package main
 
 import (
-	"math"
 	"testing"
 )
 
-func assertEqual(expected float64, actual float64, t *testing.T) {
-	epsilon := 0.00001
-
-	areEqual := math.Abs(expected-actual) < epsilon
-	if !areEqual {
-		t.Errorf("Expected value was %f, but received %f", expected, actual)
-	}
-}
-
-func assertColorEqual(expected Color, actual Color, t *testing.T) {
-	assertEqual(expected.r, actual.r, t)
-	assertEqual(expected.g, actual.g, t)
-	assertEqual(expected.b, actual.b, t)
-}
 func TestAddColors(t *testing.T) {
 	c1 := Color{0.9, 0.6, 0.75}
 	c2 := Color{0.7, 0.1, 0.25}

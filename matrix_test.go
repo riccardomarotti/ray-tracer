@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -40,4 +41,13 @@ func TestDifferentMatricestr(t *testing.T) {
 
 	Assert(false == A.Equals(B), "Matrices should be different", t)
 	Assert(false == B.Equals(A), "Matrices should be different", t)
+}
+
+func TestMatrixMultiplication(t *testing.T) {
+	A := MakeMatrix(4, 4, []float64{1, 2, 3, 4, 2, 3, 4, 5, 3, 4, 5, 6, 4, 5, 6, 7})
+	B := MakeMatrix(4, 4, []float64{0, 1, 2, 4, 1, 2, 4, 8, 2, 4, 8, 16, 4, 8, 16, 32})
+	AB := MakeMatrix(4, 4, []float64{24, 49, 98, 196, 31, 64, 128, 256, 38, 79, 158, 316, 45, 94, 188, 376})
+
+	actualProduct := A.Multiply(B)
+	Assert(actualProduct.Equals(AB), fmt.Sprintf("Expected:\n%v\nBut was:\n%v", AB, actualProduct), t)
 }

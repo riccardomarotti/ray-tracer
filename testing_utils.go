@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func assertEqual(expected float64, actual float64, t *testing.T) {
+func AssertEqual(expected float64, actual float64, t *testing.T) {
 	epsilon := 0.00001
 
 	areEqual := math.Abs(expected-actual) < epsilon
@@ -14,15 +14,21 @@ func assertEqual(expected float64, actual float64, t *testing.T) {
 	}
 }
 
-func assertColorEqual(expected Color, actual Color, t *testing.T) {
-	assertEqual(expected.r, actual.r, t)
-	assertEqual(expected.g, actual.g, t)
-	assertEqual(expected.b, actual.b, t)
+func AssertColorEqual(expected Color, actual Color, t *testing.T) {
+	AssertEqual(expected.r, actual.r, t)
+	AssertEqual(expected.g, actual.g, t)
+	AssertEqual(expected.b, actual.b, t)
 }
 
-func assertTupleEqual(expected Tuple, actual Tuple, t *testing.T) {
-	assertEqual(expected.x, actual.x, t)
-	assertEqual(expected.y, actual.y, t)
-	assertEqual(expected.z, actual.z, t)
-	assertEqual(expected.w, actual.w, t)
+func AssertTupleEqual(expected Tuple, actual Tuple, t *testing.T) {
+	AssertEqual(expected.x, actual.x, t)
+	AssertEqual(expected.y, actual.y, t)
+	AssertEqual(expected.z, actual.z, t)
+	AssertEqual(expected.w, actual.w, t)
+}
+
+func Assert(trueCondition bool, message string, t *testing.T) {
+	if !trueCondition {
+		t.Errorf(message)
+	}
 }

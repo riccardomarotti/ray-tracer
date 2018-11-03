@@ -41,21 +41,33 @@ func toIntColorValue(value float64) int {
 	return intValue
 }
 
+func truncateLineAt(line string, i int) string {
+	if len(line) > i {
+		lastSpaceIndex := strings.LastIndex(line[:i+1], " ")
+		if lastSpaceIndex != -1 {
+			return line[:lastSpaceIndex] + "\n" + line[lastSpaceIndex+1:]
+		}
+	}
+	return line
+}
+
 // PPM resturns the PPM text representing the canvas
 func (c Canvas) PPM() string {
 	maxColorValue := 255
 	var values string
 	for j := 0; j < c.height; j++ {
+		var currentLine string
 		for i := 0; i < c.width; i++ {
 			p := c.PixelAt(i, j)
 			red := toIntColorValue(p.r)
 			green := toIntColorValue(p.g)
 			blue := toIntColorValue(p.b)
 
-			values += fmt.Sprintf("%d %d %d ", red, green, blue)
+			currentLine += fmt.Sprintf("%d %d %d ", red, green, blue)
 		}
-		values = strings.Trim(values, " ") + "\n"
-
+		currentLine = strings.Trim(currentLine, " ")
+		currentLine = truncateLineAt(currentLine, 70)
+		values += currentLine + "\n"
 	}
 	return fmt.Sprintf("P3\n%d %d\n%d\n%s", c.width, c.height, maxColorValue, values)
 }

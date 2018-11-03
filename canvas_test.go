@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestCreateCanvas(t *testing.T) {
 	c := MakeCanvas(10, 20)
@@ -28,7 +31,19 @@ func TestWritePixel(t *testing.T) {
 	assertColorEqual(red, c.PixelAt(2, 3), t)
 }
 
-func TestPPMConversion(t *testing.T) {
+func TestPPMConversionHeader(t *testing.T) {
+	c := MakeCanvas(5, 3)
+
+	ppmHeader := strings.Join(strings.Split(c.PPM(), "\n")[:3], "\n")
+
+	expected := "P3\n5 3\n255"
+
+	if expected != ppmHeader {
+		t.Errorf("Expected ppm '%s', but was '%s'", expected, ppmHeader)
+	}
+}
+
+func TestPPMConversionData(t *testing.T) {
 	c := MakeCanvas(5, 3)
 	c1 := Color{1.5, 0, 0}
 	c2 := Color{0, 0.5, 0}

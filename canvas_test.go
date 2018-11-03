@@ -53,9 +53,9 @@ func TestPPMConversionData(t *testing.T) {
 	c.WriteAt(2, 1, c2)
 	c.WriteAt(4, 2, c3)
 
-	ppm := c.PPM()
+	ppm := strings.Join(strings.Split(c.PPM(), "\n")[3:], "\n")
 
-	expected := "P3\n5 3\n255\n255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 127 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n"
+	expected := "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 127 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n"
 
 	if expected != ppm {
 		t.Errorf("Expected ppm '%s', but was '%s'", expected, ppm)

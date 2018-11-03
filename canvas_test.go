@@ -104,3 +104,14 @@ func TestPPMDataHasMaxLineLengthOf70Chars(t *testing.T) {
 		t.Errorf("Expected ppm \n'%s', but was \n'%s'", expected, ppm)
 	}
 }
+
+func TestPPMEndsWithNewline(t *testing.T) {
+	c := MakeCanvas(5, 3)
+
+	lines := strings.Split(c.PPM(), "\n")
+	ppmLastLine := lines[len(lines)-1]
+
+	if ppmLastLine != "" {
+		t.Errorf("Expecte ppm file to end with newline")
+	}
+}

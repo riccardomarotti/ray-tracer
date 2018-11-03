@@ -12,6 +12,17 @@ func MakeMatrix(rows, cols int, data []float64) Matrix {
 }
 
 // At returns the matrix value at i X j
-func (m Matrix) At(i, j int) float64 {
-	return m.values[m.cols*i+j]
+func (A Matrix) At(i, j int) float64 {
+	return A.values[A.cols*i+j]
+}
+
+// Equals checks for matrix equality
+func (A Matrix) Equals(B Matrix) bool {
+	for i, Avalue := range A.values {
+		if Avalue != B.values[i] {
+			return false
+		}
+	}
+
+	return true
 }

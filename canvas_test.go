@@ -27,3 +27,22 @@ func TestWritePixel(t *testing.T) {
 
 	assertColorEqual(red, c.PixelAt(2, 3), t)
 }
+
+func TestPPMConversion(t *testing.T) {
+	c := MakeCanvas(5, 3)
+	c1 := Color{1.5, 0, 0}
+	c2 := Color{0, 0.5, 0}
+	c3 := Color{-0.5, 0, 1}
+
+	c.WriteAt(0, 0, c1)
+	c.WriteAt(2, 1, c2)
+	c.WriteAt(4, 2, c3)
+
+	ppm := c.PPM()
+
+	expected := "P3\n5 3\n255\n255 0 0 0 0 0 0 0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 127 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0 0 0 0 0 0 0 255\n"
+
+	if expected != ppm {
+		t.Errorf("Expected ppm '%s', but was '%s'", expected, ppm)
+	}
+}

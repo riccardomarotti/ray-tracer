@@ -99,3 +99,9 @@ func TestSubmatrix4x4(t *testing.T) {
 	ActualSubA := A.Submatrix(2, 1)
 	Assert(ActualSubA.Equals(ExpectedSubA), fmt.Sprintf("Expected submatrix\n%v\nbut was\n%v", ExpectedSubA, ActualSubA), t)
 }
+
+func TestMinor3x3(t *testing.T) {
+	A := MakeMatrix(3, 3, []float64{3, 5, 0, 2, -1, -7, 6, -1, 5})
+
+	AssertEqual(25, A.Minor(1, 0), t)
+}

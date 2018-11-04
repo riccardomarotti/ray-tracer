@@ -106,3 +106,8 @@ func (A Matrix) Submatrix(row, col int) Matrix {
 	}
 	return resultMatrix
 }
+
+// Minor calculates the matrix minor
+func (A Matrix) Minor(i, j int) float64 {
+	return A.Submatrix(i, j).Determinant()
+}

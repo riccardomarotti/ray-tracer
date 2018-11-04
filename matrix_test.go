@@ -61,3 +61,11 @@ func TestMatrixTupleMultiplication(t *testing.T) {
 
 	AssertTupleEqual(expectedTuple, Ab, t)
 }
+
+func TestIdentityMatrix(t *testing.T) {
+	A := MakeMatrix(4, 4, []float64{0, 1, 2, 4, 1, 2, 4, 8, 2, 4, 8, 16, 4, 8, 16, 32})
+
+	AI := A.Multiply(MakeIdentityMatrix(4))
+
+	Assert(A.Equals(AI), "", t)
+}

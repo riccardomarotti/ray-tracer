@@ -63,3 +63,12 @@ func (A Matrix) MultiplyByTuple(b Tuple) Tuple {
 
 	return Tuple{result[0], result[1], result[2], result[3]}
 }
+
+// MakeIdentityMatrix creates an identiy matrix of the given size
+func MakeIdentityMatrix(size int) (identity Matrix) {
+	identity = MakeMatrix(size, size, make([]float64, size*size))
+	for i := 0; i < size; i++ {
+		identity.values[identity.flatten(i, i)] = 1
+	}
+	return
+}

@@ -72,3 +72,15 @@ func MakeIdentityMatrix(size int) (identity Matrix) {
 	}
 	return
 }
+
+// T returns A transposed (At)
+func (A Matrix) T() (At Matrix) {
+	At = MakeMatrix(A.rows, A.cols, make([]float64, len(A.values)))
+	for i := 0; i < A.rows; i++ {
+		for j := 0; j < A.cols; j++ {
+			At.values[At.flatten(i, j)] = A.values[A.flatten(j, i)]
+		}
+	}
+
+	return
+}

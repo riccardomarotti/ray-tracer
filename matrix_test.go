@@ -69,3 +69,11 @@ func TestIdentityMatrix(t *testing.T) {
 
 	Assert(A.Equals(AI), "", t)
 }
+
+func TestTransposeMatrix(t *testing.T) {
+	A := MakeMatrix(4, 4, []float64{0, 9, 3, 0, 9, 8, 0, 8, 1, 8, 5, 3, 0, 0, 5, 8})
+	At := MakeMatrix(4, 4, []float64{0, 9, 1, 0, 9, 8, 8, 0, 3, 0, 5, 5, 0, 8, 3, 8})
+
+	actualTransposed := A.T()
+	Assert(actualTransposed.Equals(At), fmt.Sprintf("Transposed matrix expected to be\n%v\nbut was\n%v", At, actualTransposed), t)
+}

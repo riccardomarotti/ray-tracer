@@ -84,3 +84,25 @@ func (A Matrix) T() (At Matrix) {
 
 	return
 }
+
+// Determinant calculates a matrix determinant
+func (A Matrix) Determinant() float64 {
+	return A.values[A.flatten(0, 0)]*A.values[A.flatten(1, 1)] - A.values[A.flatten(0, 1)]*A.values[A.flatten(1, 0)]
+}
+
+// Submatrix calculates the matrix submatrix
+func (A Matrix) Submatrix(row, col int) Matrix {
+	resultRows := (A.rows - 1)
+	resultCols := (A.rows - 1)
+	resultMatrix := MakeMatrix(resultRows, resultCols, make([]float64, 0))
+
+	for i := 0; i < A.rows; i++ {
+		for j := 0; j < A.cols; j++ {
+			if i != row && j != col {
+				resultMatrix.values = append(resultMatrix.values, A.At(i, j))
+			}
+
+		}
+	}
+	return resultMatrix
+}

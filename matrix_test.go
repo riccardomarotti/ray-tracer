@@ -77,3 +77,25 @@ func TestTransposeMatrix(t *testing.T) {
 	actualTransposed := A.T()
 	Assert(actualTransposed.Equals(At), fmt.Sprintf("Transposed matrix expected to be\n%v\nbut was\n%v", At, actualTransposed), t)
 }
+
+func TestDeterminantOf2x2Matrix(t *testing.T) {
+	A := MakeMatrix(2, 2, []float64{1, 5, -3, 2})
+
+	AssertEqual(17, A.Determinant(), t)
+}
+
+func TestSubmatrix3x3(t *testing.T) {
+	A := MakeMatrix(3, 3, []float64{1, 5, 0, -3, 2, 7, 0, 6, -3})
+	ExpectedSubA := MakeMatrix(2, 2, []float64{-3, 2, 0, 6})
+
+	ActualSubA := A.Submatrix(0, 2)
+	Assert(ActualSubA.Equals(ExpectedSubA), fmt.Sprintf("Expected submatrix\n%v\nbut was\n%v", ExpectedSubA, ActualSubA), t)
+}
+
+func TestSubmatrix4x4(t *testing.T) {
+	A := MakeMatrix(4, 4, []float64{-6, 1, 1, 6, -8, 5, 8, 6, -1, 0, 8, 2, -7, 1, -1, 1})
+	ExpectedSubA := MakeMatrix(3, 3, []float64{-6, 1, 6, -8, 8, 6, -7, -1, 1})
+
+	ActualSubA := A.Submatrix(2, 1)
+	Assert(ActualSubA.Equals(ExpectedSubA), fmt.Sprintf("Expected submatrix\n%v\nbut was\n%v", ExpectedSubA, ActualSubA), t)
+}

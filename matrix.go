@@ -1,5 +1,7 @@
 package main
 
+import "math"
+
 // Matrix represents a matrix
 type Matrix struct {
 	rows, cols int
@@ -22,8 +24,11 @@ func (A Matrix) At(i, j int) float64 {
 
 // Equals checks for matrix equality
 func (A Matrix) Equals(B Matrix) bool {
+	epsilon := 0.00001
+
 	for i, Avalue := range A.values {
-		if Avalue != B.values[i] {
+		areEqual := math.Abs(Avalue-B.values[i]) < epsilon
+		if areEqual == false {
 			return false
 		}
 	}
@@ -139,4 +144,19 @@ func (A Matrix) Cofactor(i, j int) float64 {
 // IsInvertible chacks if the matrix is invertible
 func (A Matrix) IsInvertible() bool {
 	return A.Determinant() != 0
+}
+
+// Inverse inverts the matrix
+func (A Matrix) Inverse() (Ai Matrix) {
+	Ai = MakeMatrix(A.rows, A.cols, make([]float64, A.rows*A.cols))
+	Adet := A.Determinant()
+
+	for i := 0; i < A.rows; i++ {
+		for j := 0; j < A.cols; j++ {
+			Ai.values[Ai.flatten(i, j)] = A.Cofactor(i, j) / Adet
+		}
+	}
+
+	Ai = Ai.T()
+	return
 }

@@ -145,3 +145,22 @@ func TestShearingZtoY(t *testing.T) {
 
 	AssertTupleEqual(Point(2, 3, 7), shearing.MultiplyByTuple(p), t)
 }
+
+func TestChainingTransformation(t *testing.T) {
+	p := Point(1, 0, 1)
+	rotationX := RotationX(math.Pi / 2)
+	scaling := Scaling(5, 5, 5)
+	translation := Translation(10, 5, 7)
+
+	pRotated := rotationX.MultiplyByTuple(p)
+	AssertTupleEqual(Point(1, -1, 0), pRotated, t)
+
+	pScaled := scaling.MultiplyByTuple(pRotated)
+	AssertTupleEqual(Point(5, -5, 0), pScaled, t)
+
+	pTranslated := translation.MultiplyByTuple(pScaled)
+	AssertTupleEqual(Point(15, 0, 7), pTranslated, t)
+
+	chainedTransformation := translation.Multiply(scaling).Multiply(rotationX)
+	AssertTupleEqual(Point(15, 0, 7), chainedTransformation.MultiplyByTuple(p), t)
+}

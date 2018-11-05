@@ -124,3 +124,11 @@ func TestDeterminantOf4x4Matrix(t *testing.T) {
 
 	AssertEqual(-4071, A.Determinant(), t)
 }
+
+func TestInvertibleMatrix(t *testing.T) {
+	A := MakeMatrix(4, 4, []float64{6, 4, 4, 4, 5, 5, 7, 6, 4, -8, 3, -7, 9, 1, 7, -6})
+	Assert(A.IsInvertible(), "", t)
+
+	A = MakeMatrix(4, 4, []float64{-4, 2, -2, -3, 9, 6, 2, 6, 0, -5, 1, -5, 0, 0, 0, 0})
+	Assert(A.IsInvertible() == false, "", t)
+}

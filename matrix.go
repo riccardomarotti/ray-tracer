@@ -135,3 +135,8 @@ func (A Matrix) Cofactor(i, j int) float64 {
 
 	return m
 }
+
+// IsInvertible chacks if the matrix is invertible
+func (A Matrix) IsInvertible() bool {
+	return A.Determinant() != 0
+}

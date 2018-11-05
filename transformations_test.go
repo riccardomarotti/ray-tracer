@@ -103,3 +103,45 @@ func TestRotatePointAroundZAxis(t *testing.T) {
 	AssertTupleEqual(Point(-math.Sqrt(2)/2, math.Sqrt(2)/2, 0), halfQuarterRotation.MultiplyByTuple(p), t)
 	AssertTupleEqual(Point(-1, 0, 0), quarterRotation.MultiplyByTuple(p), t)
 }
+
+func TestShearingXtoY(t *testing.T) {
+	shearing := Shearing(1, 0, 0, 0, 0, 0)
+	p := Point(2, 3, 4)
+
+	AssertTupleEqual(Point(5, 3, 4), shearing.MultiplyByTuple(p), t)
+}
+
+func TestShearingXtoZ(t *testing.T) {
+	shearing := Shearing(0, 1, 0, 0, 0, 0)
+	p := Point(2, 3, 4)
+
+	AssertTupleEqual(Point(6, 3, 4), shearing.MultiplyByTuple(p), t)
+}
+
+func TestShearingYtoX(t *testing.T) {
+	shearing := Shearing(0, 0, 1, 0, 0, 0)
+	p := Point(2, 3, 4)
+
+	AssertTupleEqual(Point(2, 5, 4), shearing.MultiplyByTuple(p), t)
+}
+
+func TestShearingYtoZ(t *testing.T) {
+	shearing := Shearing(0, 0, 0, 1, 0, 0)
+	p := Point(2, 3, 4)
+
+	AssertTupleEqual(Point(2, 7, 4), shearing.MultiplyByTuple(p), t)
+}
+
+func TestShearingZtoX(t *testing.T) {
+	shearing := Shearing(0, 0, 0, 0, 1, 0)
+	p := Point(2, 3, 4)
+
+	AssertTupleEqual(Point(2, 3, 6), shearing.MultiplyByTuple(p), t)
+}
+
+func TestShearingZtoY(t *testing.T) {
+	shearing := Shearing(0, 0, 0, 0, 0, 1)
+	p := Point(2, 3, 4)
+
+	AssertTupleEqual(Point(2, 3, 7), shearing.MultiplyByTuple(p), t)
+}

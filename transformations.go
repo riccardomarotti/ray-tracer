@@ -65,3 +65,21 @@ func RotationZ(r float64) Matrix {
 
 	return Rz
 }
+
+// Shearing creates a shearing transform
+// xy is shearing of x in proportion of y
+// xz is shearing of x in proportion of z
+// yx is shearing of y in proportion of x
+// yz is shearing of z in proportion of z
+// zx is shearing of z in proportion of x
+// zy is shearing of z in proportion of y
+func Shearing(xy, xz, yx, yz, zx, zy float64) Matrix {
+	S := MakeIdentityMatrix(4)
+	S.values[S.flatten(0, 1)] = xy
+	S.values[S.flatten(0, 2)] = xz
+	S.values[S.flatten(1, 0)] = yx
+	S.values[S.flatten(2, 0)] = zx
+	S.values[S.flatten(1, 2)] = yz
+	S.values[S.flatten(2, 1)] = zy
+	return S
+}

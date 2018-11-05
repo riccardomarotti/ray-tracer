@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 func TestTranslation(t *testing.T) {
 	translation := Translation(5, -3, 2)
@@ -60,4 +63,43 @@ func TestReflectionIsScalingBtNegativeNumber(t *testing.T) {
 	p := Point(2, 3, 4)
 
 	AssertTupleEqual(Point(-2, 3, 4), R.MultiplyByTuple(p), t)
+}
+
+func TestRotatePointAroundXAxis(t *testing.T) {
+	p := Point(0, 1, 0)
+
+	halfQuarterRotation := RotationX(math.Pi / 4)
+	quarterRotation := RotationX(math.Pi / 2)
+
+	AssertTupleEqual(Point(0, math.Sqrt(2)/2, math.Sqrt(2)/2), halfQuarterRotation.MultiplyByTuple(p), t)
+	AssertTupleEqual(Point(0, 0, 1), quarterRotation.MultiplyByTuple(p), t)
+}
+
+func TestInverseOfRotationRatatesInTheOppositeDirection(t *testing.T) {
+	p := Point(0, 1, 0)
+
+	halfQuarterRotation := RotationX(math.Pi / 4)
+	inverseHalfQuarterRotation := halfQuarterRotation.Inverse()
+
+	AssertTupleEqual(Point(0, math.Sqrt(2)/2, -math.Sqrt(2)/2), inverseHalfQuarterRotation.MultiplyByTuple(p), t)
+}
+
+func TestRotatePointAroundYAxis(t *testing.T) {
+	p := Point(0, 0, 1)
+
+	halfQuarterRotation := RotationY(math.Pi / 4)
+	quarterRotation := RotationY(math.Pi / 2)
+
+	AssertTupleEqual(Point(math.Sqrt(2)/2, 0, math.Sqrt(2)/2), halfQuarterRotation.MultiplyByTuple(p), t)
+	AssertTupleEqual(Point(1, 0, 0), quarterRotation.MultiplyByTuple(p), t)
+}
+
+func TestRotatePointAroundZAxis(t *testing.T) {
+	p := Point(0, 1, 0)
+
+	halfQuarterRotation := RotationZ(math.Pi / 4)
+	quarterRotation := RotationZ(math.Pi / 2)
+
+	AssertTupleEqual(Point(-math.Sqrt(2)/2, math.Sqrt(2)/2, 0), halfQuarterRotation.MultiplyByTuple(p), t)
+	AssertTupleEqual(Point(-1, 0, 0), quarterRotation.MultiplyByTuple(p), t)
 }

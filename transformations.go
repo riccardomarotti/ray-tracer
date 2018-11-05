@@ -5,8 +5,8 @@ import (
 )
 
 // Translate creates a translation matrix
-func Translate(x, y, z float64) Matrix {
-	T := MakeIdentityMatrix(4)
+func (A Matrix) Translate(x, y, z float64) Matrix {
+	T := MakeIdentityMatrix(A.rows)
 
 	T.values[T.flatten(0, 3)] = x
 	T.values[T.flatten(1, 3)] = y
@@ -15,8 +15,8 @@ func Translate(x, y, z float64) Matrix {
 }
 
 // Scale creates a scaling matrix
-func Scale(x, y, z float64) Matrix {
-	S := MakeIdentityMatrix(4)
+func (A Matrix) Scale(x, y, z float64) Matrix {
+	S := MakeIdentityMatrix(A.rows)
 	S.values[S.flatten(0, 0)] = x
 	S.values[S.flatten(1, 1)] = y
 	S.values[S.flatten(2, 2)] = z
@@ -25,8 +25,8 @@ func Scale(x, y, z float64) Matrix {
 }
 
 // RotateX creates a matrix rotation around X axis of the given radians
-func RotateX(r float64) Matrix {
-	Rx := MakeIdentityMatrix(4)
+func (A Matrix) RotateX(r float64) Matrix {
+	Rx := MakeIdentityMatrix(A.rows)
 	cosR := math.Cos(r)
 	sinR := math.Sin(r)
 
@@ -39,8 +39,8 @@ func RotateX(r float64) Matrix {
 }
 
 // RotateY creates a matrix rotation around Y axis of the given radians
-func RotateY(r float64) Matrix {
-	Ry := MakeIdentityMatrix(4)
+func (A Matrix) RotateY(r float64) Matrix {
+	Ry := MakeIdentityMatrix(A.rows)
 	cosR := math.Cos(r)
 	sinR := math.Sin(r)
 
@@ -53,8 +53,8 @@ func RotateY(r float64) Matrix {
 }
 
 // RotateZ creates a matrix rotation around Z axis of the given radians
-func RotateZ(r float64) Matrix {
-	Rz := MakeIdentityMatrix(4)
+func (A Matrix) RotateZ(r float64) Matrix {
+	Rz := MakeIdentityMatrix(A.rows)
 	cosR := math.Cos(r)
 	sinR := math.Sin(r)
 
@@ -73,8 +73,8 @@ func RotateZ(r float64) Matrix {
 // yz is shearing of z in proportion of z
 // zx is shearing of z in proportion of x
 // zy is shearing of z in proportion of y
-func Shear(xy, xz, yx, yz, zx, zy float64) Matrix {
-	S := MakeIdentityMatrix(4)
+func (A Matrix) Shear(xy, xz, yx, yz, zx, zy float64) Matrix {
+	S := MakeIdentityMatrix(A.rows)
 	S.values[S.flatten(0, 1)] = xy
 	S.values[S.flatten(0, 2)] = xz
 	S.values[S.flatten(1, 0)] = yx

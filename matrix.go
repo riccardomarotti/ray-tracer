@@ -78,6 +78,11 @@ func MakeIdentityMatrix(size int) (identity Matrix) {
 	return
 }
 
+// Identity creates a 4x4 identity matrix
+func Identity() Matrix {
+	return MakeIdentityMatrix(4)
+}
+
 // T returns A transposed (At)
 func (A Matrix) T() (At Matrix) {
 	At = MakeMatrix(A.rows, A.cols, make([]float64, len(A.values)))

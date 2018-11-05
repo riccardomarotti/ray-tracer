@@ -111,3 +111,14 @@ func (A Matrix) Submatrix(row, col int) Matrix {
 func (A Matrix) Minor(i, j int) float64 {
 	return A.Submatrix(i, j).Determinant()
 }
+
+// Cofactor calculates the cofactor
+func (A Matrix) Cofactor(i, j int) float64 {
+	m := A.Minor(i, j)
+
+	if (i+j)%2 == 1 {
+		m = -m
+	}
+
+	return m
+}

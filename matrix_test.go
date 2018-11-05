@@ -105,3 +105,10 @@ func TestMinor3x3(t *testing.T) {
 
 	AssertEqual(25, A.Minor(1, 0), t)
 }
+
+func TestCofactor(t *testing.T) {
+	A := MakeMatrix(3, 3, []float64{3, 5, 0, 2, -1, -7, 6, -1, 5})
+
+	AssertEqual(-12, A.Cofactor(0, 0), t)
+	AssertEqual(-25, A.Cofactor(1, 0), t)
+}

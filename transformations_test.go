@@ -54,3 +54,10 @@ func TestScalingInverse(t *testing.T) {
 
 	AssertTupleEqual(expectedScaledPoint, actualScaledPoint, t)
 }
+
+func TestReflectionIsScalingBtNegativeNumber(t *testing.T) {
+	R := Scaling(-1, 1, 1)
+	p := Point(2, 3, 4)
+
+	AssertTupleEqual(Point(-2, 3, 4), R.MultiplyByTuple(p), t)
+}

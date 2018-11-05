@@ -85,9 +85,22 @@ func (A Matrix) T() (At Matrix) {
 	return
 }
 
+func (A Matrix) determinant2x2() float64 {
+	return A.values[A.flatten(0, 0)]*A.values[A.flatten(1, 1)] - A.values[A.flatten(0, 1)]*A.values[A.flatten(1, 0)]
+}
+
 // Determinant calculates a matrix determinant
 func (A Matrix) Determinant() float64 {
-	return A.values[A.flatten(0, 0)]*A.values[A.flatten(1, 1)] - A.values[A.flatten(0, 1)]*A.values[A.flatten(1, 0)]
+	if A.rows == 2 {
+		return A.determinant2x2()
+	}
+
+	var det float64
+	row := 0
+	for i := 0; i < A.cols; i++ {
+		det += A.values[A.flatten(i, 0)] * A.Cofactor(i, row)
+	}
+	return det
 }
 
 // Submatrix calculates the matrix submatrix

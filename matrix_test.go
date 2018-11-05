@@ -112,3 +112,15 @@ func TestCofactor(t *testing.T) {
 	AssertEqual(-12, A.Cofactor(0, 0), t)
 	AssertEqual(-25, A.Cofactor(1, 0), t)
 }
+
+func TestDeterminantOf3x3Matrix(t *testing.T) {
+	A := MakeMatrix(3, 3, []float64{1, 2, 6, -5, 8, -4, 2, 6, 4})
+
+	AssertEqual(-196, A.Determinant(), t)
+}
+
+func TestDeterminantOf4x4Matrix(t *testing.T) {
+	A := MakeMatrix(4, 4, []float64{-2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9})
+
+	AssertEqual(-4071, A.Determinant(), t)
+}

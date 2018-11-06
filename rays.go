@@ -12,8 +12,8 @@ func (r Ray) Position(d float64) Tuple {
 	return r.direction.Multiply(d).Add(r.origin)
 }
 
-func (r Ray) Intersection(s Solid) (intersection []float64) {
-	intersection = make([]float64, 0)
+func (r Ray) Intersection(s Object) (intersection []Intersection) {
+	intersection = make([]Intersection, 0)
 
 	sphereToRay := r.origin.Subtract(Point(0, 0, 0))
 	b := 2 * r.direction.Dot(sphereToRay)
@@ -29,7 +29,10 @@ func (r Ray) Intersection(s Solid) (intersection []float64) {
 			t1, t2 = t2, t1
 		}
 
-		intersection = []float64{t1, t2}
+		i1 := Intersection{t1, s}
+		i2 := Intersection{t2, s}
+
+		intersection = []Intersection{i1, i2}
 	}
 
 	return

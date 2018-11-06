@@ -28,8 +28,8 @@ func TestRayIntersectsASphereAtTwoPoints(t *testing.T) {
 	xs := r.Intersection(s)
 
 	Assert(2 == len(xs), "", t)
-	AssertEqual(4, xs[0], t)
-	AssertEqual(6, xs[1], t)
+	AssertEqual(4, xs[0].t, t)
+	AssertEqual(6, xs[1].t, t)
 }
 
 func TestRayIntersectsASphereAtATangent(t *testing.T) {
@@ -39,8 +39,8 @@ func TestRayIntersectsASphereAtATangent(t *testing.T) {
 	xs := r.Intersection(s)
 
 	Assert(2 == len(xs), "", t)
-	AssertEqual(5, xs[0], t)
-	AssertEqual(5, xs[1], t)
+	AssertEqual(5, xs[0].t, t)
+	AssertEqual(5, xs[1].t, t)
 }
 
 func TestRayMissesASphere(t *testing.T) {
@@ -58,8 +58,8 @@ func TestRayOriginatesInsideASphere(t *testing.T) {
 	xs := r.Intersection(s)
 
 	Assert(2 == len(xs), "", t)
-	AssertEqual(-1, xs[0], t)
-	AssertEqual(1, xs[1], t)
+	AssertEqual(-1, xs[0].t, t)
+	AssertEqual(1, xs[1].t, t)
 }
 
 func TestSphereBehindARay(t *testing.T) {
@@ -68,6 +68,17 @@ func TestSphereBehindARay(t *testing.T) {
 	xs := r.Intersection(s)
 
 	Assert(2 == len(xs), "", t)
-	AssertEqual(-6, xs[0], t)
-	AssertEqual(-4, xs[1], t)
+	AssertEqual(-6, xs[0].t, t)
+	AssertEqual(-4, xs[1].t, t)
+}
+
+func TestIntersecSetsTheObjectOnTheIntersection(t *testing.T) {
+	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+	s := Sphere{}
+
+	xs := r.Intersection(s)
+
+	Assert(2 == len(xs), "", t)
+	Assert(s == xs[0].object, "", t)
+	Assert(s == xs[1].object, "", t)
 }

@@ -20,3 +20,54 @@ func TestComputeAPointFromADistanceAlongTheRay(t *testing.T) {
 	AssertTupleEqual(Point(1, 3, 4), r.Position(-1), t)
 	AssertTupleEqual(Point(4.5, 3, 4), r.Position(2.5), t)
 }
+
+func TestRayIntersectsASphereAtTwoPoints(t *testing.T) {
+	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+	s := Sphere{}
+
+	xs := r.Intersection(s)
+
+	Assert(2 == len(xs), "", t)
+	AssertEqual(4, xs[0], t)
+	AssertEqual(6, xs[1], t)
+}
+
+func TestRayIntersectsASphereAtATangent(t *testing.T) {
+	r := Ray{Point(0, 1, -5), Vector(0, 0, 1)}
+	s := Sphere{}
+
+	xs := r.Intersection(s)
+
+	Assert(2 == len(xs), "", t)
+	AssertEqual(5, xs[0], t)
+	AssertEqual(5, xs[1], t)
+}
+
+func TestRayMissesASphere(t *testing.T) {
+	r := Ray{Point(0, 2, -5), Vector(0, 0, 1)}
+	s := Sphere{}
+
+	xs := r.Intersection(s)
+
+	Assert(0 == len(xs), "Length of intersection had to be zero", t)
+}
+
+func TestRayOriginatesInsideASphere(t *testing.T) {
+	r := Ray{Point(0, 0, 0), Vector(0, 0, 1)}
+	s := Sphere{}
+	xs := r.Intersection(s)
+
+	Assert(2 == len(xs), "", t)
+	AssertEqual(-1, xs[0], t)
+	AssertEqual(1, xs[1], t)
+}
+
+func TestSphereBehindARay(t *testing.T) {
+	r := Ray{Point(0, 0, 5), Vector(0, 0, 1)}
+	s := Sphere{}
+	xs := r.Intersection(s)
+
+	Assert(2 == len(xs), "", t)
+	AssertEqual(-6, xs[0], t)
+	AssertEqual(-4, xs[1], t)
+}

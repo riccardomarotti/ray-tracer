@@ -20,9 +20,16 @@ func areEqual(expected float64, actual float64) bool {
 }
 
 func AssertColorEqual(expected Color, actual Color, t *testing.T) {
-	AssertEqual(expected.r, actual.r, t)
-	AssertEqual(expected.g, actual.g, t)
-	AssertEqual(expected.b, actual.b, t)
+	errorTemplate := "Color differ.\nExpected was:\n%v\n\nBut was:\n%v\n\n"
+
+	ok := areEqual(expected.r, actual.r) ||
+		areEqual(expected.r, actual.r) ||
+		areEqual(expected.g, actual.g) ||
+		areEqual(expected.b, actual.b)
+
+	if !ok {
+		t.Fatal(fmt.Sprintf(errorTemplate, expected, actual))
+	}
 }
 
 func AssertTupleEqual(expected Tuple, actual Tuple, t *testing.T) {

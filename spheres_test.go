@@ -70,3 +70,19 @@ func TestNormalIsANormalizedVector(t *testing.T) {
 
 	AssertTupleEqual(n.Normalize(), n, t)
 }
+
+func TestComputingTheNormalOnATranslatedSphere(t *testing.T) {
+	s := MakeSphere(Identity().Translate(0, 1, 0))
+
+	n := s.NormalAt(Point(0, 1.70711, -0.70711))
+
+	AssertTupleEqual(Vector(0, 0.70711, -0.70711), n, t)
+}
+
+func TestComputingTheNormalOnAScaledSphere(t *testing.T) {
+	s := MakeSphere(Identity().Scale(1, 0.5, 1))
+
+	n := s.NormalAt(Point(0, math.Sqrt(2)/2, -math.Sqrt(2)/2))
+
+	AssertTupleEqual(Vector(0, 0.97014, -0.24254), n, t)
+}

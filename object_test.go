@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestIntersecionEncapsulatesTAndSolid(t *testing.T) {
-	s := Sphere{}
+	s := MakeSphere()
 	i := Intersection{3.5, s}
 
 	AssertEqual(i.t, 3.5, t)
@@ -11,7 +11,7 @@ func TestIntersecionEncapsulatesTAndSolid(t *testing.T) {
 }
 
 func TestAggregatingIntersections(t *testing.T) {
-	s := Sphere{}
+	s := MakeSphere()
 
 	xs := []Intersection{Intersection{1, s}, Intersection{2, s}}
 
@@ -21,7 +21,7 @@ func TestAggregatingIntersections(t *testing.T) {
 }
 
 func TestHitWhenAllIntersectionsHavePositiveT(t *testing.T) {
-	s := Sphere{}
+	s := MakeSphere()
 	i1 := Intersection{1, s}
 	i2 := Intersection{2, s}
 	xs := []Intersection{i2, i1}
@@ -30,7 +30,7 @@ func TestHitWhenAllIntersectionsHavePositiveT(t *testing.T) {
 }
 
 func TestHitWhenSomeIntersectionsHaveNegativeT(t *testing.T) {
-	s := Sphere{}
+	s := MakeSphere()
 	i1 := Intersection{-1, s}
 	i2 := Intersection{1, s}
 	xs := []Intersection{i2, i1}
@@ -39,7 +39,7 @@ func TestHitWhenSomeIntersectionsHaveNegativeT(t *testing.T) {
 }
 
 func TestHitWhenAllIntersectionsHaveNegativeT(t *testing.T) {
-	s := Sphere{}
+	s := MakeSphere()
 	i1 := Intersection{-1, s}
 	i2 := Intersection{-2, s}
 	xs := []Intersection{i2, i1}
@@ -48,7 +48,7 @@ func TestHitWhenAllIntersectionsHaveNegativeT(t *testing.T) {
 }
 
 func TestHitIsAlwaysTheLowestNonNegativeIntersection(t *testing.T) {
-	s := Sphere{}
+	s := MakeSphere()
 	i1 := Intersection{5, s}
 	i2 := Intersection{7, s}
 	i3 := Intersection{-3, s}

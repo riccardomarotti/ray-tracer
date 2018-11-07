@@ -13,11 +13,12 @@ func (r Ray) Position(d float64) Tuple {
 }
 
 func (r Ray) Intersection(s Object) (intersection []Intersection) {
+	transformedRay := r.Transform(s.Transform().Inverse())
 	intersection = make([]Intersection, 0)
 
-	sphereToRay := r.origin.Subtract(Point(0, 0, 0))
-	b := 2 * r.direction.Dot(sphereToRay)
-	a := r.direction.Dot(r.direction)
+	sphereToRay := transformedRay.origin.Subtract(Point(0, 0, 0))
+	b := 2 * transformedRay.direction.Dot(sphereToRay)
+	a := transformedRay.direction.Dot(transformedRay.direction)
 	c := sphereToRay.Dot(sphereToRay) - 1
 
 	delta := b*b - 4*a*c

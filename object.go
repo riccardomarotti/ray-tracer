@@ -1,6 +1,8 @@
 package main
 
-type Object interface{}
+type Object interface {
+	Transform() Matrix
+}
 
 type Intersection struct {
 	t      float64

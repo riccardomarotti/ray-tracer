@@ -1,17 +1,22 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"testing"
 )
 
 func AssertEqual(expected float64, actual float64, t *testing.T) {
-	epsilon := 0.00001
-
-	areEqual := math.Abs(expected-actual) < epsilon
+	areEqual := areEqual(expected, actual)
 	if !areEqual {
 		t.Errorf("Expected value was %f, but received %f", expected, actual)
 	}
+}
+
+func areEqual(expected float64, actual float64) bool {
+	epsilon := 0.00001
+	return math.Abs(expected-actual) < epsilon
+
 }
 
 func AssertColorEqual(expected Color, actual Color, t *testing.T) {
@@ -25,6 +30,19 @@ func AssertTupleEqual(expected Tuple, actual Tuple, t *testing.T) {
 	AssertEqual(expected.y, actual.y, t)
 	AssertEqual(expected.z, actual.z, t)
 	AssertEqual(expected.w, actual.w, t)
+}
+
+func AssertMatrixEqual(expected Matrix, actual Matrix, t *testing.T) {
+	message := fmt.Sprintf("Matrices differ. Expected was\n%v\nbut was\n%v", expected, actual)
+
+	Assert(expected.rows == actual.rows, message, t)
+	Assert(expected.cols == actual.cols, message, t)
+
+	for i := 0; i < expected.rows; i++ {
+		for j := 0; j < expected.cols; j++ {
+			Assert(areEqual(expected.At(i, j), actual.At(i, j)), message, t)
+		}
+	}
 }
 
 func Assert(trueCondition bool, message string, t *testing.T) {

@@ -138,3 +138,19 @@ func TestTuplesCrossProduct(t *testing.T) {
 	AssertTupleEqual(Vector(-1, 2, -1), a.Cross(b), t)
 	AssertTupleEqual(Vector(1, -2, 1), b.Cross(a), t)
 }
+
+func TestReflectingAVectorApproachingAt45Degrees(t *testing.T) {
+	v := Vector(1, -1, 0)
+	n := Vector(0, 1, 0)
+
+	r := v.Reflect(n)
+	AssertTupleEqual(Vector(1, 1, 0), r, t)
+}
+
+func TestReflectingAVectorOffASlantedSurface(t *testing.T) {
+	v := Vector(0, -1, 0)
+	n := Vector(math.Sqrt(2)/2, math.Sqrt(2)/2, 0)
+
+	r := v.Reflect(n)
+	AssertTupleEqual(Vector(1, 0, 0), r, t)
+}

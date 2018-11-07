@@ -26,10 +26,15 @@ func AssertColorEqual(expected Color, actual Color, t *testing.T) {
 }
 
 func AssertTupleEqual(expected Tuple, actual Tuple, t *testing.T) {
-	AssertEqual(expected.x, actual.x, t)
-	AssertEqual(expected.y, actual.y, t)
-	AssertEqual(expected.z, actual.z, t)
-	AssertEqual(expected.w, actual.w, t)
+	errorTemplate := "Tuple differ.\nExpected was:\n%v\n\nBut was:\n%v\n"
+	equalX := areEqual(expected.x, actual.x)
+	equalY := areEqual(expected.y, actual.y)
+	equalZ := areEqual(expected.z, actual.z)
+	equalW := areEqual(expected.w, actual.w)
+	if !equalX || !equalY || !equalZ || !equalW {
+		t.Fatal(fmt.Sprintf(errorTemplate, expected, actual))
+	}
+
 }
 
 func AssertMatrixEqual(expected Matrix, actual Matrix, t *testing.T) {

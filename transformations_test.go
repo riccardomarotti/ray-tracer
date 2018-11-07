@@ -161,6 +161,6 @@ func TestChainingTransformation(t *testing.T) {
 	pTranslated := translation.MultiplyByTuple(pScaled)
 	AssertTupleEqual(Point(15, 0, 7), pTranslated, t)
 
-	chainedTransformation := translation.Multiply(scaling).Multiply(rotationX)
+	chainedTransformation := Identity().Translate(10, 5, 7).Scale(5, 5, 5).RotateX(math.Pi / 2)
 	AssertTupleEqual(Point(15, 0, 7), chainedTransformation.MultiplyByTuple(p), t)
 }

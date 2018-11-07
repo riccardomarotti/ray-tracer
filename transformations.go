@@ -11,7 +11,7 @@ func (A Matrix) Translate(x, y, z float64) Matrix {
 	T.values[T.flatten(0, 3)] = x
 	T.values[T.flatten(1, 3)] = y
 	T.values[T.flatten(2, 3)] = z
-	return T
+	return A.Multiply(T)
 }
 
 // Scale creates a scaling matrix
@@ -21,7 +21,7 @@ func (A Matrix) Scale(x, y, z float64) Matrix {
 	S.values[S.flatten(1, 1)] = y
 	S.values[S.flatten(2, 2)] = z
 
-	return S
+	return A.Multiply(S)
 }
 
 // RotateX creates a matrix rotation around X axis of the given radians
@@ -35,7 +35,7 @@ func (A Matrix) RotateX(r float64) Matrix {
 	Rx.values[Rx.flatten(1, 2)] = -sinR
 	Rx.values[Rx.flatten(2, 1)] = sinR
 
-	return Rx
+	return A.Multiply(Rx)
 }
 
 // RotateY creates a matrix rotation around Y axis of the given radians
@@ -49,7 +49,7 @@ func (A Matrix) RotateY(r float64) Matrix {
 	Ry.values[Ry.flatten(2, 0)] = -sinR
 	Ry.values[Ry.flatten(0, 2)] = sinR
 
-	return Ry
+	return A.Multiply(Ry)
 }
 
 // RotateZ creates a matrix rotation around Z axis of the given radians
@@ -63,7 +63,7 @@ func (A Matrix) RotateZ(r float64) Matrix {
 	Rz.values[Rz.flatten(0, 1)] = -sinR
 	Rz.values[Rz.flatten(1, 0)] = sinR
 
-	return Rz
+	return A.Multiply(Rz)
 }
 
 // Shear creates a shearing transform
@@ -81,5 +81,5 @@ func (A Matrix) Shear(xy, xz, yx, yz, zx, zy float64) Matrix {
 	S.values[S.flatten(2, 0)] = zx
 	S.values[S.flatten(1, 2)] = yz
 	S.values[S.flatten(2, 1)] = zy
-	return S
+	return A.Multiply(S)
 }

@@ -89,7 +89,7 @@ func TestIntersecSetsTheObjectOnTheIntersection(t *testing.T) {
 func TestTranslateRay(t *testing.T) {
 	r := Ray{Point(1, 2, 3), Vector(0, 1, 0)}
 
-	r2 := r.Translate(3, 4, 5)
+	r2 := r.Transform(Identity().Translate(3, 4, 5))
 
 	AssertTupleEqual(Point(4, 6, 8), r2.origin, t)
 	AssertTupleEqual(Vector(0, 1, 0), r2.direction, t)
@@ -99,7 +99,7 @@ func TestTranslateRay(t *testing.T) {
 func TestScaleRay(t *testing.T) {
 	r := Ray{Point(1, 2, 3), Vector(0, 1, 0)}
 
-	r2 := r.Scale(2, 3, 4)
+	r2 := r.Transform(Identity().Scale(2, 3, 4))
 
 	AssertTupleEqual(Point(2, 6, 12), r2.origin, t)
 	AssertTupleEqual(Vector(0, 3, 0), r2.direction, t)

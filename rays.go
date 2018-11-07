@@ -37,3 +37,15 @@ func (r Ray) Intersection(s Object) (intersection []Intersection) {
 
 	return
 }
+
+func (r Ray) Translate(x, y, z float64) Ray {
+	T := Identity().Translate(x, y, z)
+
+	return Ray{T.MultiplyByTuple(r.origin), T.MultiplyByTuple(r.direction)}
+}
+
+func (r Ray) Scale(x, y, z float64) Ray {
+	T := Identity().Scale(x, y, z)
+
+	return Ray{T.MultiplyByTuple(r.origin), T.MultiplyByTuple(r.direction)}
+}

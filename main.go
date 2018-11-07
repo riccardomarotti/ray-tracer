@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	s := MakeSphere(Identity().Scale(0.5, 1, 0.5))
+	s := MakeSphere(Identity().Scale(0.5, 1, 0.5), MakeMaterial())
 	canvasPixels := 100
 	c := MakeCanvas(canvasPixels, canvasPixels)
 	color := Color{0, .7, .3}

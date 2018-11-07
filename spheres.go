@@ -2,15 +2,20 @@ package main
 
 // Sphere represents a sphere
 type Sphere struct {
-	T Matrix
+	transform Matrix
+	material  Material
 }
 
-func MakeSphere(T Matrix) Object {
-	return Sphere{T}
+func MakeSphere(transform Matrix, material Material) Object {
+	return Sphere{transform, material}
 }
 
 func (s Sphere) Transform() Matrix {
-	return s.T
+	return s.transform
+}
+
+func (s Sphere) Material() Material {
+	return s.material
 }
 
 func (s Sphere) NormalAt(p Tuple) Tuple {

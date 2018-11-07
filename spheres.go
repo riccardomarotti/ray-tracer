@@ -12,3 +12,7 @@ func MakeSphere(T Matrix) Object {
 func (s Sphere) Transform() Matrix {
 	return s.T
 }
+
+func (s Sphere) NormalAt(p Tuple) Tuple {
+	return p.Subtract(Point(0, 0, 0)).Normalize()
+}

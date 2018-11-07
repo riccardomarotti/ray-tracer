@@ -33,14 +33,16 @@ func AssertTupleEqual(expected Tuple, actual Tuple, t *testing.T) {
 }
 
 func AssertMatrixEqual(expected Matrix, actual Matrix, t *testing.T) {
-	message := fmt.Sprintf("Matrices differ. Expected was\n%v\nbut was\n%v", expected, actual)
+	message := fmt.Sprintf("Matrices differ.\nExpected was\n%v\n\nbut received\n%v\n\n", expected, actual)
 
 	Assert(expected.rows == actual.rows, message, t)
 	Assert(expected.cols == actual.cols, message, t)
 
 	for i := 0; i < expected.rows; i++ {
 		for j := 0; j < expected.cols; j++ {
-			Assert(areEqual(expected.At(i, j), actual.At(i, j)), message, t)
+			if !areEqual(expected.At(i, j), actual.At(i, j)) {
+				t.Fatal(message)
+			}
 		}
 	}
 }

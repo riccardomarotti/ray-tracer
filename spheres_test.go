@@ -2,8 +2,9 @@ package main
 
 import "testing"
 
-func TestSphereDefaultTransformation(t *testing.T) {
-	s := MakeSphere()
+func TestSphereTransformation(t *testing.T) {
+	T := Identity().Translate(2, 3, 4)
+	s := MakeSphere(T)
 
-	AssertMatrixEqual(Identity(), s.Transform(), t)
+	AssertMatrixEqual(T, s.Transform(), t)
 }

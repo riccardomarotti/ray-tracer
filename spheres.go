@@ -2,12 +2,13 @@ package main
 
 // Sphere represents a sphere
 type Sphere struct {
+	T Matrix
 }
 
-func MakeSphere() Object {
-	return Sphere{}
+func MakeSphere(T Matrix) Object {
+	return Sphere{T}
 }
 
 func (s Sphere) Transform() Matrix {
-	return Identity()
+	return s.T
 }

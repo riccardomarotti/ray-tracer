@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestCreatingAndQueryingARay(t *testing.T) {
 	origin := Point(1, 2, 3)
@@ -23,7 +26,7 @@ func TestComputeAPointFromADistanceAlongTheRay(t *testing.T) {
 
 func TestRayIntersectsASphereAtTwoPoints(t *testing.T) {
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
-	s := MakeSphere()
+	s := MakeSphere(Identity())
 
 	xs := r.Intersection(s)
 
@@ -34,7 +37,7 @@ func TestRayIntersectsASphereAtTwoPoints(t *testing.T) {
 
 func TestRayIntersectsASphereAtATangent(t *testing.T) {
 	r := Ray{Point(0, 1, -5), Vector(0, 0, 1)}
-	s := MakeSphere()
+	s := MakeSphere(Identity())
 
 	xs := r.Intersection(s)
 
@@ -45,7 +48,7 @@ func TestRayIntersectsASphereAtATangent(t *testing.T) {
 
 func TestRayMissesASphere(t *testing.T) {
 	r := Ray{Point(0, 2, -5), Vector(0, 0, 1)}
-	s := MakeSphere()
+	s := MakeSphere(Identity())
 
 	xs := r.Intersection(s)
 
@@ -54,7 +57,7 @@ func TestRayMissesASphere(t *testing.T) {
 
 func TestRayOriginatesInsideASphere(t *testing.T) {
 	r := Ray{Point(0, 0, 0), Vector(0, 0, 1)}
-	s := MakeSphere()
+	s := MakeSphere(Identity())
 	xs := r.Intersection(s)
 
 	Assert(2 == len(xs), "", t)
@@ -64,7 +67,7 @@ func TestRayOriginatesInsideASphere(t *testing.T) {
 
 func TestSphereBehindARay(t *testing.T) {
 	r := Ray{Point(0, 0, 5), Vector(0, 0, 1)}
-	s := MakeSphere()
+	s := MakeSphere(Identity())
 	xs := r.Intersection(s)
 
 	Assert(2 == len(xs), "", t)
@@ -74,13 +77,13 @@ func TestSphereBehindARay(t *testing.T) {
 
 func TestIntersecSetsTheObjectOnTheIntersection(t *testing.T) {
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
-	s := MakeSphere()
+	s := MakeSphere(Identity())
 
 	xs := r.Intersection(s)
 
 	Assert(2 == len(xs), "", t)
-	Assert(s == xs[0].object, "", t)
-	Assert(s == xs[1].object, "", t)
+	Assert(reflect.DeepEqual(s, xs[0].object), "", t)
+	Assert(reflect.DeepEqual(s, xs[1].object), "", t)
 }
 
 func TestTranslateRay(t *testing.T) {

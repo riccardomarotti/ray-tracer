@@ -16,3 +16,16 @@ func TestDefaultWorld(t *testing.T) {
 	Assert(reflect.DeepEqual(s1, w.objects[0]), "", t)
 	Assert(reflect.DeepEqual(s2, w.objects[1]), "", t)
 }
+
+func TestIntersectWorldWithARay(t *testing.T) {
+	w := DefaultWorld()
+	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+
+	xs := w.Intersect(ray)
+
+	Assert(len(xs) == 4, "", t)
+	AssertEqual(4, xs[0].t, t)
+	AssertEqual(4.5, xs[1].t, t)
+	AssertEqual(5.5, xs[2].t, t)
+	AssertEqual(6, xs[3].t, t)
+}

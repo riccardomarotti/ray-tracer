@@ -39,3 +39,7 @@ func PrepareHit(i Intersection, r Ray) Intersection {
 		inside:       inside,
 	}
 }
+
+func (i Intersection) Shade(world World) Color {
+	return i.object.Material().Lighting(world.light, i.point, i.eyeVector, i.normalVector)
+}

@@ -100,3 +100,30 @@ func TestIntersectionInside(t *testing.T) {
 	Assert(hitData.inside == true, "Hit ha dto be inside", t)
 	AssertTupleEqual(Vector(0, 0, -1), hitData.normalVector, t)
 }
+
+func TestShadingAnIntersection(t *testing.T) {
+	world := DefaultWorld()
+	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+	shape := world.objects[0]
+
+	hit := Intersection{t: 4, object: shape}
+	hit = PrepareHit(hit, ray)
+
+	c := hit.Shade(world)
+
+	AssertColorEqual(Color{0.38066, 0.47583, 0.2855}, c, t)
+}
+
+func TestShadingAnIntersectionFromTheInside(t *testing.T) {
+	world := DefaultWorld()
+	world.light = PointLight{Point(0, 0.25, 0), Color{1, 1, 1}}
+	ray := Ray{Point(0, 0, 0), Vector(0, 0, 1)}
+	shape := world.objects[1]
+
+	hit := Hit(ray.Intersection(shape))
+	hit = PrepareHit(hit, ray)
+
+	c := hit.Shade(world)
+
+	AssertColorEqual(Color{0.90498, 0.90498, 0.90498}, c, t)
+}

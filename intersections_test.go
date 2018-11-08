@@ -7,7 +7,7 @@ import (
 
 func TestIntersecionEncapsulatesTAndSolid(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
-	i := Intersection{3.5, s}
+	i := Intersection{t: 3.5, object: s}
 
 	AssertEqual(i.t, 3.5, t)
 
@@ -17,7 +17,7 @@ func TestIntersecionEncapsulatesTAndSolid(t *testing.T) {
 func TestAggregatingIntersections(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
 
-	xs := []Intersection{Intersection{1, s}, Intersection{2, s}}
+	xs := []Intersection{Intersection{t: 1, object: s}, Intersection{t: 2, object: s}}
 
 	Assert(len(xs) == 2, "", t)
 	AssertEqual(1, xs[0].t, t)
@@ -26,8 +26,8 @@ func TestAggregatingIntersections(t *testing.T) {
 
 func TestHitWhenAllIntersectionsHavePositiveT(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
-	i1 := Intersection{1, s}
-	i2 := Intersection{2, s}
+	i1 := Intersection{t: 1, object: s}
+	i2 := Intersection{t: 2, object: s}
 	xs := []Intersection{i2, i1}
 
 	Assert(reflect.DeepEqual(i1, Hit(xs)), "", t)
@@ -35,8 +35,8 @@ func TestHitWhenAllIntersectionsHavePositiveT(t *testing.T) {
 
 func TestHitWhenSomeIntersectionsHaveNegativeT(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
-	i1 := Intersection{-1, s}
-	i2 := Intersection{1, s}
+	i1 := Intersection{t: -1, object: s}
+	i2 := Intersection{t: 1, object: s}
 	xs := []Intersection{i2, i1}
 
 	Assert(reflect.DeepEqual(i2, Hit(xs)), "", t)
@@ -44,8 +44,8 @@ func TestHitWhenSomeIntersectionsHaveNegativeT(t *testing.T) {
 
 func TestHitWhenAllIntersectionsHaveNegativeT(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
-	i1 := Intersection{-1, s}
-	i2 := Intersection{-2, s}
+	i1 := Intersection{t: -1, object: s}
+	i2 := Intersection{t: -2, object: s}
 	xs := []Intersection{i2, i1}
 
 	Assert(Intersection{} == Hit(xs), "", t)
@@ -53,10 +53,10 @@ func TestHitWhenAllIntersectionsHaveNegativeT(t *testing.T) {
 
 func TestHitIsAlwaysTheLowestNonNegativeIntersection(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
-	i1 := Intersection{5, s}
-	i2 := Intersection{7, s}
-	i3 := Intersection{-3, s}
-	i4 := Intersection{2, s}
+	i1 := Intersection{t: 5, object: s}
+	i2 := Intersection{t: 7, object: s}
+	i3 := Intersection{t: -3, object: s}
+	i4 := Intersection{t: 2, object: s}
 	xs := []Intersection{i1, i2, i3, i4}
 
 	Assert(reflect.DeepEqual(i4, Hit(xs)), "", t)

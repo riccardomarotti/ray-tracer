@@ -30,8 +30,8 @@ func (r Ray) Intersection(s Object) (intersection []Intersection) {
 			t1, t2 = t2, t1
 		}
 
-		i1 := Intersection{t1, s}
-		i2 := Intersection{t2, s}
+		i1 := Intersection{t: t1, object: s}
+		i2 := Intersection{t: t2, object: s}
 
 		intersection = []Intersection{i1, i2}
 	}

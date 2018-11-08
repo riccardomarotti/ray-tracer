@@ -1,14 +1,10 @@
 package main
 
 type Intersection struct {
-	t      float64
-	object Object
-}
-
-type HitData struct {
-	point,
-	eyeVector, normalVector Tuple
-	inside bool
+	t                              float64
+	object                         Object
+	point, eyeVector, normalVector Tuple
+	inside                         bool
 }
 
 func Hit(i []Intersection) (hit Intersection) {
@@ -23,7 +19,7 @@ func Hit(i []Intersection) (hit Intersection) {
 	return
 }
 
-func PrepareHit(i Intersection, r Ray) HitData {
+func PrepareHit(i Intersection, r Ray) Intersection {
 	point := r.Position(i.t)
 	normalVector := i.object.NormalAt(point)
 	eyeVector := r.direction.Multiply(-1)
@@ -34,7 +30,9 @@ func PrepareHit(i Intersection, r Ray) HitData {
 		normalVector = normalVector.Multiply(-1)
 	}
 
-	return HitData{
+	return Intersection{
+		t:            i.t,
+		object:       i.object,
 		point:        point,
 		eyeVector:    eyeVector,
 		normalVector: normalVector,

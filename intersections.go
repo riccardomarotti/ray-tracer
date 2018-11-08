@@ -6,7 +6,9 @@ type Intersection struct {
 }
 
 type HitData struct {
-	point, eyeVector, normalVector Tuple
+	point,
+	eyeVector, normalVector Tuple
+	inside bool
 }
 
 func Hit(i []Intersection) (hit Intersection) {
@@ -23,5 +25,19 @@ func Hit(i []Intersection) (hit Intersection) {
 
 func PrepareHit(i Intersection, r Ray) HitData {
 	point := r.Position(i.t)
-	return HitData{point: point, eyeVector: r.direction.Multiply(-1), normalVector: i.object.NormalAt(point)}
+	normalVector := i.object.NormalAt(point)
+	eyeVector := r.direction.Multiply(-1)
+	inside := false
+
+	if normalVector.Dot(eyeVector) < 0 {
+		inside = true
+		normalVector = normalVector.Multiply(-1)
+	}
+
+	return HitData{
+		point:        point,
+		eyeVector:    eyeVector,
+		normalVector: normalVector,
+		inside:       inside,
+	}
 }

@@ -26,7 +26,7 @@ func TestComputeAPointFromADistanceAlongTheRay(t *testing.T) {
 
 func TestRayIntersectsASphereAtTwoPoints(t *testing.T) {
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
-	s := MakeSphere(Identity(), MakeMaterial())
+	s := MakeSphere(Identity(), DefaultMaterial())
 
 	xs := r.Intersection(s)
 
@@ -37,7 +37,7 @@ func TestRayIntersectsASphereAtTwoPoints(t *testing.T) {
 
 func TestRayIntersectsASphereAtATangent(t *testing.T) {
 	r := Ray{Point(0, 1, -5), Vector(0, 0, 1)}
-	s := MakeSphere(Identity(), MakeMaterial())
+	s := MakeSphere(Identity(), DefaultMaterial())
 
 	xs := r.Intersection(s)
 
@@ -48,7 +48,7 @@ func TestRayIntersectsASphereAtATangent(t *testing.T) {
 
 func TestRayMissesASphere(t *testing.T) {
 	r := Ray{Point(0, 2, -5), Vector(0, 0, 1)}
-	s := MakeSphere(Identity(), MakeMaterial())
+	s := MakeSphere(Identity(), DefaultMaterial())
 
 	xs := r.Intersection(s)
 
@@ -57,7 +57,7 @@ func TestRayMissesASphere(t *testing.T) {
 
 func TestRayOriginatesInsideASphere(t *testing.T) {
 	r := Ray{Point(0, 0, 0), Vector(0, 0, 1)}
-	s := MakeSphere(Identity(), MakeMaterial())
+	s := MakeSphere(Identity(), DefaultMaterial())
 	xs := r.Intersection(s)
 
 	Assert(2 == len(xs), "", t)
@@ -67,7 +67,7 @@ func TestRayOriginatesInsideASphere(t *testing.T) {
 
 func TestSphereBehindARay(t *testing.T) {
 	r := Ray{Point(0, 0, 5), Vector(0, 0, 1)}
-	s := MakeSphere(Identity(), MakeMaterial())
+	s := MakeSphere(Identity(), DefaultMaterial())
 	xs := r.Intersection(s)
 
 	Assert(2 == len(xs), "", t)
@@ -77,7 +77,7 @@ func TestSphereBehindARay(t *testing.T) {
 
 func TestIntersecSetsTheObjectOnTheIntersection(t *testing.T) {
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
-	s := MakeSphere(Identity(), MakeMaterial())
+	s := MakeSphere(Identity(), DefaultMaterial())
 
 	xs := r.Intersection(s)
 

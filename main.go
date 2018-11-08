@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"sync"
 )
 
 func main() {
-	material := MakeMaterial()
+	material := DefaultMaterial()
 	material.color = Color{0.2, 1, 1}
-	s := MakeSphere(Identity().Scale(2, 1, 2), material)
+	s := MakeSphere(Identity().Scale(1.5, 1.5, 1.5).RotateX(math.Pi/4), material)
 
 	lightPosition := Point(-10, 10, -10)
 	lightColor := Color{1, 1, 1}

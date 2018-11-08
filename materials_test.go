@@ -6,7 +6,7 @@ import (
 )
 
 func TestDefaultMaterial(t *testing.T) {
-	m := MakeMaterial()
+	m := DefaultMaterial()
 
 	Assert(Color{1, 1, 1} == m.color, "", t)
 	AssertEqual(0.1, m.ambient, t)
@@ -16,7 +16,7 @@ func TestDefaultMaterial(t *testing.T) {
 }
 
 func TestLightingWithTheEyeBetweenTheLightAndTheSurface(t *testing.T) {
-	m := MakeMaterial()
+	m := DefaultMaterial()
 	position := Point(0, 0, 0)
 
 	eyeVector := Vector(0, 0, -1)
@@ -26,7 +26,7 @@ func TestLightingWithTheEyeBetweenTheLightAndTheSurface(t *testing.T) {
 	AssertColorEqual(Color{1.9, 1.9, 1.9}, m.Lighting(light, position, eyeVector, normalVector), t)
 }
 func TestLightingWithTheEyeBetweenTheLightAndTheSurfaceEyeOffset45Degrees(t *testing.T) {
-	m := MakeMaterial()
+	m := DefaultMaterial()
 	position := Point(0, 0, 0)
 
 	eyeVector := Vector(0, math.Sqrt(2)/2, -math.Sqrt(2)/2)
@@ -37,7 +37,7 @@ func TestLightingWithTheEyeBetweenTheLightAndTheSurfaceEyeOffset45Degrees(t *tes
 }
 
 func TestLightingWithEyeOppositeSurfaceLightOffset45Degrees(t *testing.T) {
-	m := MakeMaterial()
+	m := DefaultMaterial()
 	position := Point(0, 0, 0)
 
 	eyeVector := Vector(0, 0, -1)
@@ -48,7 +48,7 @@ func TestLightingWithEyeOppositeSurfaceLightOffset45Degrees(t *testing.T) {
 }
 
 func TestLightingWithEyeInThePathOfTheReflectionVector(t *testing.T) {
-	m := MakeMaterial()
+	m := DefaultMaterial()
 	position := Point(0, 0, 0)
 
 	eyeVector := Vector(0, -math.Sqrt(2)/2, -math.Sqrt(2)/2)
@@ -58,7 +58,7 @@ func TestLightingWithEyeInThePathOfTheReflectionVector(t *testing.T) {
 	AssertColorEqual(Color{1.6364, 1.6364, 1.6364}, m.Lighting(light, position, eyeVector, normalVector), t)
 }
 func TestLightingWithTheLightBehindTheSurface(t *testing.T) {
-	m := MakeMaterial()
+	m := DefaultMaterial()
 	position := Point(0, 0, 0)
 
 	eyeVector := Vector(0, 0, -1)

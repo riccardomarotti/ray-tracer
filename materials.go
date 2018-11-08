@@ -9,8 +9,12 @@ type Material struct {
 	ambient, diffuse, specular, shininess float64
 }
 
-func MakeMaterial() Material {
+func DefaultMaterial() Material {
 	return Material{Color{1, 1, 1}, 0.1, 0.9, 0.9, 200}
+}
+
+func MakeMaterial(color Color, ambient, diffuse, specular, shininess float64) Material {
+	return Material{color, ambient, diffuse, specular, shininess}
 }
 
 func (m Material) Lighting(light PointLight, position Tuple, eyeVector Tuple, normalVector Tuple) Color {

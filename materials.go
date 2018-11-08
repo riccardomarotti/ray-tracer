@@ -37,6 +37,4 @@ func (m Material) Lighting(light PointLight, position Tuple, eyeVector Tuple, no
 	}
 
 	return ambient.Add(diffuse).Add(specular)
-
-	return Color{}
 }

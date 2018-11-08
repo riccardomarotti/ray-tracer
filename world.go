@@ -17,12 +17,20 @@ func DefaultWorld() World {
 
 func (w World) Intersect(ray Ray) []Intersection {
 	var intersections []Intersection
+	channel := make(chan []Intersection)
 	for _, object := range w.objects {
-		xs := ray.Intersection(object)
-		intersections = append(intersections, xs...)
+		go func(o Object) {
+			channel <- ray.Intersection(o)
+		}(object)
 	}
+
+	for i := 0; i < len(w.objects); i++ {
+		intersections = append(intersections, <-channel...)
+	}
+
 	sort.Slice(intersections, func(i, j int) bool {
 		return intersections[i].t < intersections[j].t
 	})
+
 	return intersections
 }

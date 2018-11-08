@@ -61,3 +61,17 @@ func TestHitIsAlwaysTheLowestNonNegativeIntersection(t *testing.T) {
 
 	Assert(reflect.DeepEqual(i4, Hit(xs)), "", t)
 }
+
+func TestPrecomputingTheStateOfAnIntersection(t *testing.T) {
+	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+	shape := MakeSphere(Identity(), DefaultMaterial())
+
+	hit := Hit(ray.Intersection(shape))
+
+	hitData := PrepareHit(hit, ray)
+
+	AssertTupleEqual(Point(0, 0, -1), hitData.point, t)
+	AssertTupleEqual(Vector(0, 0, -1), hitData.eyeVector, t)
+	AssertTupleEqual(Vector(0, 0, -1), hitData.normalVector, t)
+
+}

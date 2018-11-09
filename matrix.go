@@ -2,13 +2,11 @@ package main
 
 import "math"
 
-// Matrix represents a matrix
 type Matrix struct {
 	rows, cols int
 	values     []float64
 }
 
-// MakeMatrix creates a matrix of rows X cols with data values
 func MakeMatrix(rows, cols int, data []float64) Matrix {
 	return Matrix{rows, cols, data}
 }
@@ -17,12 +15,10 @@ func (A Matrix) flatten(i, j int) int {
 	return A.cols*i + j
 }
 
-// At returns the matrix value at i X j
 func (A Matrix) At(i, j int) float64 {
 	return A.values[A.flatten(i, j)]
 }
 
-// Equals checks for matrix equality
 func (A Matrix) Equals(B Matrix) bool {
 	epsilon := 0.00001
 
@@ -36,7 +32,6 @@ func (A Matrix) Equals(B Matrix) bool {
 	return true
 }
 
-// Multiply calulates the product of two matrices
 func (A Matrix) Multiply(B Matrix) Matrix {
 	values := make([]float64, len(A.values))
 
@@ -53,7 +48,6 @@ func (A Matrix) Multiply(B Matrix) Matrix {
 	return MakeMatrix(A.rows, A.cols, values)
 }
 
-// MultiplyByTuple multiplies a matrix by a tuple
 func (A Matrix) MultiplyByTuple(b Tuple) Tuple {
 	result := make([]float64, 4)
 	for row := 0; row < 4; row++ {
@@ -69,7 +63,6 @@ func (A Matrix) MultiplyByTuple(b Tuple) Tuple {
 	return Tuple{result[0], result[1], result[2], result[3]}
 }
 
-// MakeIdentityMatrix creates an identiy matrix of the given size
 func MakeIdentityMatrix(size int) (identity Matrix) {
 	identity = MakeMatrix(size, size, make([]float64, size*size))
 	for i := 0; i < size; i++ {
@@ -78,12 +71,10 @@ func MakeIdentityMatrix(size int) (identity Matrix) {
 	return
 }
 
-// Identity creates a 4x4 identity matrix
 func Identity() Matrix {
 	return MakeIdentityMatrix(4)
 }
 
-// T returns A transposed (At)
 func (A Matrix) T() (At Matrix) {
 	At = MakeMatrix(A.rows, A.cols, make([]float64, len(A.values)))
 	for i := 0; i < A.rows; i++ {
@@ -99,7 +90,6 @@ func (A Matrix) determinant2x2() float64 {
 	return A.values[A.flatten(0, 0)]*A.values[A.flatten(1, 1)] - A.values[A.flatten(0, 1)]*A.values[A.flatten(1, 0)]
 }
 
-// Determinant calculates a matrix determinant
 func (A Matrix) Determinant() float64 {
 	if A.rows == 2 {
 		return A.determinant2x2()
@@ -113,7 +103,6 @@ func (A Matrix) Determinant() float64 {
 	return det
 }
 
-// Submatrix calculates the matrix submatrix
 func (A Matrix) Submatrix(row, col int) Matrix {
 	resultRows := (A.rows - 1)
 	resultCols := (A.rows - 1)
@@ -130,12 +119,10 @@ func (A Matrix) Submatrix(row, col int) Matrix {
 	return resultMatrix
 }
 
-// Minor calculates the matrix minor
 func (A Matrix) Minor(i, j int) float64 {
 	return A.Submatrix(i, j).Determinant()
 }
 
-// Cofactor calculates the cofactor
 func (A Matrix) Cofactor(i, j int) float64 {
 	m := A.Minor(i, j)
 
@@ -146,12 +133,10 @@ func (A Matrix) Cofactor(i, j int) float64 {
 	return m
 }
 
-// IsInvertible chacks if the matrix is invertible
 func (A Matrix) IsInvertible() bool {
 	return A.Determinant() != 0
 }
 
-// Inverse inverts the matrix
 func (A Matrix) Inverse() (Ai Matrix) {
 	Ai = MakeMatrix(A.rows, A.cols, make([]float64, A.rows*A.cols))
 	Adet := A.Determinant()
@@ -164,4 +149,19 @@ func (A Matrix) Inverse() (Ai Matrix) {
 
 	Ai = Ai.T()
 	return
+}
+
+func ViewTransform(from, to, up Tuple) Matrix {
+	forward := to.Subtract(from).Normalize()
+	left := forward.Cross(up.Normalize())
+	trueUp := left.Cross(forward)
+
+	orientation := MakeMatrix(4, 4, []float64{
+		left.x, left.y, left.z, 0,
+		trueUp.x, trueUp.y, trueUp.z, 0,
+		-forward.x, -forward.y, -forward.z, 0,
+		0, 0, 0, 1,
+	})
+
+	return orientation.Translate(-from.x, -from.y, -from.z)
 }

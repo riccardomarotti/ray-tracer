@@ -41,3 +41,17 @@ func TestConstructRayWhenTheCameraIsTransformed(t *testing.T) {
 	AssertTupleEqual(Point(0, 2, -5), r.origin, t)
 	// AssertTupleEqual(Vector(math.Sqrt(2)/2, 0, math.Sqrt(2)/2), r.direction, t)
 }
+
+func TestRendringWorldWithCamera(t *testing.T) {
+	from := Point(0, 0, -5)
+	to := Point(0, 0, 0)
+	up := Vector(0, 1, 0)
+
+	c := Camera{11, 11, math.Pi / 2, ViewTransform(from, to, up)}
+	w := DefaultWorld()
+
+	image := c.Render(w)
+
+	AssertColorEqual(Color{0.38066, 0.47583, 0.2855}, image.PixelAt(5, 5), t)
+
+}

@@ -9,30 +9,23 @@ type Camera struct {
 	transform                 Matrix
 }
 
-func (c Camera) halfWidth() float64 {
+func (c Camera) halfWidthAndHeight() (float64, float64) {
 	aspectRatio := c.hsize / c.vsize
 	halfWidth := math.Tan(c.fieldOfView / 2)
+	halfHeight := halfWidth
 
 	if aspectRatio < 1 {
 		halfWidth = halfWidth * aspectRatio
-	}
-
-	return halfWidth
-}
-
-func (c Camera) halfHeight() float64 {
-	aspectRatio := c.hsize / c.vsize
-	halfHeight := math.Tan(c.fieldOfView / 2)
-
-	if aspectRatio >= 1 {
+	} else {
 		halfHeight = halfHeight / aspectRatio
 	}
 
-	return halfHeight
+	return halfWidth, halfHeight
 }
 
 func (c Camera) PixelSize() float64 {
-	return 2 * c.halfWidth() / c.hsize
+	halfWidth, _ := c.halfWidthAndHeight()
+	return 2 * halfWidth / c.hsize
 }
 
 func (c Camera) RayForPixel(x, y float64) Ray {
@@ -41,8 +34,9 @@ func (c Camera) RayForPixel(x, y float64) Ray {
 	xOffset := (x + 0.5) * pixelSize
 	yOffset := (y + 0.5) * pixelSize
 
-	worldX := c.halfWidth() - xOffset
-	worldY := c.halfHeight() - yOffset
+	halfWidth, halfHeight := c.halfWidthAndHeight()
+	worldX := halfWidth - xOffset
+	worldY := halfHeight - yOffset
 
 	inverse := c.transform.Inverse()
 	pixel := inverse.MultiplyByTuple(Point(worldX, worldY, -1))

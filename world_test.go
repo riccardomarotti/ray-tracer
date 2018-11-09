@@ -35,3 +35,28 @@ func TestIntersectWorldWithARay(t *testing.T) {
 	AssertEqual(5.5, xs[2].t, t)
 	AssertEqual(6, xs[3].t, t)
 }
+
+func TestTheColorWhenARayMisses(t *testing.T) {
+	world := DefaultWorld()
+	ray := Ray{Point(0, 0, -5), Vector(0, 1, 0)}
+
+	c := world.ColorAt(ray)
+	AssertColorEqual(Color{0, 0, 0}, c, t)
+}
+
+func TestTheColorWhenARayHits(t *testing.T) {
+	world := DefaultWorld()
+	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+
+	c := world.ColorAt(ray)
+	AssertColorEqual(Color{0.38066, 0.47583, 0.2855}, c, t)
+}
+
+func TestColotWithAnIntersectionBehindTheRay(t *testing.T) {
+	world := WorldWithAmbientSetTo(1)
+
+	ray := Ray{Point(0, 0, 0.75), Vector(0, 0, -1)}
+
+	c := world.ColorAt(ray)
+	AssertColorEqual(world.objects[1].Material().color, c, t)
+}

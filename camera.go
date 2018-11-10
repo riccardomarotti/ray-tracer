@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"sync"
 )
 
 type Camera struct {
@@ -50,12 +51,20 @@ func (c Camera) RayForPixel(x, y float64) Ray {
 func (c Camera) Render(w World) Canvas {
 	image := MakeCanvas(c.hsize, c.vsize)
 
+	var wg sync.WaitGroup
 	for y := 0; y < c.vsize-1; y++ {
 		for x := 0; x < c.hsize-1; x++ {
-			ray := c.RayForPixel(float64(x), float64(y))
-			color := w.ColorAt(ray)
-			image.WriteAt(x, y, color)
+			wg.Add(1)
+			go c.writePixel(x, y, image, w, &wg)
 		}
 	}
+	wg.Wait()
 	return image
+}
+
+func (c Camera) writePixel(x, y int, image Canvas, w World, wg *sync.WaitGroup) {
+	defer wg.Done()
+	ray := c.RayForPixel(float64(x), float64(y))
+	color := w.ColorAt(ray)
+	image.WriteAt(x, y, color)
 }

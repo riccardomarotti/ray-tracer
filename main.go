@@ -3,57 +3,39 @@ package main
 import (
 	"fmt"
 	"math"
-	"sync"
 )
 
 func main() {
-	material := DefaultMaterial()
-	material.color = Color{0.2, 1, 1}
-	s := MakeSphere(Identity().Scale(1.5, 1.5, 1.5).RotateX(math.Pi/4), material)
+	camera := Camera{1000, 500, math.Pi / 3, ViewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0))}
+	sphereMaterial := DefaultMaterial()
+	sphereMaterial.color = Color{0.2, 1, 1}
+	sphere := MakeSphere(Identity().Translate(-0.5, 1, 0.5), sphereMaterial)
+
+	sphere2Material := DefaultMaterial()
+	sphere2Material.color = Color{0.5, 1, 0.1}
+	sphere2Material.diffuse = 0.7
+	sphere2Material.specular = 0.3
+	sphere2 := MakeSphere(Identity().Translate(1.5, 0.5, -0.5).Scale(0.5, 0.5, 0.5), sphere2Material)
+
+	sphere3Material := DefaultMaterial()
+	sphere3Material.color = Color{1, 0.8, 0.1}
+	sphere3Material.diffuse = 0.7
+	sphere3Material.specular = 0.3
+	sphere3 := MakeSphere(Identity().Translate(-1.5, 0.33, -0.75).Scale(0.33, 0.33, 0.33), sphere3Material)
+
+	floorMaterial := DefaultMaterial()
+	floorMaterial.color = Color{1, 0.9, 0.9}
+	floorMaterial.specular = 0
+	floor := MakeSphere(Identity().Scale(10, 0.01, 10), floorMaterial)
+
+	leftWall := MakeSphere(Identity().Translate(0, 0, 5).RotateY(-math.Pi/4).RotateX(math.Pi/2).Scale(10, 0.01, 10), floorMaterial)
+	rightWall := MakeSphere(Identity().Translate(0, 0, 5).RotateY(math.Pi/4).RotateX(math.Pi/2).Scale(10, 0.01, 10), floorMaterial)
 
 	lightPosition := Point(-10, 10, -10)
 	lightColor := Color{1, 1, 1}
 	light := PointLight{lightPosition, lightColor}
 
-	canvasPixels := 1000
-	c := MakeCanvas(canvasPixels, canvasPixels)
-
-	rayOrigin := Point(0, 0, -10)
-	wallZ := 20.0
-	wallSize := 14.0
-	half := wallSize / 2
-	pixelSize := wallSize / float64(canvasPixels)
-
-	var wg sync.WaitGroup
-
-	for y := 0; y < canvasPixels; y++ {
-		worldY := half - pixelSize*float64(y)
-		for x := 0; x < canvasPixels; x++ {
-			worldX := -half + pixelSize*float64(x)
-			wg.Add(1)
-			go writePixel(worldX, worldY, wallZ, rayOrigin, s, c, x, y, light, &wg)
-		}
-	}
-
-	wg.Wait()
-
+	world := World{light, []Object{sphere, sphere2, sphere3, floor, leftWall, rightWall}}
+	c := camera.Render(world)
 	fmt.Printf(c.PPM())
-}
-
-func writePixel(worldX, worldY, wallZ float64, rayOrigin Tuple, s Object, c Canvas, x, y int, light PointLight, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	position := Point(worldX, worldY, wallZ)
-	r := Ray{rayOrigin, position.Subtract(rayOrigin).Normalize()}
-	xs := r.Intersection(s)
-
-	intersection := Hit(xs)
-	hit := intersection != Intersection{}
-	if hit {
-		point := r.Position(intersection.t)
-		normal := intersection.object.NormalAt(point)
-		eye := r.direction.Multiply(-1)
-		color := intersection.object.Material().Lighting(light, point, eye, normal)
-		c.WriteAt(x, y, color)
-	}
 }

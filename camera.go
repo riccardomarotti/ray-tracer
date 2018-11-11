@@ -52,8 +52,8 @@ func (c Camera) Render(w World) Canvas {
 	image := MakeCanvas(c.hsize, c.vsize)
 
 	var wg sync.WaitGroup
-	for y := 0; y < c.vsize-1; y++ {
-		for x := 0; x < c.hsize-1; x++ {
+	for y := 0; y < c.vsize; y++ {
+		for x := 0; x < c.hsize; x++ {
 			wg.Add(1)
 			go c.writePixel(x, y, image, w, &wg)
 		}

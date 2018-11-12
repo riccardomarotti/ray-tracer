@@ -22,6 +22,7 @@ func Hit(i []Intersection) (hit Intersection) {
 func PrepareHit(i Intersection, r Ray) Intersection {
 	point := r.Position(i.t)
 	normalVector := i.object.NormalAt(point)
+	point = point.Add(normalVector.Multiply(0.000009))
 	eyeVector := r.direction.Multiply(-1)
 	inside := false
 
@@ -41,5 +42,5 @@ func PrepareHit(i Intersection, r Ray) Intersection {
 }
 
 func (i Intersection) Shade(world World) Color {
-	return i.object.Material().Lighting(world.light, i.point, i.eyeVector, i.normalVector, false)
+	return i.object.Material().Lighting(world.light, i.point, i.eyeVector, i.normalVector, world.IsShadowed(i.point))
 }

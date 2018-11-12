@@ -125,5 +125,31 @@ func TestShadingAnIntersectionFromTheInside(t *testing.T) {
 
 	c := hit.Shade(world)
 
-	AssertColorEqual(Color{0.90498, 0.90498, 0.90498}, c, t)
+	AssertColorEqual(Color{.1, .1, .1}, c, t)
+}
+
+func TestShadeIsGivenAnIntersectionInShadow(t *testing.T) {
+	light := PointLight{Point(0, 0, -10), Color{1, 1, 1}}
+	s1 := MakeSphere(Identity(), DefaultMaterial())
+	s2 := MakeSphere(Identity().Translate(0, 0, 10), DefaultMaterial())
+	world := World{light, []Object{s1, s2}}
+
+	r := Ray{Point(0, 0, 5), Vector(0, 0, 1)}
+	hit := Hit(r.Intersection(s2))
+	hit = PrepareHit(hit, r)
+
+	c := hit.Shade(world)
+
+	AssertColorEqual(Color{0.1, 0.1, 0.1}, c, t)
+}
+
+func TestThePointIdOffset(t *testing.T) {
+	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+	shape := MakeSphere(Identity(), DefaultMaterial())
+
+	hit := Hit(ray.Intersection(shape))
+	hit = PrepareHit(hit, ray)
+
+	Assert(hit.point.z > -1.1 && hit.point.z < -1, "", t)
+
 }

@@ -6,10 +6,6 @@ type Sphere struct {
 	material  Material
 }
 
-func MakeSphere(transform Matrix, material Material) Object {
-	return Sphere{transform, material}
-}
-
 func (s Sphere) Transform() Matrix {
 	return s.transform
 }

@@ -9,14 +9,14 @@ func TestDefaultWorld(t *testing.T) {
 	w := DefaultWorld()
 
 	light := PointLight{Point(-10, 10, -10), Color{1, 1, 1}}
-	s1 := MakeSphere(Identity(), Material{
+	s1 := Sphere{Identity(), Material{
 		color:     Color{0.8, 1.0, 0.6},
 		ambient:   0.1,
 		diffuse:   0.7,
 		specular:  0.2,
 		shininess: 200,
-	})
-	s2 := MakeSphere(Identity().Scale(0.5, 0.5, 0.5), DefaultMaterial())
+	}}
+	s2 := Sphere{Identity().Scale(0.5, 0.5, 0.5), DefaultMaterial()}
 
 	Assert(light == w.light, "", t)
 	Assert(reflect.DeepEqual(s1, w.objects[0]), "", t)

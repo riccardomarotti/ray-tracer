@@ -7,14 +7,14 @@ import (
 
 func TestSphereTransformation(t *testing.T) {
 	T := Identity().Translate(2, 3, 4)
-	s := MakeSphere(T, DefaultMaterial())
+	s := Sphere{T, DefaultMaterial()}
 
 	AssertMatrixEqual(T, s.Transform(), t)
 }
 
 func TestIntersectingAScaledSphereWithARay(t *testing.T) {
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
-	s := MakeSphere(Identity().Scale(2, 2, 2), DefaultMaterial())
+	s := Sphere{Identity().Scale(2, 2, 2), DefaultMaterial()}
 
 	xs := r.Intersection(s)
 
@@ -25,7 +25,7 @@ func TestIntersectingAScaledSphereWithARay(t *testing.T) {
 
 func TestIntersectingATranslatedSphereWithARay(t *testing.T) {
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
-	s := MakeSphere(Identity().Translate(5, 0, 0), DefaultMaterial())
+	s := Sphere{Identity().Translate(5, 0, 0), DefaultMaterial()}
 
 	xs := r.Intersection(s)
 
@@ -33,28 +33,28 @@ func TestIntersectingATranslatedSphereWithARay(t *testing.T) {
 }
 
 func TestNormalOnSphereAtAPointOnTheXAxis(t *testing.T) {
-	s := MakeSphere(Identity(), DefaultMaterial())
+	s := Sphere{Identity(), DefaultMaterial()}
 	n := s.NormalAt(Point(1, 0, 0))
 
 	AssertTupleEqual(Vector(1, 0, 0), n, t)
 }
 
 func TestNormalOnSphereAtAPointOnTheYAxis(t *testing.T) {
-	s := MakeSphere(Identity(), DefaultMaterial())
+	s := Sphere{Identity(), DefaultMaterial()}
 	n := s.NormalAt(Point(0, 1, 0))
 
 	AssertTupleEqual(Vector(0, 1, 0), n, t)
 }
 
 func TestNormalOnSphereAtAPointOnTheZAxis(t *testing.T) {
-	s := MakeSphere(Identity(), DefaultMaterial())
+	s := Sphere{Identity(), DefaultMaterial()}
 	n := s.NormalAt(Point(0, 0, 1))
 
 	AssertTupleEqual(Vector(0, 0, 1), n, t)
 }
 
 func TestNormalOnSphereAtANonAxialPoint(t *testing.T) {
-	s := MakeSphere(Identity(), DefaultMaterial())
+	s := Sphere{Identity(), DefaultMaterial()}
 	xyz := math.Sqrt(3) / 3
 
 	n := s.NormalAt(Point(xyz, xyz, xyz))
@@ -63,7 +63,7 @@ func TestNormalOnSphereAtANonAxialPoint(t *testing.T) {
 }
 
 func TestNormalIsANormalizedVector(t *testing.T) {
-	s := MakeSphere(Identity(), DefaultMaterial())
+	s := Sphere{Identity(), DefaultMaterial()}
 	xyz := math.Sqrt(3) / 3
 
 	n := s.NormalAt(Point(xyz, xyz, xyz))
@@ -72,7 +72,7 @@ func TestNormalIsANormalizedVector(t *testing.T) {
 }
 
 func TestComputingTheNormalOnATranslatedSphere(t *testing.T) {
-	s := MakeSphere(Identity().Translate(0, 1, 0), DefaultMaterial())
+	s := Sphere{Identity().Translate(0, 1, 0), DefaultMaterial()}
 
 	n := s.NormalAt(Point(0, 1.70711, -0.70711))
 
@@ -80,7 +80,7 @@ func TestComputingTheNormalOnATranslatedSphere(t *testing.T) {
 }
 
 func TestComputingTheNormalOnAScaledSphere(t *testing.T) {
-	s := MakeSphere(Identity().Scale(1, 0.5, 1), DefaultMaterial())
+	s := Sphere{Identity().Scale(1, 0.5, 1), DefaultMaterial()}
 
 	n := s.NormalAt(Point(0, math.Sqrt(2)/2, -math.Sqrt(2)/2))
 
@@ -89,7 +89,7 @@ func TestComputingTheNormalOnAScaledSphere(t *testing.T) {
 
 func TestSphereHasMaterial(t *testing.T) {
 	m := DefaultMaterial()
-	s := MakeSphere(Identity(), m)
+	s := Sphere{Identity(), m}
 
 	Assert(m == s.Material(), "", t)
 

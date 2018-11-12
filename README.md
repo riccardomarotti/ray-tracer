@@ -4,4 +4,8 @@
 
 
 
-A ray tracer based on Jamis Buck's [book](https://pragprog.com/book/jbtracer/the-ray-tracer-challenge)
+A ray tracer based on Jamis Buck's [book](https://pragprog.com/book/jbtracer/the-ray-tracer-challenge).
+
+This image shows the current development progress:
+
+![](example.png?raw=true)

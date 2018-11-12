@@ -1,5 +1,9 @@
 package main
 
+import (
+	"math"
+)
+
 type Plane struct {
 	transofrm Matrix
 	material  Material
@@ -21,6 +25,15 @@ func (p Plane) Material() Material {
 	return p.material
 }
 
-func (p Plane) Intersection(r Ray) []Intersection {
-	return make([]Intersection, 0)
+func (p Plane) Intersection(r Ray) (intersection []Intersection) {
+	intersection = make([]Intersection, 0)
+	if (math.Abs(r.direction.y)) >= 0.0001 {
+		t := -r.origin.y / r.direction.y
+		i := Intersection{}
+		i.t = t
+		i.object = p
+		return []Intersection{i}
+	}
+
+	return
 }

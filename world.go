@@ -42,7 +42,7 @@ func (w World) Intersect(ray Ray) []Intersection {
 	channel := make(chan []Intersection)
 	for _, object := range w.objects {
 		go func(o Object) {
-			channel <- ray.Intersection(o)
+			channel <- o.Intersection(ray)
 		}(object)
 	}
 

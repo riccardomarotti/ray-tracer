@@ -66,7 +66,7 @@ func TestPrecomputingTheStateOfAnIntersection(t *testing.T) {
 	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
 	shape := Sphere{Identity(), DefaultMaterial()}
 
-	hit := Hit(ray.Intersection(shape))
+	hit := Hit(shape.Intersection(ray))
 
 	hitData := PrepareHit(hit, ray)
 
@@ -79,7 +79,7 @@ func TestIntersectionOutside(t *testing.T) {
 	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
 	shape := Sphere{Identity(), DefaultMaterial()}
 
-	hit := Hit(ray.Intersection(shape))
+	hit := Hit(shape.Intersection(ray))
 
 	hitData := PrepareHit(hit, ray)
 
@@ -90,7 +90,7 @@ func TestIntersectionInside(t *testing.T) {
 	ray := Ray{Point(0, 0, 0), Vector(0, 0, 1)}
 	shape := Sphere{Identity(), DefaultMaterial()}
 
-	hit := Hit(ray.Intersection(shape))
+	hit := Hit(shape.Intersection(ray))
 
 	hitData := PrepareHit(hit, ray)
 
@@ -120,7 +120,7 @@ func TestShadingAnIntersectionFromTheInside(t *testing.T) {
 	ray := Ray{Point(0, 0, 0), Vector(0, 0, 1)}
 	shape := world.objects[1]
 
-	hit := Hit(ray.Intersection(shape))
+	hit := Hit(shape.Intersection(ray))
 	hit = PrepareHit(hit, ray)
 
 	c := hit.Shade(world)
@@ -135,7 +135,7 @@ func TestShadeIsGivenAnIntersectionInShadow(t *testing.T) {
 	world := World{light, []Object{s1, s2}}
 
 	r := Ray{Point(0, 0, 5), Vector(0, 0, 1)}
-	hit := Hit(r.Intersection(s2))
+	hit := Hit(s2.Intersection(r))
 	hit = PrepareHit(hit, r)
 
 	c := hit.Shade(world)
@@ -147,7 +147,7 @@ func TestThePointIdOffset(t *testing.T) {
 	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
 	shape := Sphere{Identity(), DefaultMaterial()}
 
-	hit := Hit(ray.Intersection(shape))
+	hit := Hit(shape.Intersection(ray))
 	hit = PrepareHit(hit, ray)
 
 	Assert(hit.point.z > -1.1 && hit.point.z < -1, "", t)

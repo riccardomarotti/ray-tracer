@@ -16,7 +16,7 @@ func TestIntersectingAScaledSphereWithARay(t *testing.T) {
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
 	s := Sphere{Identity().Scale(2, 2, 2), DefaultMaterial()}
 
-	xs := r.Intersection(s)
+	xs := s.Intersection(r)
 
 	Assert(len(xs) == 2, "", t)
 	AssertEqual(3, xs[0].t, t)
@@ -27,7 +27,7 @@ func TestIntersectingATranslatedSphereWithARay(t *testing.T) {
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
 	s := Sphere{Identity().Translate(5, 0, 0), DefaultMaterial()}
 
-	xs := r.Intersection(s)
+	xs := s.Intersection(r)
 
 	Assert(len(xs) == 0, "", t)
 }

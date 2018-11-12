@@ -1,6 +1,8 @@
 package main
 
-import "sort"
+import (
+	"sort"
+)
 
 type World struct {
 	light   PointLight
@@ -67,4 +69,13 @@ func (w World) ColorAt(r Ray) Color {
 	}
 
 	return color
+}
+
+func (w World) IsShadowed(p Tuple) bool {
+	v := w.light.position.Subtract(p)
+	r := Ray{p, v.Normalize()}
+	intersection := Hit(w.Intersect(r))
+	// panic(fmt.Sprintf("%v", intersection))
+
+	return intersection != Intersection{} && intersection.t < v.Magnitude()
 }

@@ -60,3 +60,31 @@ func TestColotWithAnIntersectionBehindTheRay(t *testing.T) {
 	c := world.ColorAt(ray)
 	AssertColorEqual(world.objects[1].Material().color, c, t)
 }
+
+func TestNoShadowWhenNothingIsCollinearWithPointAndLight(t *testing.T) {
+	world := DefaultWorld()
+	p := Point(0, 10, 0)
+
+	Assert(world.IsShadowed(p) == false, "The point shouln't be be shadowed", t)
+}
+
+func TestShadowWhenAnObjectIsBetweenThePointAndTheLight(t *testing.T) {
+	world := DefaultWorld()
+	p := Point(10, -10, 10)
+
+	Assert(world.IsShadowed(p), "The point had to be shadowed", t)
+}
+
+func TestNoShadowWhenAnObjectIsBehindTheLight(t *testing.T) {
+	world := DefaultWorld()
+	p := Point(-20, 20, -20)
+
+	Assert(world.IsShadowed(p) == false, "The point shouln't be be shadowed", t)
+}
+
+func TestNoShadowWhenAnObjectIsBehindThePoint(t *testing.T) {
+	world := DefaultWorld()
+	p := Point(-2, 2, -2)
+
+	Assert(world.IsShadowed(p) == false, "The point shouln't be be shadowed", t)
+}

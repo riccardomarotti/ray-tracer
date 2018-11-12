@@ -26,16 +26,13 @@ func main() {
 	floorMaterial := DefaultMaterial()
 	floorMaterial.color = Color{1, 0.9, 0.9}
 	floorMaterial.specular = 0
-	floor := MakeSphere(Identity().Scale(10, 0.01, 10), floorMaterial)
-
-	leftWall := MakeSphere(Identity().Translate(0, 0, 5).RotateY(-math.Pi/4).RotateX(math.Pi/2).Scale(10, 0.01, 10), floorMaterial)
-	rightWall := MakeSphere(Identity().Translate(0, 0, 5).RotateY(math.Pi/4).RotateX(math.Pi/2).Scale(10, 0.01, 10), floorMaterial)
+	floor := MakePlane(Identity(), floorMaterial)
 
 	lightPosition := Point(-10, 10, -10)
 	lightColor := Color{1, 1, 1}
 	light := PointLight{lightPosition, lightColor}
 
-	world := World{light, []Object{sphere, sphere2, sphere3, floor, leftWall, rightWall}}
+	world := World{light, []Object{sphere, sphere2, sphere3, floor}}
 	c := camera.Render(world)
 	fmt.Printf(c.PPM())
 }

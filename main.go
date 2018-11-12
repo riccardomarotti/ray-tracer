@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	camera := Camera{1000, 500, math.Pi / 3, ViewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0))}
+	camera := Camera{500, 250, math.Pi / 3, ViewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0))}
 	sphereMaterial := DefaultMaterial()
 	sphereMaterial.color = Color{0.2, 1, 1}
 	sphere := MakeSphere(Identity().Translate(-0.5, 1, 0.5), sphereMaterial)

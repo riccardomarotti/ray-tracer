@@ -80,3 +80,20 @@ func TestLightingWithTheSurfaceInShadow(t *testing.T) {
 	result := m.Lighting(light, position, eyeVector, normalVector, inShadow)
 	AssertColorEqual(Color{0.1, 0.1, 0.1}, result, t)
 }
+
+func TestLightingWithPatternApplied(t *testing.T) {
+	m := DefaultMaterial()
+	m.pattern = StripePattern{Color{1, 1, 1}, Color{0, 0, 0}}
+	m.ambient = 1
+	m.diffuse = 0
+	m.specular = 0
+	eyeVector := Vector(0, 0, -1)
+	normalVector := Vector(0, 0, -1)
+	light := PointLight{Point(0, 0, -10), Color{1, 1, 1}}
+
+	c1 := m.Lighting(light, Point(0.9, 0, 0), eyeVector, normalVector, false)
+	c2 := m.Lighting(light, Point(1.1, 0, 0), eyeVector, normalVector, false)
+
+	AssertColorEqual(Color{1, 1, 1}, c1, t)
+	AssertColorEqual(Color{0, 0, 0}, c2, t)
+}

@@ -32,7 +32,7 @@ func WorldWithAmbientSetTo(a float64) World {
 		specular:  0.2,
 		shininess: 200,
 	})
-	s2 := MakeSphere(Identity().Scale(0.5, 0.5, 0.5), Material{Color{1, 1, 1}, 1, 0.9, 0.9, 200})
+	s2 := MakeSphere(Identity().Scale(0.5, 0.5, 0.5), Material{color: Color{1, 1, 1}, ambient: 1, diffuse: 0.9, specular: 0.9, shininess: 200})
 
 	return World{light, []Object{s1, s2}}
 }

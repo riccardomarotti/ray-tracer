@@ -5,14 +5,14 @@ import (
 )
 
 type Pattern interface {
-	StripeAt(Tuple)
+	ColorAt(Tuple) Color
 }
 
 type StripePattern struct {
 	a, b Color
 }
 
-func (p StripePattern) StripeAt(point Tuple) Color {
+func (p StripePattern) ColorAt(point Tuple) Color {
 	mod := math.Mod(point.x, 2)
 	if mod >= 1 && point.x >= 0 {
 		return p.b

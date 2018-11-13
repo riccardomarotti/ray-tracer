@@ -2,6 +2,8 @@ package main
 
 import (
 	"math"
+
+	"github.com/larspensjo/Go-simplex-noise/simplexnoise"
 )
 
 type Pattern interface {
@@ -118,4 +120,17 @@ func (p BlendPattern) ColorAt(point Tuple, objectTransform Matrix) Color {
 	colorB := p.b.ColorAt(point, objectTransform)
 
 	return colorA.Schur(colorB)
+}
+
+type PerturbPattern struct {
+	pattern Pattern
+}
+
+func MakePerturbPattern(pattern Pattern) Pattern {
+	return PerturbPattern{pattern}
+}
+
+func (p PerturbPattern) ColorAt(point Tuple, objectTransform Matrix) Color {
+	noise := simplexnoise.Noise3(point.x, point.y, point.z)
+	return p.pattern.ColorAt(point.Multiply(noise), objectTransform)
 }

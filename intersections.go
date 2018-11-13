@@ -45,5 +45,7 @@ func PrepareHit(i Intersection, r Ray) Intersection {
 }
 
 func (i Intersection) Shade(world World) Color {
-	return i.object.Material().Lighting(i.object.Transform(), world.light, i.point, i.eyeVector, i.normalVector, world.IsShadowed(i.point))
+	surface := i.object.Material().Lighting(i.object.Transform(), world.light, i.point, i.eyeVector, i.normalVector, world.IsShadowed(i.point))
+	reflected := world.ReflectedColor(i)
+	return surface.Add(reflected)
 }

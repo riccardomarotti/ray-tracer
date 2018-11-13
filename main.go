@@ -19,10 +19,12 @@ func main() {
 	sphere2Material.color = Color{0.5, 1, 0.1}
 	sphere2Material.diffuse = 0.7
 	sphere2Material.specular = 0.3
+	sphere2Material.reflective = 0.2
+
 	gradientPattern := MakeGradientPattern(Color{.3, .5, 1}, Color{.5, 1, .3}, Identity())
 	noisePattern := MakePerturbPattern(gradientPattern)
 	sphere2Material.pattern = noisePattern
-	sphere2 := MakeSphere(Identity().Translate(1.5, 0.5, -0.5).Scale(0.5, 0.5, 0.5), sphere2Material)
+	sphere2 := MakeSphere(Identity().Translate(1.5, 0.7, -0.5).Scale(0.7, 0.7, 0.7), sphere2Material)
 
 	sphere3Material := DefaultMaterial()
 

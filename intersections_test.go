@@ -163,3 +163,17 @@ func TestPrecomputingTheReflectionVector(t *testing.T) {
 
 	AssertTupleEqual(Vector(0, math.Sqrt(2)/2, math.Sqrt(2)/2), hit.reflectVector, t)
 }
+
+func TestShadeWithReflectiveMaterial(t *testing.T) {
+	world := WorldWithAmbientSetTo(.47013)
+	reflectiveMaterial := DefaultMaterial()
+	reflectiveMaterial.reflective = 1
+	plane := MakePlane(Identity().Translate(0, -1, 0), reflectiveMaterial)
+	world.objects = append(world.objects, plane)
+
+	ray := Ray{Point(0, 0, -3), Vector(0, -math.Sqrt(2)/2, math.Sqrt(2)/2)}
+	hit := Intersection{t: math.Sqrt(2), object: plane}
+	hit = PrepareHit(hit, ray)
+
+	AssertColorEqual(Color{0.87677, 0.92436, 0.82918}, hit.Shade(world), t)
+}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"reflect"
 	"testing"
 )
@@ -87,4 +88,42 @@ func TestNoShadowWhenAnObjectIsBehindThePoint(t *testing.T) {
 	p := Point(-2, 2, -2)
 
 	Assert(world.IsShadowed(p) == false, "The point shouln't be be shadowed", t)
+}
+
+func TestReflectedClorForNonReflectiveMaterial(t *testing.T) {
+	world := WorldWithAmbientSetTo(.1)
+	ray := Ray{Point(0, 0, 0), Vector(0, 0, 1)}
+	shape := world.objects[1]
+	hit := Intersection{t: 1, object: shape}
+
+	hit = PrepareHit(hit, ray)
+
+	AssertColorEqual(Color{0, 0, 0}, world.ReflectedColor(hit), t)
+}
+
+func TestReflectedColorWithReflectiveMaterial(t *testing.T) {
+	world := WorldWithAmbientSetTo(.3258)
+	reflectiveMaterial := DefaultMaterial()
+	reflectiveMaterial.reflective = 0.5
+	plane := MakePlane(Identity().Translate(0, -1, 0), reflectiveMaterial)
+	world.objects = append(world.objects, plane)
+	ray := Ray{Point(0, 0, -3), Vector(0, -math.Sqrt(2)/2, math.Sqrt(2)/2)}
+	hit := Intersection{t: math.Sqrt(2), object: plane}
+	hit = PrepareHit(hit, ray)
+
+	AssertColorEqual(Color{0.19032, -.2379, 0.14274}, world.ReflectedColor(hit), t)
+}
+
+func TestMutuallyReflectiveSurfaces(t *testing.T) {
+	light := PointLight{Point(-10, 10, -10), Color{1, 1, 1}}
+
+	material := DefaultMaterial()
+	material.reflective = 1
+
+	lower := MakePlane(Identity().Translate(0, -1, 0), material)
+	uppler := MakePlane(Identity().Translate(0, 1, 0), material)
+
+	world := World{light, []Object{lower, uppler}}
+
+	world.ColorAt(Ray{Point(0, 0, 0), Vector(0, 1, 0)})
 }

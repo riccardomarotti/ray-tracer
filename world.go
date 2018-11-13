@@ -78,3 +78,14 @@ func (w World) IsShadowed(p Tuple) bool {
 
 	return intersection != Intersection{} && intersection.t < v.Magnitude()
 }
+
+func (w World) ReflectedColor(i Intersection) Color {
+	if i.object.Material().reflective == 0 {
+		return Color{0, 0, 0}
+	}
+
+	reflectedRay := Ray{i.point, i.reflectVector}
+	color := w.ColorAt(reflectedRay)
+
+	return color.By(i.object.Material().reflective)
+}

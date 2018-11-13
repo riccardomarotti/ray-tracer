@@ -104,3 +104,18 @@ func (p CheckersPattern) ColorAt(point Tuple, objectTransform Matrix) Color {
 	}
 	return p.b
 }
+
+type BlendPattern struct {
+	a, b Pattern
+}
+
+func MakeBlendPattern(patternA, patternB Pattern) Pattern {
+	return BlendPattern{patternA, patternB}
+}
+
+func (p BlendPattern) ColorAt(point Tuple, objectTransform Matrix) Color {
+	colorA := p.a.ColorAt(point, objectTransform)
+	colorB := p.b.ColorAt(point, objectTransform)
+
+	return colorA.Schur(colorB)
+}

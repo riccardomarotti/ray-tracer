@@ -9,7 +9,9 @@ func main() {
 	camera := Camera{500, 250, math.Pi / 3, ViewTransform(Point(0, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0))}
 	sphereMaterial := DefaultMaterial()
 	sphereMaterial.color = Color{0.2, 1, 1}
-	sphereMaterial.pattern = MakeRingPattern(Color{0.2, 1, 1}, Color{.8, 1, .8}, Identity().Scale(.05, .05, .05).RotateX(-math.Pi/3))
+	pattern1 := MakeRingPattern(Color{0.2, 1, 1}, Color{.8, 1, .8}, Identity().Scale(.05, .05, .05).RotateX(-math.Pi/3))
+	pattern2 := MakeGradientPattern(Color{1, .5, .3}, Color{.3, .5, 1}, Identity().RotateZ(-math.Pi/3))
+	sphereMaterial.pattern = MakeBlendPattern(pattern1, pattern2)
 
 	sphere := MakeSphere(Identity().Translate(-0.5, 1, 0.5), sphereMaterial)
 

@@ -3,95 +3,95 @@ package main
 import "testing"
 
 func TestStripePatternIsConstantInY(t *testing.T) {
-	pattern := MakeStripePattern(Color{1, 1, 1}, Color{0, 0, 0}, Identity(), Identity())
+	pattern := MakeStripePattern(Color{1, 1, 1}, Color{0, 0, 0}, Identity())
 
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 0)), t)
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 1, 0)), t)
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 2, 0)), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 0), Identity()), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 1, 0), Identity()), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 2, 0), Identity()), t)
 }
 
 func TestStripePatternIsConstantInZ(t *testing.T) {
-	pattern := MakeStripePattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+	pattern := MakeStripePattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity())
 
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 1)), t)
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 2)), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0), Identity()), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 1), Identity()), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 2), Identity()), t)
 }
 
 func TestStripePatternAlternatesInX(t *testing.T) {
-	pattern := MakeStripePattern(Color{1, 1, 1}, Color{0, 0, 0}, Identity(), Identity())
+	pattern := MakeStripePattern(Color{1, 1, 1}, Color{0, 0, 0}, Identity())
 
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 0)), t)
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0.9, 0, 0)), t)
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(1, 0, 0)), t)
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(-0.1, 0, 0)), t)
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(-1, 0, 0)), t)
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(-1.1, 0, 0)), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 0), Identity()), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0.9, 0, 0), Identity()), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(1, 0, 0), Identity()), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(-0.1, 0, 0), Identity()), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(-1, 0, 0), Identity()), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(-1.1, 0, 0), Identity()), t)
 
 }
 
 func TestStripesWithAnObjectTransformation(t *testing.T) {
-	pattern := MakeStripePattern(Color{1, 1, 1}, Color{0, 0, 0}, Identity(), Identity().Scale(2, 2, 2))
+	pattern := MakeStripePattern(Color{1, 1, 1}, Color{0, 0, 0}, Identity())
 
-	c := pattern.ColorAt(Point(1.5, 0, 0))
+	c := pattern.ColorAt(Point(1.5, 0, 0), Identity().Scale(2, 2, 2))
 
 	AssertColorEqual(Color{1, 1, 1}, c, t)
 }
 
 func TestStripeWothAPatternTransformation(t *testing.T) {
-	pattern := MakeStripePattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity().Scale(2, 2, 2))
+	pattern := MakeStripePattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity())
 
-	c := pattern.ColorAt(Point(1.5, 0, 0))
+	c := pattern.ColorAt(Point(1.5, 0, 0), Identity().Scale(2, 2, 2))
 
 	AssertColorEqual(Color{0, 0, 0}, c, t)
 }
 
 func TestStripesWithBothAnObjectAndAPatternTransformation(t *testing.T) {
-	pattern := MakeStripePattern(Color{1, 1, 1}, Color{0, 0, 0}, Identity().Translate(0.5, 0, 0), Identity().Scale(2, 2, 2))
+	pattern := MakeStripePattern(Color{1, 1, 1}, Color{0, 0, 0}, Identity().Translate(0.5, 0, 0))
 
-	c := pattern.ColorAt(Point(1.5, 0, 0))
+	c := pattern.ColorAt(Point(1.5, 0, 0), Identity().Scale(2, 2, 2))
 
 	AssertColorEqual(Color{1, 1, 1}, c, t)
 }
 
 func TestGradientLieanrlyInterlpoatesBetweenColors(t *testing.T) {
-	pattern := MakeGradientPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+	pattern := MakeGradientPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity())
 
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
-	AssertColorEqual(Color{0.25, 0.25, 0.25}, pattern.ColorAt(Point(0.25, 0, 0)), t)
-	AssertColorEqual(Color{0.5, 0.5, 0.5}, pattern.ColorAt(Point(0.5, 0, 0)), t)
-	AssertColorEqual(Color{0.75, 0.75, 0.75}, pattern.ColorAt(Point(0.75, 0, 0)), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0), Identity()), t)
+	AssertColorEqual(Color{0.25, 0.25, 0.25}, pattern.ColorAt(Point(0.25, 0, 0), Identity()), t)
+	AssertColorEqual(Color{0.5, 0.5, 0.5}, pattern.ColorAt(Point(0.5, 0, 0), Identity()), t)
+	AssertColorEqual(Color{0.75, 0.75, 0.75}, pattern.ColorAt(Point(0.75, 0, 0), Identity()), t)
 }
 
 func TestRingShouldExtendInBothXandZ(t *testing.T) {
-	pattern := MakeRingPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+	pattern := MakeRingPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity())
 
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(1, 0, 0)), t)
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 1)), t)
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0.708, 0, 0.708)), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0), Identity()), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(1, 0, 0), Identity()), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 1), Identity()), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0.708, 0, 0.708), Identity()), t)
 }
 
 func TestCheckersShouldRepeatInX(t *testing.T) {
-	pattern := MakeCheckersPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+	pattern := MakeCheckersPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity())
 
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0.99, 0, 0)), t)
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(1.01, 0, 0)), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0), Identity()), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0.99, 0, 0), Identity()), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(1.01, 0, 0), Identity()), t)
 }
 
 func TestCheckersShouldRepeatInY(t *testing.T) {
-	pattern := MakeCheckersPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+	pattern := MakeCheckersPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity())
 
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0.99, 0)), t)
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 1.01, 0)), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0), Identity()), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0.99, 0), Identity()), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 1.01, 0), Identity()), t)
 }
 
 func TestCheckersShouldRepeatInZ(t *testing.T) {
-	pattern := MakeCheckersPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+	pattern := MakeCheckersPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity())
 
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
-	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0.99)), t)
-	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 1.01)), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0), Identity()), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0.99), Identity()), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 1.01), Identity()), t)
 }

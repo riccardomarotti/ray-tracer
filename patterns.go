@@ -5,16 +5,16 @@ import (
 )
 
 type Pattern interface {
-	ColorAt(Tuple) Color
+	ColorAt(Tuple, Matrix) Color
 }
 
 type StripePattern struct {
-	a, b                       Color
-	transform, objectTransform Matrix
+	a, b      Color
+	transform Matrix
 }
 
-func MakeStripePattern(colorA, colorB Color, transform, objectTransform Matrix) Pattern {
-	return StripePattern{colorA, colorB, transform, objectTransform}
+func MakeStripePattern(colorA, colorB Color, transform Matrix) Pattern {
+	return StripePattern{colorA, colorB, transform}
 }
 
 func (p StripePattern) colorAt(point Tuple) Color {
@@ -30,42 +30,48 @@ func (p StripePattern) colorAt(point Tuple) Color {
 	return p.a
 }
 
-func (p StripePattern) ColorAt(point Tuple) Color {
-	objectPoint := p.objectTransform.Inverse().MultiplyByTuple(point)
+func (p StripePattern) ColorAt(point Tuple, objectTransform Matrix) Color {
+	objectPoint := objectTransform.Inverse().MultiplyByTuple(point)
 	patternPoint := p.transform.Inverse().MultiplyByTuple(objectPoint)
 
 	return p.colorAt(patternPoint)
 }
 
 type GradientPattern struct {
-	a, b                       Color
-	transform, objectTransform Matrix
+	a, b      Color
+	transform Matrix
 }
 
-func MakeGradientPattern(colorA, colorB Color, transform, objectTransform Matrix) Pattern {
-	return GradientPattern{colorA, colorB, transform, objectTransform}
+func MakeGradientPattern(colorA, colorB Color, transform Matrix) Pattern {
+	return GradientPattern{colorA, colorB, transform}
 }
 
-func (p GradientPattern) ColorAt(point Tuple) Color {
-	objectPoint := p.objectTransform.Inverse().MultiplyByTuple(point)
+func (p GradientPattern) ColorAt(point Tuple, objectTransform Matrix) Color {
+	objectPoint := objectTransform.Inverse().MultiplyByTuple(point)
 	patternPoint := p.transform.Inverse().MultiplyByTuple(objectPoint)
 
 	colorDiff := p.b.Subtract(p.a)
-	gradient := patternPoint.x - math.Floor(patternPoint.x)
+	var gradient float64
+	if patternPoint.x >= 0 {
+		gradient = patternPoint.x - math.Floor(patternPoint.x)
+	} else {
+		gradient = -patternPoint.x + math.Floor(-patternPoint.x)
+	}
+
 	return p.a.Add(colorDiff.By(gradient))
 }
 
 type RingPattern struct {
-	a, b                       Color
-	transform, objectTransform Matrix
+	a, b      Color
+	transform Matrix
 }
 
-func MakeRingPattern(colorA, colorB Color, transform, objectTransform Matrix) Pattern {
-	return RingPattern{colorA, colorB, transform, objectTransform}
+func MakeRingPattern(colorA, colorB Color, transform Matrix) Pattern {
+	return RingPattern{colorA, colorB, transform}
 }
 
-func (p RingPattern) ColorAt(point Tuple) Color {
-	objectPoint := p.objectTransform.Inverse().MultiplyByTuple(point)
+func (p RingPattern) ColorAt(point Tuple, objectTransform Matrix) Color {
+	objectPoint := objectTransform.Inverse().MultiplyByTuple(point)
 	patternPoint := p.transform.Inverse().MultiplyByTuple(objectPoint)
 
 	x := patternPoint.x
@@ -77,16 +83,16 @@ func (p RingPattern) ColorAt(point Tuple) Color {
 }
 
 type CheckersPattern struct {
-	a, b                       Color
-	transform, objectTransform Matrix
+	a, b      Color
+	transform Matrix
 }
 
-func MakeCheckersPattern(colorA, colorB Color, transform, objectTransform Matrix) Pattern {
-	return CheckersPattern{colorA, colorB, transform, objectTransform}
+func MakeCheckersPattern(colorA, colorB Color, transform Matrix) Pattern {
+	return CheckersPattern{colorA, colorB, transform}
 }
 
-func (p CheckersPattern) ColorAt(point Tuple) Color {
-	objectPoint := p.objectTransform.Inverse().MultiplyByTuple(point)
+func (p CheckersPattern) ColorAt(point Tuple, objectTransform Matrix) Color {
+	objectPoint := objectTransform.Inverse().MultiplyByTuple(point)
 	patternPoint := p.transform.Inverse().MultiplyByTuple(objectPoint)
 
 	x := int(math.Floor(patternPoint.x))

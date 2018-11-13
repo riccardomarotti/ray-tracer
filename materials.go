@@ -19,14 +19,14 @@ func DefaultMaterial() Material {
 		shininess: 200}
 }
 
-func (m Material) Lighting(light PointLight, position Tuple, eyeVector Tuple, normalVector Tuple, inShadow bool) Color {
+func (m Material) Lighting(objectTransform Matrix, light PointLight, position Tuple, eyeVector Tuple, normalVector Tuple, inShadow bool) Color {
 	diffuse := Color{0, 0, 0}
 	specular := Color{0, 0, 0}
 
 	hasPattern := m.pattern != nil
 	var actualColor Color
 	if hasPattern {
-		actualColor = m.pattern.ColorAt(position)
+		actualColor = m.pattern.ColorAt(position, objectTransform)
 	} else {
 		actualColor = m.color
 	}

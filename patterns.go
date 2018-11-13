@@ -6,19 +6,18 @@ import (
 
 type Pattern interface {
 	ColorAt(Tuple) Color
-	ColorAtObject(Object, Tuple) Color
 }
 
 type StripePattern struct {
-	a, b      Color
-	transform Matrix
+	a, b                       Color
+	transform, objectTransform Matrix
 }
 
-func MakeStripePattern(colorA, colorB Color, transform Matrix) Pattern {
-	return StripePattern{colorA, colorB, transform}
+func MakeStripePattern(colorA, colorB Color, transform, objectTransform Matrix) Pattern {
+	return StripePattern{colorA, colorB, transform, objectTransform}
 }
 
-func (p StripePattern) ColorAt(point Tuple) Color {
+func (p StripePattern) colorAt(point Tuple) Color {
 	mod := math.Mod(point.x, 2)
 	if mod >= 1 && point.x >= 0 {
 		return p.b
@@ -31,9 +30,9 @@ func (p StripePattern) ColorAt(point Tuple) Color {
 	return p.a
 }
 
-func (p StripePattern) ColorAtObject(object Object, point Tuple) Color {
-	objectPoint := object.Transform().Inverse().MultiplyByTuple(point)
+func (p StripePattern) ColorAt(point Tuple) Color {
+	objectPoint := p.objectTransform.Inverse().MultiplyByTuple(point)
 	patternPoint := p.transform.Inverse().MultiplyByTuple(objectPoint)
 
-	return p.ColorAt(patternPoint)
+	return p.colorAt(patternPoint)
 }

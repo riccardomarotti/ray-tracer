@@ -75,3 +75,26 @@ func (p RingPattern) ColorAt(point Tuple) Color {
 	}
 	return p.b
 }
+
+type CheckersPattern struct {
+	a, b                       Color
+	transform, objectTransform Matrix
+}
+
+func MakeCheckersPattern(colorA, colorB Color, transform, objectTransform Matrix) Pattern {
+	return CheckersPattern{colorA, colorB, transform, objectTransform}
+}
+
+func (p CheckersPattern) ColorAt(point Tuple) Color {
+	objectPoint := p.objectTransform.Inverse().MultiplyByTuple(point)
+	patternPoint := p.transform.Inverse().MultiplyByTuple(objectPoint)
+
+	x := int(math.Floor(patternPoint.x))
+	y := int(math.Floor(patternPoint.y))
+	z := int(math.Floor(patternPoint.z))
+
+	if (x+y+z)%2 == 0 {
+		return p.a
+	}
+	return p.b
+}

@@ -10,6 +10,7 @@ func main() {
 	sphereMaterial := DefaultMaterial()
 	sphereMaterial.color = Color{0.2, 1, 1}
 	sphereMaterial.pattern = MakeRingPattern(Color{0.2, 1, 1}, Color{.8, 1, .8}, Identity().Scale(.3, .3, .3), Identity())
+
 	sphere := MakeSphere(Identity().Translate(-0.5, 1, 0.5), sphereMaterial)
 
 	sphere2Material := DefaultMaterial()
@@ -30,6 +31,7 @@ func main() {
 	floorMaterial := DefaultMaterial()
 	floorMaterial.color = Color{1, 0.9, 0.9}
 	floorMaterial.specular = 0
+	floorMaterial.pattern = MakeCheckersPattern(Color{1, 1, 1}, Color{0, 0, 0}, Identity(), Identity())
 	floor := MakePlane(Identity(), floorMaterial)
 
 	lightPosition := Point(-10, 10, -10)

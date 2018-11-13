@@ -71,3 +71,27 @@ func TestRingShouldExtendInBothXandZ(t *testing.T) {
 	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 1)), t)
 	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0.708, 0, 0.708)), t)
 }
+
+func TestCheckersShouldRepeatInX(t *testing.T) {
+	pattern := MakeCheckersPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0.99, 0, 0)), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(1.01, 0, 0)), t)
+}
+
+func TestCheckersShouldRepeatInY(t *testing.T) {
+	pattern := MakeCheckersPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0.99, 0)), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 1.01, 0)), t)
+}
+
+func TestCheckersShouldRepeatInZ(t *testing.T) {
+	pattern := MakeCheckersPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0.99)), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 1.01)), t)
+}

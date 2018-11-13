@@ -19,8 +19,8 @@ func main() {
 	sphere2Material.color = Color{0.5, 1, 0.1}
 	sphere2Material.diffuse = 0.7
 	sphere2Material.specular = 0.3
-	sphere2Material.pattern = MakeGradientPattern(Color{.3, .5, 1}, Color{1, .5, .3}, Identity())
-	sphere2 := MakeSphere(Identity().Translate(1.5, 0.5, -0.5).RotateY(math.Pi/2).Scale(0.5, 0.5, 0.5), sphere2Material)
+	sphere2Material.pattern = MakeGradientPattern(Color{.3, .5, 1}, Color{.5, 1, .3}, Identity())
+	sphere2 := MakeSphere(Identity().Translate(1.5, 0.5, -0.5).Scale(0.5, 0.5, 0.5), sphere2Material)
 
 	sphere3Material := DefaultMaterial()
 

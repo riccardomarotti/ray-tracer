@@ -75,7 +75,6 @@ func (w World) IsShadowed(p Tuple) bool {
 	v := w.light.position.Subtract(p)
 	r := Ray{p, v.Normalize()}
 	intersection := Hit(w.Intersect(r))
-	// panic(fmt.Sprintf("%v", intersection))
 
 	return intersection != Intersection{} && intersection.t < v.Magnitude()
 }

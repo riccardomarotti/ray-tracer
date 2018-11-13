@@ -83,7 +83,7 @@ func TestLightingWithTheSurfaceInShadow(t *testing.T) {
 
 func TestLightingWithPatternApplied(t *testing.T) {
 	m := DefaultMaterial()
-	m.pattern = StripePattern{Color{1, 1, 1}, Color{0, 0, 0}}
+	m.pattern = StripePattern{Color{1, 1, 1}, Color{0, 0, 0}, Identity()}
 	m.ambient = 1
 	m.diffuse = 0
 	m.specular = 0

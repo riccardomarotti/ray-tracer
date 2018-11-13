@@ -5,9 +5,9 @@ import (
 )
 
 type Material struct {
-	color                                 Color
-	ambient, diffuse, specular, shininess float64
-	pattern                               Pattern
+	color                                             Color
+	ambient, diffuse, specular, shininess, reflective float64
+	pattern                                           Pattern
 }
 
 func DefaultMaterial() Material {

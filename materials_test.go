@@ -97,3 +97,9 @@ func TestLightingWithPatternApplied(t *testing.T) {
 	AssertColorEqual(Color{1, 1, 1}, c1, t)
 	AssertColorEqual(Color{0, 0, 0}, c2, t)
 }
+
+func TestReflectivityForDefaultMAterial(t *testing.T) {
+	m := DefaultMaterial()
+
+	AssertEqual(0, m.reflective, t)
+}

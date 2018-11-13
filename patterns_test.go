@@ -62,3 +62,12 @@ func TestGradientLieanrlyInterlpoatesBetweenColors(t *testing.T) {
 	AssertColorEqual(Color{0.5, 0.5, 0.5}, pattern.ColorAt(Point(0.5, 0, 0)), t)
 	AssertColorEqual(Color{0.75, 0.75, 0.75}, pattern.ColorAt(Point(0.75, 0, 0)), t)
 }
+
+func TestRingShouldExtendInBothXandZ(t *testing.T) {
+	pattern := MakeRingPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(1, 0, 0)), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 1)), t)
+	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0.708, 0, 0.708)), t)
+}

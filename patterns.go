@@ -54,3 +54,24 @@ func (p GradientPattern) ColorAt(point Tuple) Color {
 	gradient := patternPoint.x - math.Floor(patternPoint.x)
 	return p.a.Add(colorDiff.By(gradient))
 }
+
+type RingPattern struct {
+	a, b                       Color
+	transform, objectTransform Matrix
+}
+
+func MakeRingPattern(colorA, colorB Color, transform, objectTransform Matrix) Pattern {
+	return RingPattern{colorA, colorB, transform, objectTransform}
+}
+
+func (p RingPattern) ColorAt(point Tuple) Color {
+	objectPoint := p.objectTransform.Inverse().MultiplyByTuple(point)
+	patternPoint := p.transform.Inverse().MultiplyByTuple(objectPoint)
+
+	x := patternPoint.x
+	z := patternPoint.z
+	if int(math.Floor(math.Sqrt((x*x)+(z*z))))%2 == 0 {
+		return p.a
+	}
+	return p.b
+}

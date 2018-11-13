@@ -1,10 +1,10 @@
 package main
 
 type Intersection struct {
-	t                              float64
-	object                         Object
-	point, eyeVector, normalVector Tuple
-	inside                         bool
+	t                                             float64
+	object                                        Object
+	point, eyeVector, normalVector, reflectVector Tuple
+	inside                                        bool
 }
 
 func Hit(i []Intersection) (hit Intersection) {
@@ -31,13 +31,16 @@ func PrepareHit(i Intersection, r Ray) Intersection {
 		normalVector = normalVector.Multiply(-1)
 	}
 
+	reflectVector := r.direction.Reflect(normalVector)
+
 	return Intersection{
-		t:            i.t,
-		object:       i.object,
-		point:        point,
-		eyeVector:    eyeVector,
-		normalVector: normalVector,
-		inside:       inside,
+		t:             i.t,
+		object:        i.object,
+		point:         point,
+		eyeVector:     eyeVector,
+		normalVector:  normalVector,
+		inside:        inside,
+		reflectVector: reflectVector,
 	}
 }
 

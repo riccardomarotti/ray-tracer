@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"reflect"
 	"testing"
 )
@@ -152,4 +153,13 @@ func TestThePointIdOffset(t *testing.T) {
 
 	Assert(hit.point.z > -1.1 && hit.point.z < -1, "", t)
 
+}
+func TestPrecomputingTheReflectionVector(t *testing.T) {
+	shape := MakePlane(Identity(), DefaultMaterial())
+	ray := Ray{Point(0, 1, -1), Vector(0, -math.Sqrt(2)/2, math.Sqrt(2)/2)}
+	hit := Intersection{t: math.Sqrt(2), object: shape}
+
+	hit = PrepareHit(hit, ray)
+
+	AssertTupleEqual(Vector(0, math.Sqrt(2)/2, math.Sqrt(2)/2), hit.reflectVector, t)
 }

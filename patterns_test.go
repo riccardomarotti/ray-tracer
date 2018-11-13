@@ -53,3 +53,12 @@ func TestStripesWithBothAnObjectAndAPatternTransformation(t *testing.T) {
 
 	AssertColorEqual(Color{1, 1, 1}, c, t)
 }
+
+func TestGradientLieanrlyInterlpoatesBetweenColors(t *testing.T) {
+	pattern := MakeGradientPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity(), Identity())
+
+	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0)), t)
+	AssertColorEqual(Color{0.25, 0.25, 0.25}, pattern.ColorAt(Point(0.25, 0, 0)), t)
+	AssertColorEqual(Color{0.5, 0.5, 0.5}, pattern.ColorAt(Point(0.5, 0, 0)), t)
+	AssertColorEqual(Color{0.75, 0.75, 0.75}, pattern.ColorAt(Point(0.75, 0, 0)), t)
+}

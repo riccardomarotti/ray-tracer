@@ -36,3 +36,18 @@ func (p StripePattern) ColorAt(point Tuple) Color {
 
 	return p.colorAt(patternPoint)
 }
+
+type GradientPattern struct {
+	a, b                       Color
+	transform, objectTransform Matrix
+}
+
+func MakeGradientPattern(colorA, colorB Color, transform, objectTransform Matrix) Pattern {
+	return GradientPattern{colorA, colorB, transform, objectTransform}
+}
+
+func (p GradientPattern) ColorAt(point Tuple) Color {
+	colorDiff := p.b.Subtract(p.a)
+	gradient := point.x - math.Floor(point.x)
+	return p.a.Add(colorDiff.By(gradient))
+}

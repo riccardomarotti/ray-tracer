@@ -47,7 +47,10 @@ func MakeGradientPattern(colorA, colorB Color, transform, objectTransform Matrix
 }
 
 func (p GradientPattern) ColorAt(point Tuple) Color {
+	objectPoint := p.objectTransform.Inverse().MultiplyByTuple(point)
+	patternPoint := p.transform.Inverse().MultiplyByTuple(objectPoint)
+
 	colorDiff := p.b.Subtract(p.a)
-	gradient := point.x - math.Floor(point.x)
+	gradient := patternPoint.x - math.Floor(patternPoint.x)
 	return p.a.Add(colorDiff.By(gradient))
 }

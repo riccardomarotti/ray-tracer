@@ -4,10 +4,10 @@
 
 
 
-A ray tracer based on Jamis Buck's [book](https://pragprog.com/book/jbtracer/the-ray-tracer-challenge).
+A [Ray Tracer](https://en.wikipedia.org/wiki/Ray_tracing_(graphics)) based on Jamis Buck's [book](https://pragprog.com/book/jbtracer/the-ray-tracer-challenge).
 
 This image shows the current development progress:
 
 ![](example.png?raw=true)
 
-https://github.com/larspensjo/Go-simplex-noise is used for Simplex Noise.
+https://github.com/larspensjo/Go-simplex-noise is used for [Simplex Noise](https://en.wikipedia.org/wiki/Simplex_noise).

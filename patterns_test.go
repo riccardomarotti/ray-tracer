@@ -95,3 +95,15 @@ func TestCheckersShouldRepeatInZ(t *testing.T) {
 	AssertColorEqual(Color{0, 0, 0}, pattern.ColorAt(Point(0, 0, 0.99), Identity()), t)
 	AssertColorEqual(Color{1, 1, 1}, pattern.ColorAt(Point(0, 0, 1.01), Identity()), t)
 }
+
+func TestBlendPatternBLendsTwoPatterns(t *testing.T) {
+	pattern1 := MakeGradientPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity())
+	pattern2 := MakeCheckersPattern(Color{.5, .6, .7}, Color{1, 1, 1}, Identity())
+
+	AssertColorEqual(Color{0, .5, 0}, pattern1.ColorAt(Point(.5, .5, .5), Identity()), t)
+	AssertColorEqual(Color{0.5, 0.6, 0.7}, pattern2.ColorAt(Point(.5, .5, .5), Identity()), t)
+
+	blended := MakeBlendPattern(pattern1, pattern2)
+
+	AssertColorEqual(Color{.25, .3, .35}, blended.ColorAt(Point(.5, .5, .5), Identity()), t)
+}

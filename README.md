@@ -9,3 +9,5 @@ A ray tracer based on Jamis Buck's [book](https://pragprog.com/book/jbtracer/the
 This image shows the current development progress:
 
 ![](example.png?raw=true)
+
+https://github.com/larspensjo/Go-simplex-noise is used for Simplex Noise.

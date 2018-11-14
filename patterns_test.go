@@ -107,3 +107,17 @@ func TestBlendPatternBLendsTwoPatterns(t *testing.T) {
 
 	AssertColorEqual(Color{.25, .3, .35}, blended.ColorAt(Point(.5, .5, .5), Identity()), t)
 }
+
+func TestPerturbPatterSlightlyModifiesPerturbedPattern(t *testing.T) {
+	pattern := MakeGradientPattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity())
+
+	AssertColorEqual(Color{.3, .3, .3}, pattern.ColorAt(Point(.3, 0, 0), Identity()), t)
+	AssertColorEqual(Color{.2, .2, .2}, pattern.ColorAt(Point(.2, 0, 0), Identity()), t)
+	AssertColorEqual(Color{.1, .1, .1}, pattern.ColorAt(Point(.1, 0, 0), Identity()), t)
+
+	perturb := MakePerturbPattern(pattern)
+
+	AssertColorEqual(Color{.21581, .21581, .21581}, perturb.ColorAt(Point(.3, 0, 0), Identity()), t)
+	AssertColorEqual(Color{.13003, .13003, .13003}, perturb.ColorAt(Point(.2, 0, 0), Identity()), t)
+	AssertColorEqual(Color{.03965, .03965, .03965}, perturb.ColorAt(Point(.1, 0, 0), Identity()), t)
+}

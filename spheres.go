@@ -54,3 +54,10 @@ func (s Sphere) Intersection(r Ray) (intersection []Intersection) {
 
 	return
 }
+
+func MakeGlassSphere() Object {
+	material := DefaultMaterial()
+	material.transparency = 1.0
+	material.refractiveIndex = 1.5
+	return MakeSphere(Identity(), material)
+}

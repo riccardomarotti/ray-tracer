@@ -157,3 +157,11 @@ func TestIntersecSetsTheObjectOnTheIntersection(t *testing.T) {
 	Assert(reflect.DeepEqual(s, xs[0].object), "", t)
 	Assert(reflect.DeepEqual(s, xs[1].object), "", t)
 }
+
+func TestHelperForProducingASphereWithGlassyMaterial(t *testing.T) {
+	s := MakeGlassSphere()
+
+	AssertMatrixEqual(Identity(), s.Transform(), t)
+	AssertEqual(1.0, s.Material().transparency, t)
+	AssertEqual(1.5, s.Material().refractiveIndex, t)
+}

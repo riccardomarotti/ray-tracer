@@ -251,3 +251,13 @@ func TestShadeWithATransparentMaterial(t *testing.T) {
 
 	AssertColorEqual(Color{0.93642, 0.68642, 0.68642}, intersection.Shade(w, 5), t)
 }
+
+func TestSchlickApproximationUnderTotalInternalReflection(t *testing.T) {
+	shape := MakeGlassSphere(Identity(), 1.5)
+	r := Ray{Point(0, 0, math.Sqrt(2)/2), Vector(0, 1, 0)}
+	xs := []Intersection{Intersection{t: -math.Sqrt(2) / 2, object: shape}, Intersection{t: math.Sqrt(2) / 2, object: shape}}
+
+	hitData := PrepareComputations(xs[1], r, xs)
+
+	AssertEqual(1, hitData.Schlick(), t)
+}

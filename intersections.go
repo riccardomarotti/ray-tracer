@@ -106,3 +106,17 @@ func contains(array []Object, o Object) int {
 func areIntersectionsEqual(i1, i2 Intersection) bool {
 	return (math.Abs(i1.t-i2.t) < Epsilon) && reflect.DeepEqual(i1.object, i2.object)
 }
+
+func (i Intersection) Schlick() float64 {
+	cos := i.eyeVector.Dot(i.normalVector)
+
+	if i.n1 > i.n2 {
+		n := i.n1 / i.n2
+		sin2Theta := n * n * (1 - cos*cos)
+		if sin2Theta > 1 {
+			return 1
+		}
+	}
+
+	return 0
+}

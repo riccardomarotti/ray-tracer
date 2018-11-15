@@ -1,7 +1,12 @@
 package main
 
+import (
+	"math"
+	"reflect"
+)
+
 type Intersection struct {
-	t                                             float64
+	t, n1, n2                                     float64
 	object                                        Object
 	point, eyeVector, normalVector, reflectVector Tuple
 	inside                                        bool
@@ -19,7 +24,7 @@ func Hit(i []Intersection) (hit Intersection) {
 	return
 }
 
-func PrepareHit(i Intersection, r Ray) Intersection {
+func PrepareComputations(i Intersection, r Ray, allIntersections []Intersection) Intersection {
 	point := r.Position(i.t)
 	normalVector := i.object.NormalAt(point)
 	point = point.Add(normalVector.Multiply(0.000009))
@@ -33,6 +38,36 @@ func PrepareHit(i Intersection, r Ray) Intersection {
 
 	reflectVector := r.direction.Reflect(normalVector)
 
+	containers := []Object{}
+
+	for _, intersection := range allIntersections {
+		if areIntersectionsEqual(intersection, i) {
+			if len(containers) == 0 {
+				i.n1 = 1.0
+			} else {
+				lastIndex := len(containers) - 1
+				i.n1 = containers[lastIndex].Material().refractiveIndex
+			}
+		}
+
+		if x := contains(containers, intersection.object); x != -1 {
+			containers = append(containers[:x], containers[x+1:]...)
+		} else {
+			containers = append(containers, intersection.object)
+		}
+
+		if areIntersectionsEqual(intersection, i) {
+			if len(containers) == 0 {
+				i.n2 = 1.0
+			} else {
+				lastIndex := len(containers) - 1
+				i.n2 = containers[lastIndex].Material().refractiveIndex
+			}
+
+			break
+		}
+	}
+
 	return Intersection{
 		t:             i.t,
 		object:        i.object,
@@ -41,6 +76,8 @@ func PrepareHit(i Intersection, r Ray) Intersection {
 		normalVector:  normalVector,
 		inside:        inside,
 		reflectVector: reflectVector,
+		n1:            i.n1,
+		n2:            i.n2,
 	}
 }
 
@@ -48,4 +85,18 @@ func (i Intersection) Shade(world World) Color {
 	surface := i.object.Material().Lighting(i.object.Transform(), world.light, i.point, i.eyeVector, i.normalVector, world.IsShadowed(i.point))
 	reflected := world.ReflectedColor(i)
 	return surface.Add(reflected)
+}
+
+func contains(array []Object, o Object) int {
+	for i := 0; i < len(array); i++ {
+		if reflect.DeepEqual(o, array[i]) {
+			return i
+		}
+	}
+
+	return -1
+}
+
+func areIntersectionsEqual(i1, i2 Intersection) bool {
+	return (math.Abs(i1.t-i2.t) < 0.00001) && reflect.DeepEqual(i1.object, i2.object)
 }

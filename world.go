@@ -64,7 +64,7 @@ func (w World) ColorAt(r Ray) Color {
 
 	hit := intersection != Intersection{}
 	if hit {
-		intersection = PrepareHit(intersection, r)
+		intersection = PrepareComputations(intersection, r, intersections)
 		color = intersection.Shade(w)
 	}
 

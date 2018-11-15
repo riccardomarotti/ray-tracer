@@ -159,9 +159,9 @@ func TestIntersecSetsTheObjectOnTheIntersection(t *testing.T) {
 }
 
 func TestHelperForProducingASphereWithGlassyMaterial(t *testing.T) {
-	s := MakeGlassSphere()
+	s := MakeGlassSphere(Identity(), 1.6)
 
 	AssertMatrixEqual(Identity(), s.Transform(), t)
 	AssertEqual(1.0, s.Material().transparency, t)
-	AssertEqual(1.5, s.Material().refractiveIndex, t)
+	AssertEqual(1.6, s.Material().refractiveIndex, t)
 }

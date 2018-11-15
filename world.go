@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"sort"
 )
 
@@ -99,5 +100,9 @@ func (w World) RefractedColor(i Intersection, remaining float64) Color {
 		return Color{0, 0, 0}
 	}
 
-	return Color{1, 1, 1}
+	cosThetaT := math.Sqrt(1 - sinThetaT)
+	direction := i.normalVector.Multiply(nRatio*cosThetaI - cosThetaT)
+	refractRay := Ray{i.underPoint, direction}
+
+	return w.ColorAt(refractRay).By(i.object.Material().transparency)
 }

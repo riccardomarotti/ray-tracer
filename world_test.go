@@ -179,3 +179,31 @@ func TestRefractedColorUnderTotalInternalRefrlection(t *testing.T) {
 
 	AssertColorEqual(Color{0, 0, 0}, w.RefractedColor(hitData, 5), t)
 }
+
+func TestRefractedColorWithRefractedRay(t *testing.T) {
+	light := PointLight{Point(-10, 10, -10), Color{1, 1, 1}}
+	materialA := DefaultMaterial()
+	materialA.ambient = 1
+	materialA.pattern = MakeTestPattern(Identity())
+
+	materialB := DefaultMaterial()
+	materialB.transparency = 1
+	materialB.refractiveIndex = 1.5
+
+	A := MakeSphere(Identity(), materialA)
+	B := MakeSphere(Identity(), materialB)
+
+	w := World{light, []Object{A, B}}
+
+	r := Ray{Point(0, 0, 0.1), Vector(0, 1, 0)}
+	xs := []Intersection{
+		Intersection{t: -0.9899, object: A},
+		Intersection{t: -0.4899, object: B},
+		Intersection{t: 0.4899, object: B},
+		Intersection{t: 0.9899, object: A},
+	}
+
+	hitData := PrepareComputations(xs[2], r, xs)
+
+	AssertColorEqual(Color{0, 0.99878, 0.04724}, w.RefractedColor(hitData, 5), t)
+}

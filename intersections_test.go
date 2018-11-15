@@ -281,3 +281,27 @@ func TestSchlickApproximationWithSmallAncgleAndN2GreaterThanN1(t *testing.T) {
 
 	AssertEqual(.48873, hitData.Schlick(), t)
 }
+
+func TestShadeWithReflectiveAndTransparentMaterial(t *testing.T) {
+	w := DefaultWorld()
+	r := Ray{Point(0, 0, -3), Vector(0, -math.Sqrt(2)/2, math.Sqrt(2)/2)}
+
+	floorMaterial := DefaultMaterial()
+	floorMaterial.ambient = .66699
+	floorMaterial.reflective = 0.5
+	floorMaterial.transparency = 0.5
+	floorMaterial.refractiveIndex = 1.5
+	floor := MakePlane(Identity().Translate(0, -1, 0), floorMaterial)
+
+	ballMaterial := DefaultMaterial()
+	ballMaterial.color = Color{1, 0, 0}
+	ballMaterial.ambient = 0.5
+	ball := MakeSphere(Identity().Translate(0, -3.5, -0.5), ballMaterial)
+
+	w.objects = append(w.objects, []Object{floor, ball}...)
+
+	xs := []Intersection{Intersection{t: math.Sqrt(2) / 2, object: floor}}
+	hitData := PrepareComputations(xs[0], r, xs)
+
+	AssertColorEqual(Color{0.93391, 0.69643, 0.60243}, hitData.Shade(w, 5), t)
+}

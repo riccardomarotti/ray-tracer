@@ -58,15 +58,18 @@ func (w World) Intersect(ray Ray) []Intersection {
 	return intersections
 }
 
-func (w World) ColorAt(r Ray) Color {
+func (w World) ColorAt(r Ray, remaining int) Color {
 	color := Color{0, 0, 0}
+	if remaining <= 0 {
+		return color
+	}
 	intersections := w.Intersect(r)
 	intersection := Hit(intersections)
 
 	hit := intersection != Intersection{}
 	if hit {
 		intersection = PrepareComputations(intersection, r, intersections)
-		color = intersection.Shade(w)
+		color = intersection.Shade(w, remaining)
 	}
 
 	return color
@@ -86,17 +89,17 @@ func (w World) ReflectedColor(i Intersection) Color {
 	}
 
 	reflectedRay := Ray{i.point, i.reflectVector}
-	color := w.ColorAt(reflectedRay)
+	color := w.ColorAt(reflectedRay, 1)
 
-	return color.By(i.object.Material().reflective)
+	return color.Multiply(i.object.Material().reflective)
 }
 
-func (w World) RefractedColor(i Intersection, remaining float64) Color {
+func (w World) RefractedColor(i Intersection, remaining int) Color {
 	nRatio := i.n1 / i.n2
 	cosThetaI := i.eyeVector.Dot(i.normalVector)
 	sinThetaT := nRatio * nRatio * (1 - (cosThetaI * cosThetaI))
 
-	if i.object.Material().transparency == 0 || remaining == 0 || sinThetaT > 1 {
+	if i.object.Material().transparency == 0 || remaining <= 0 || sinThetaT > 1 {
 		return Color{0, 0, 0}
 	}
 
@@ -104,5 +107,5 @@ func (w World) RefractedColor(i Intersection, remaining float64) Color {
 	direction := i.normalVector.Multiply(nRatio*cosThetaI - cosThetaT).Subtract(i.eyeVector.Multiply(nRatio))
 	refractRay := Ray{i.underPoint, direction}
 
-	return w.ColorAt(refractRay).By(i.object.Material().transparency)
+	return w.ColorAt(refractRay, remaining-1).Multiply(i.object.Material().transparency)
 }

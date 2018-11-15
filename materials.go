@@ -34,14 +34,14 @@ func (m Material) Lighting(objectTransform Matrix, light PointLight, position Tu
 
 	actualColor = actualColor.Schur(light.intensity)
 	lightVector := light.position.Subtract(position).Normalize()
-	ambient := actualColor.By(m.ambient)
+	ambient := actualColor.Multiply(m.ambient)
 	lightDotNormal := lightVector.Dot(normalVector)
 
 	if lightDotNormal > 0 && !inShadow {
-		diffuse = actualColor.By(m.diffuse).By(lightDotNormal)
+		diffuse = actualColor.Multiply(m.diffuse).Multiply(lightDotNormal)
 		reflectVector := lightVector.Multiply(-1).Reflect(normalVector)
 		reflectDotEye := math.Pow(reflectVector.Dot(eyeVector), m.shininess)
-		specular = light.intensity.By(m.specular).By(reflectDotEye)
+		specular = light.intensity.Multiply(m.specular).Multiply(reflectDotEye)
 	}
 
 	return ambient.Add(diffuse).Add(specular)

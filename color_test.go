@@ -21,7 +21,7 @@ func TestSubtractColors(t *testing.T) {
 func TestMultiplyColorByScalar(t *testing.T) {
 	c := Color{0.2, 0.3, 0.4}
 
-	AssertColorEqual(Color{0.4, 0.6, 0.8}, c.By(2), t)
+	AssertColorEqual(Color{0.4, 0.6, 0.8}, c.Multiply(2), t)
 }
 
 func TestColorMultiplication(t *testing.T) {

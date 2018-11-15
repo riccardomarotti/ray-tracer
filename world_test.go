@@ -41,7 +41,7 @@ func TestTheColorWhenARayMisses(t *testing.T) {
 	world := DefaultWorld()
 	ray := Ray{Point(0, 0, -5), Vector(0, 1, 0)}
 
-	c := world.ColorAt(ray)
+	c := world.ColorAt(ray, 1)
 	AssertColorEqual(Color{0, 0, 0}, c, t)
 }
 
@@ -49,7 +49,7 @@ func TestTheColorWhenARayHits(t *testing.T) {
 	world := DefaultWorld()
 	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
 
-	c := world.ColorAt(ray)
+	c := world.ColorAt(ray, 1)
 	AssertColorEqual(Color{0.38066, 0.47583, 0.2855}, c, t)
 }
 
@@ -58,7 +58,7 @@ func TestColotWithAnIntersectionBehindTheRay(t *testing.T) {
 
 	ray := Ray{Point(0, 0, 0.75), Vector(0, 0, -1)}
 
-	c := world.ColorAt(ray)
+	c := world.ColorAt(ray, 1)
 	AssertColorEqual(world.objects[1].Material().color, c, t)
 }
 
@@ -125,7 +125,7 @@ func TestMutuallyReflectiveSurfaces(t *testing.T) {
 
 	world := World{light, []Object{lower, uppler}}
 
-	world.ColorAt(Ray{Point(0, 0, 0), Vector(0, 1, 0)})
+	world.ColorAt(Ray{Point(0, 0, 0), Vector(0, 1, 0)}, 1)
 }
 func TestTheRefractedColorWithAnOpaqueSurface(t *testing.T) {
 	w := DefaultWorld()
@@ -171,7 +171,9 @@ func TestRefractedColorUnderTotalInternalRefrlection(t *testing.T) {
 		refractiveIndex: 1.5,
 	})
 
-	w := World{light, []Object{shape}}
+	otherShape := MakeSphere(Identity().Scale(0.5, 0.5, 0.5), DefaultMaterial())
+
+	w := World{light, []Object{shape, otherShape}}
 	r := Ray{Point(0, 0, math.Sqrt(2)/2), Vector(0, 1, 0)}
 	xs := []Intersection{Intersection{t: -math.Sqrt(2) / 2, object: shape}, Intersection{t: math.Sqrt(2) / 2, object: shape}}
 
@@ -182,9 +184,14 @@ func TestRefractedColorUnderTotalInternalRefrlection(t *testing.T) {
 
 func TestRefractedColorWithRefractedRay(t *testing.T) {
 	light := PointLight{Point(-10, 10, -10), Color{1, 1, 1}}
-	materialA := DefaultMaterial()
-	materialA.ambient = 1
-	materialA.pattern = MakeTestPattern(Identity())
+	materialA := Material{
+		color:     Color{0.8, 1.0, 0.6},
+		ambient:   1,
+		diffuse:   0.7,
+		specular:  0.2,
+		shininess: 200,
+		pattern:   MakeTestPattern(Identity()),
+	}
 
 	materialB := DefaultMaterial()
 	materialB.transparency = 1

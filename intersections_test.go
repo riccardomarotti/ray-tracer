@@ -113,7 +113,7 @@ func TestShadingAnIntersection(t *testing.T) {
 	hit := Intersection{t: 4, object: shape}
 	hit = PrepareComputations(hit, ray, nil)
 
-	c := hit.Shade(world)
+	c := hit.Shade(world, 5)
 
 	AssertColorEqual(Color{0.38066, 0.47583, 0.2855}, c, t)
 }
@@ -128,7 +128,7 @@ func TestShadingAnIntersectionFromTheInside(t *testing.T) {
 	hit := Hit(intersections)
 	hit = PrepareComputations(hit, ray, intersections)
 
-	c := hit.Shade(world)
+	c := hit.Shade(world, 5)
 
 	AssertColorEqual(Color{.1, .1, .1}, c, t)
 }
@@ -144,7 +144,7 @@ func TestShadeIsGivenAnIntersectionInShadow(t *testing.T) {
 	hit := Hit(intersections)
 	hit = PrepareComputations(hit, r, intersections)
 
-	c := hit.Shade(world)
+	c := hit.Shade(world, 5)
 
 	AssertColorEqual(Color{0.1, 0.1, 0.1}, c, t)
 }
@@ -181,7 +181,7 @@ func TestShadeWithReflectiveMaterial(t *testing.T) {
 	hit := Intersection{t: math.Sqrt(2), object: plane}
 	hit = PrepareComputations(hit, ray, nil)
 
-	AssertColorEqual(Color{0.87677, 0.92436, 0.82918}, hit.Shade(world), t)
+	AssertColorEqual(Color{0.87677, 0.92436, 0.82918}, hit.Shade(world, 5), t)
 }
 
 func TestN1AndN2AtVariousIntersections(t *testing.T) {
@@ -226,4 +226,28 @@ func TestTheUnderPointIsOffsetBelowTheSurface(t *testing.T) {
 	hitData := PrepareComputations(i, r, xs)
 
 	Assert(hitData.underPoint.z > Epsilon/2, "", t)
+}
+
+func TestShadeWithATransparentMaterial(t *testing.T) {
+	floorMaterial := DefaultMaterial()
+	floorMaterial.transparency = 0.5
+	floorMaterial.refractiveIndex = 1.5
+	floorMaterial.ambient = .65867
+	floor := MakePlane(Identity().Translate(0, -1, 0), floorMaterial)
+
+	ballMaterial := DefaultMaterial()
+	ballMaterial.color = Color{1, 0, 0}
+	ballMaterial.ambient = 0.5
+	ballMaterial.transparency = 0.1
+	ball := MakeSphere(Identity().Translate(0, -3.5, -0.5), ballMaterial)
+
+	w := DefaultWorld()
+	w.objects = append(w.objects, []Object{floor, ball}...)
+
+	r := Ray{Point(0, 0, -3), Vector(0, -math.Sqrt(2)/2, math.Sqrt(2)/2)}
+	xs := []Intersection{Intersection{t: math.Sqrt(2), object: floor}}
+
+	intersection := PrepareComputations(xs[0], r, xs)
+
+	AssertColorEqual(Color{0.93642, 0.68642, 0.68642}, intersection.Shade(w, 5), t)
 }

@@ -60,7 +60,7 @@ func (p GradientPattern) ColorAt(point Tuple, objectTransform Matrix) Color {
 		gradient = -patternPoint.x + math.Floor(-patternPoint.x)
 	}
 
-	return p.a.Add(colorDiff.By(gradient))
+	return p.a.Add(colorDiff.Multiply(gradient))
 }
 
 type RingPattern struct {

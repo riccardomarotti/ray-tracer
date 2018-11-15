@@ -86,10 +86,11 @@ func PrepareComputations(i Intersection, r Ray, allIntersections []Intersection)
 	}
 }
 
-func (i Intersection) Shade(world World) Color {
+func (i Intersection) Shade(world World, remaining int) Color {
 	surface := i.object.Material().Lighting(i.object.Transform(), world.light, i.point, i.eyeVector, i.normalVector, world.IsShadowed(i.point))
 	reflected := world.ReflectedColor(i)
-	return surface.Add(reflected)
+	refracted := world.RefractedColor(i, remaining)
+	return surface.Add(reflected).Add(refracted)
 }
 
 func contains(array []Object, o Object) int {

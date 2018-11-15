@@ -137,3 +137,24 @@ func TestTheRefractedColorWithAnOpaqueSurface(t *testing.T) {
 
 	AssertColorEqual(Color{0, 0, 0}, w.RefractedColor(hitData, 5), t)
 }
+
+func TestTheRefractedColotAtTheMaximumRecursiveDepth(t *testing.T) {
+	light := PointLight{Point(-10, 10, -10), Color{1, 1, 1}}
+	shape := MakeSphere(Identity(), Material{
+		color:           Color{0.8, 1.0, 0.6},
+		ambient:         0.1,
+		diffuse:         0.7,
+		specular:        0.2,
+		shininess:       200,
+		transparency:    1.0,
+		refractiveIndex: 1.5,
+	})
+	w := World{light, []Object{shape}}
+
+	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+	xs := []Intersection{Intersection{t: 4, object: shape}, Intersection{t: 5, object: shape}}
+
+	hitData := PrepareComputations(xs[0], r, xs)
+
+	AssertColorEqual(Color{0, 0, 0}, w.RefractedColor(hitData, 0), t)
+}

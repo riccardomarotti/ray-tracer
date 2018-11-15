@@ -91,7 +91,7 @@ func (w World) ReflectedColor(i Intersection) Color {
 }
 
 func (w World) RefractedColor(i Intersection, remaining float64) Color {
-	if i.object.Material().transparency == 0 {
+	if i.object.Material().transparency == 0 || remaining == 0 {
 		return Color{0, 0, 0}
 	}
 

@@ -91,7 +91,11 @@ func (w World) ReflectedColor(i Intersection) Color {
 }
 
 func (w World) RefractedColor(i Intersection, remaining float64) Color {
-	if i.object.Material().transparency == 0 || remaining == 0 {
+	nRatio := i.n1 / i.n2
+	cosThetaI := i.eyeVector.Dot(i.normalVector)
+	sinThetaT := nRatio * nRatio * (1 - (cosThetaI * cosThetaI))
+
+	if i.object.Material().transparency == 0 || remaining == 0 || sinThetaT > 1 {
 		return Color{0, 0, 0}
 	}
 

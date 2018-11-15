@@ -3,7 +3,7 @@ package main
 import (
 	"math"
 
-	"github.com/larspensjo/Go-simplex-noise/simplexnoise"
+	"github.com/riccardomarotti/Go-simplex-noise/simplexnoise"
 )
 
 type Pattern interface {

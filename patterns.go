@@ -134,3 +134,18 @@ func (p PerturbPattern) ColorAt(point Tuple, objectTransform Matrix) Color {
 	noise := simplexnoise.Noise3(point.x, point.y, point.z)
 	return p.pattern.ColorAt(point.Multiply(noise), objectTransform)
 }
+
+type TestPattern struct {
+	transform Matrix
+}
+
+func MakeTestPattern(transform Matrix) Pattern {
+	return TestPattern{transform}
+}
+
+func (p TestPattern) ColorAt(point Tuple, objectTransform Matrix) Color {
+	objectPoint := objectTransform.Inverse().MultiplyByTuple(point)
+	patternPoint := p.transform.Inverse().MultiplyByTuple(objectPoint)
+
+	return Color{patternPoint.x, patternPoint.y, patternPoint.z}
+}

@@ -89,3 +89,11 @@ func (w World) ReflectedColor(i Intersection) Color {
 
 	return color.By(i.object.Material().reflective)
 }
+
+func (w World) RefractedColor(i Intersection, remaining float64) Color {
+	if i.object.Material().transparency == 0 {
+		return Color{0, 0, 0}
+	}
+
+	return Color{1, 1, 1}
+}

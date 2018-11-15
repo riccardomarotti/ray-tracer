@@ -127,3 +127,13 @@ func TestMutuallyReflectiveSurfaces(t *testing.T) {
 
 	world.ColorAt(Ray{Point(0, 0, 0), Vector(0, 1, 0)})
 }
+func TestTheRefractedColorWithAnOpaqueSurface(t *testing.T) {
+	w := DefaultWorld()
+	shape := w.objects[0]
+	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+	xs := []Intersection{Intersection{t: 4, object: shape}, Intersection{t: 6, object: shape}}
+
+	hitData := PrepareComputations(xs[0], r, xs)
+
+	AssertColorEqual(Color{0, 0, 0}, w.RefractedColor(hitData, 5), t)
+}

@@ -116,7 +116,9 @@ func (i Intersection) Schlick() float64 {
 		if sin2Theta > 1 {
 			return 1
 		}
+		cos = math.Sqrt(1 - sin2Theta)
 	}
 
-	return 0
+	r0 := math.Pow(((i.n1 - i.n2) / (i.n1 + i.n2)), 2)
+	return r0 + (1-r0)*math.Pow(1-cos, 5)
 }

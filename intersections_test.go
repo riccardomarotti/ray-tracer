@@ -261,3 +261,23 @@ func TestSchlickApproximationUnderTotalInternalReflection(t *testing.T) {
 
 	AssertEqual(1, hitData.Schlick(), t)
 }
+
+func TestSchlickApproximationWithAPerpendicularViewingAngle(t *testing.T) {
+	shape := MakeGlassSphere(Identity(), 1.5)
+	r := Ray{Point(0, 0, 0), Vector(0, 1, 0)}
+	xs := []Intersection{Intersection{t: -1, object: shape}, Intersection{t: 1, object: shape}}
+
+	hitData := PrepareComputations(xs[1], r, xs)
+
+	AssertEqual(.04, hitData.Schlick(), t)
+}
+
+func TestSchlickApproximationWithSmallAncgleAndN2GreaterThanN1(t *testing.T) {
+	shape := MakeGlassSphere(Identity(), 1.5)
+	r := Ray{Point(0, 0.99, -2), Vector(0, 0, 1)}
+	xs := []Intersection{Intersection{t: 1.8589, object: shape}}
+
+	hitData := PrepareComputations(xs[0], r, xs)
+
+	AssertEqual(.48873, hitData.Schlick(), t)
+}

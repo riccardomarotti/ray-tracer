@@ -14,8 +14,7 @@ func AssertEqual(expected float64, actual float64, t *testing.T) {
 }
 
 func areEqual(expected float64, actual float64) bool {
-	epsilon := 0.00001
-	return math.Abs(expected-actual) < epsilon
+	return math.Abs(expected-actual) < 1.05*Epsilon
 
 }
 

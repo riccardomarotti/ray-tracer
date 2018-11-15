@@ -215,3 +215,15 @@ func TestN1AndN2AtVariousIntersections(t *testing.T) {
 		AssertEqual(examples[index][1], hit.n2, t)
 	}
 }
+
+func TestTheUnderPointIsOffsetBelowTheSurface(t *testing.T) {
+	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+	shape := MakeGlassSphere(Identity().Translate(0, 0, 1), 1.5)
+
+	i := Intersection{t: 5, object: shape}
+	xs := []Intersection{i}
+
+	hitData := PrepareComputations(i, r, xs)
+
+	Assert(hitData.underPoint.z > Epsilon/2, "", t)
+}

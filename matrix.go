@@ -20,10 +20,8 @@ func (A Matrix) At(i, j int) float64 {
 }
 
 func (A Matrix) Equals(B Matrix) bool {
-	epsilon := 0.00001
-
 	for i, Avalue := range A.values {
-		areEqual := math.Abs(Avalue-B.values[i]) < epsilon
+		areEqual := math.Abs(Avalue-B.values[i]) < Epsilon
 		if areEqual == false {
 			return false
 		}

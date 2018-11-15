@@ -5,11 +5,13 @@ import (
 	"reflect"
 )
 
+const Epsilon = 0.00001
+
 type Intersection struct {
-	t, n1, n2                                     float64
-	object                                        Object
-	point, eyeVector, normalVector, reflectVector Tuple
-	inside                                        bool
+	t, n1, n2                                                 float64
+	object                                                    Object
+	point, eyeVector, normalVector, reflectVector, underPoint Tuple
+	inside                                                    bool
 }
 
 func Hit(i []Intersection) (hit Intersection) {
@@ -25,9 +27,11 @@ func Hit(i []Intersection) (hit Intersection) {
 }
 
 func PrepareComputations(i Intersection, r Ray, allIntersections []Intersection) Intersection {
-	point := r.Position(i.t)
-	normalVector := i.object.NormalAt(point)
-	point = point.Add(normalVector.Multiply(0.000009))
+	rawPoint := r.Position(i.t)
+	normalVector := i.object.NormalAt(rawPoint)
+	point := rawPoint.Add(normalVector.Multiply(Epsilon))
+	underPoint := rawPoint.Subtract(normalVector.Multiply(Epsilon))
+
 	eyeVector := r.direction.Multiply(-1)
 	inside := false
 
@@ -76,6 +80,7 @@ func PrepareComputations(i Intersection, r Ray, allIntersections []Intersection)
 		normalVector:  normalVector,
 		inside:        inside,
 		reflectVector: reflectVector,
+		underPoint:    underPoint,
 		n1:            i.n1,
 		n2:            i.n2,
 	}
@@ -98,5 +103,5 @@ func contains(array []Object, o Object) int {
 }
 
 func areIntersectionsEqual(i1, i2 Intersection) bool {
-	return (math.Abs(i1.t-i2.t) < 0.00001) && reflect.DeepEqual(i1.object, i2.object)
+	return (math.Abs(i1.t-i2.t) < Epsilon) && reflect.DeepEqual(i1.object, i2.object)
 }

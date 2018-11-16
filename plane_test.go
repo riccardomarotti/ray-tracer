@@ -5,13 +5,6 @@ import (
 	"testing"
 )
 
-func TestPlaneImplementsObjectInterface(t *testing.T) {
-	p := Plane{}
-
-	p.Transform()
-	p.NormalAt(Point(0, 0, 0))
-	p.Material()
-}
 func TestTheNormalOfAPlaneIsConstantEverywhere(t *testing.T) {
 	p := Plane{}
 	n1 := p.NormalAt(Point(0, 0, 0))

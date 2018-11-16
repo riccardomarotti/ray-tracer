@@ -14,7 +14,11 @@ func MakePlane(transform Matrix, material Material) Object {
 }
 
 func (p Plane) NormalAt(point Tuple) Tuple {
-	return Vector(0, 1, 0)
+	objectNormal := Vector(0, 1, 0)
+	worldNormal := p.Transform().Inverse().T().MultiplyByTuple(objectNormal)
+	worldNormal.w = 0
+
+	return worldNormal.Normalize()
 }
 
 func (p Plane) Transform() Matrix {
@@ -26,9 +30,12 @@ func (p Plane) Material() Material {
 }
 
 func (p Plane) Intersection(r Ray) (intersection []Intersection) {
+	localRay := r.Transform(p.Transform().Inverse())
 	intersection = make([]Intersection, 0)
-	if (math.Abs(r.direction.y)) >= 0.0001 {
-		t := -r.origin.y / r.direction.y
+	intersection = make([]Intersection, 0)
+
+	if (math.Abs(localRay.direction.y)) >= Epsilon {
+		t := -localRay.origin.y / localRay.direction.y
 		i := Intersection{}
 		i.t = t
 		i.object = p

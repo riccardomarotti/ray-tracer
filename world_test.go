@@ -102,7 +102,7 @@ func TestReflectedClorForNonReflectiveMaterial(t *testing.T) {
 }
 
 func TestReflectedColorWithReflectiveMaterial(t *testing.T) {
-	world := WorldWithAmbientSetTo(.3258)
+	world := DefaultWorld()
 	reflectiveMaterial := DefaultMaterial()
 	reflectiveMaterial.reflective = 0.5
 	plane := MakePlane(Identity().Translate(0, -1, 0), reflectiveMaterial)
@@ -125,7 +125,7 @@ func TestMutuallyReflectiveSurfaces(t *testing.T) {
 
 	world := World{light, []Object{lower, uppler}}
 
-	world.ColorAt(Ray{Point(0, 0, 0), Vector(0, 1, 0)}, 1)
+	world.ColorAt(Ray{Point(0, 0, 0), Vector(0, 1, 0)}, 5)
 }
 func TestTheRefractedColorWithAnOpaqueSurface(t *testing.T) {
 	w := DefaultWorld()

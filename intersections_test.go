@@ -171,9 +171,9 @@ func TestPrecomputingTheReflectionVector(t *testing.T) {
 }
 
 func TestShadeWithReflectiveMaterial(t *testing.T) {
-	world := WorldWithAmbientSetTo(.47013)
+	world := DefaultWorld()
 	reflectiveMaterial := DefaultMaterial()
-	reflectiveMaterial.reflective = 1
+	reflectiveMaterial.reflective = .5
 	plane := MakePlane(Identity().Translate(0, -1, 0), reflectiveMaterial)
 	world.objects = append(world.objects, plane)
 
@@ -232,7 +232,6 @@ func TestShadeWithATransparentMaterial(t *testing.T) {
 	floorMaterial := DefaultMaterial()
 	floorMaterial.transparency = 0.5
 	floorMaterial.refractiveIndex = 1.5
-	floorMaterial.ambient = .65867
 	floor := MakePlane(Identity().Translate(0, -1, 0), floorMaterial)
 
 	ballMaterial := DefaultMaterial()
@@ -287,7 +286,6 @@ func TestShadeWithReflectiveAndTransparentMaterial(t *testing.T) {
 	r := Ray{Point(0, 0, -3), Vector(0, -math.Sqrt(2)/2, math.Sqrt(2)/2)}
 
 	floorMaterial := DefaultMaterial()
-	floorMaterial.ambient = .66699
 	floorMaterial.reflective = 0.5
 	floorMaterial.transparency = 0.5
 	floorMaterial.refractiveIndex = 1.5
@@ -295,7 +293,7 @@ func TestShadeWithReflectiveAndTransparentMaterial(t *testing.T) {
 
 	ballMaterial := DefaultMaterial()
 	ballMaterial.color = Color{1, 0, 0}
-	ballMaterial.ambient = 0.5
+	ballMaterial.ambient = 0.4
 	ball := MakeSphere(Identity().Translate(0, -3.5, -0.5), ballMaterial)
 
 	w.objects = append(w.objects, []Object{floor, ball}...)

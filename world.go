@@ -107,5 +107,5 @@ func (w World) RefractedColor(i Intersection, remaining int) Color {
 	direction := i.normalVector.Multiply(nRatio*cosThetaI - cosThetaT).Subtract(i.eyeVector.Multiply(nRatio))
 	refractRay := Ray{i.underPoint, direction}
 
-	return w.ColorAt(refractRay, remaining-1).Multiply(i.object.Material().transparency)
+	return w.ColorAt(refractRay, remaining).Multiply(i.object.Material().transparency)
 }

@@ -203,3 +203,45 @@ func TestShadeWithReflectiveAndTransparentMaterial(t *testing.T) {
 
 	AssertColorEqual(Color{0.93391, 0.69643, 0.60243}, hitData.Shade(w, 5), t)
 }
+
+func TestPrecomputingTheStateOfAnIntersection(t *testing.T) {
+	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+	shape := MakeSphere(Identity(), DefaultMaterial())
+
+	intersections := shape.Intersection(ray)
+	hit := Hit(intersections)
+
+	hitData := PrepareComputations(hit, ray, intersections)
+
+	AssertTupleEqual(Point(0, 0, -1), hitData.point, t)
+	AssertTupleEqual(Vector(0, 0, -1), hitData.eyeVector, t)
+	AssertTupleEqual(Vector(0, 0, -1), hitData.normalVector, t)
+}
+
+func TestIntersectionOutside(t *testing.T) {
+	ray := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
+	shape := MakeSphere(Identity(), DefaultMaterial())
+
+	intersections := shape.Intersection(ray)
+	hit := Hit(intersections)
+
+	hitData := PrepareComputations(hit, ray, intersections)
+
+	Assert(hitData.inside == false, "", t)
+}
+
+func TestIntersectionInside(t *testing.T) {
+	ray := Ray{Point(0, 0, 0), Vector(0, 0, 1)}
+	shape := MakeSphere(Identity(), DefaultMaterial())
+
+	intersections := shape.Intersection(ray)
+	hit := Hit(intersections)
+
+	hitData := PrepareComputations(hit, ray, intersections)
+
+	AssertTupleEqual(Point(0, 0, 1), hitData.point, t)
+	AssertTupleEqual(Vector(0, 0, -1), hitData.eyeVector, t)
+
+	Assert(hitData.inside == true, "Hit ha dto be inside", t)
+	AssertTupleEqual(Vector(0, 0, -1), hitData.normalVector, t)
+}

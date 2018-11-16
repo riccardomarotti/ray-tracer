@@ -11,13 +11,13 @@ type Computations struct {
 	inside                                                    bool
 }
 
-func PrepareComputations(intersection Intersection, r Ray, allIntersections []Intersection) (comps Computations) {
+func PrepareComputations(hit Intersection, r Ray, allIntersections []Intersection) (comps Computations) {
 	comps = Computations{}
-	comps.t = intersection.t
-	comps.object = intersection.object
+	comps.t = hit.t
+	comps.object = hit.object
 
-	rawPoint := r.Position(intersection.t)
-	normalVector := intersection.object.NormalAt(rawPoint)
+	rawPoint := r.Position(hit.t)
+	normalVector := hit.object.NormalAt(rawPoint)
 	point := rawPoint.Add(normalVector.Multiply(Epsilon))
 	underPoint := rawPoint.Subtract(normalVector.Multiply(Epsilon))
 
@@ -34,7 +34,7 @@ func PrepareComputations(intersection Intersection, r Ray, allIntersections []In
 	containers := []Object{}
 
 	for _, i := range allIntersections {
-		if areIntersectionsEqual(i, intersection) {
+		if areIntersectionsEqual(i, hit) {
 			if len(containers) == 0 {
 				comps.n1 = 1.0
 			} else {
@@ -49,7 +49,7 @@ func PrepareComputations(intersection Intersection, r Ray, allIntersections []In
 			containers = append(containers, i.object)
 		}
 
-		if areIntersectionsEqual(i, intersection) {
+		if areIntersectionsEqual(i, hit) {
 			if len(containers) == 0 {
 				comps.n2 = 1.0
 			} else {

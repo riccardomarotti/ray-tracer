@@ -288,12 +288,13 @@ func TestShadeWithReflectiveAndTransparentMaterial(t *testing.T) {
 	floorMaterial := DefaultMaterial()
 	floorMaterial.reflective = 0.5
 	floorMaterial.transparency = 0.5
+	floorMaterial.ambient = 0
 	floorMaterial.refractiveIndex = 1.5
 	floor := MakePlane(Identity().Translate(0, -1, 0), floorMaterial)
 
 	ballMaterial := DefaultMaterial()
 	ballMaterial.color = Color{1, 0, 0}
-	ballMaterial.ambient = 0.4
+	ballMaterial.ambient = 0.3146
 	ball := MakeSphere(Identity().Translate(0, -3.5, -0.5), ballMaterial)
 
 	w.objects = append(w.objects, []Object{floor, ball}...)

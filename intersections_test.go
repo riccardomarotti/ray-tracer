@@ -18,7 +18,7 @@ func TestIntersecionEncapsulatesTAndSolid(t *testing.T) {
 func TestAggregatingIntersections(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
 
-	xs := []Intersection{Intersection{t: 1, object: s}, Intersection{t: 2, object: s}}
+	xs := []Intersection{{t: 1, object: s}, {t: 2, object: s}}
 
 	Assert(len(xs) == 2, "", t)
 	AssertEqual(1, xs[0].t, t)
@@ -191,21 +191,21 @@ func TestN1AndN2AtVariousIntersections(t *testing.T) {
 
 	ray := Ray{Point(0, 0, -4), Vector(0, 0, 1)}
 	xs := []Intersection{
-		Intersection{t: 2, object: A},
-		Intersection{t: 2.75, object: B},
-		Intersection{t: 3.25, object: C},
-		Intersection{t: 4.75, object: B},
-		Intersection{t: 5.25, object: C},
-		Intersection{t: 6, object: A},
+		{t: 2, object: A},
+		{t: 2.75, object: B},
+		{t: 3.25, object: C},
+		{t: 4.75, object: B},
+		{t: 5.25, object: C},
+		{t: 6, object: A},
 	}
 
 	examples := map[int][]float64{
-		0: []float64{1.0, 1.5},
-		1: []float64{1.5, 2.0},
-		2: []float64{2.0, 2.5},
-		3: []float64{2.5, 2.5},
-		4: []float64{2.5, 1.5},
-		5: []float64{1.5, 1.0},
+		0: {1.0, 1.5},
+		1: {1.5, 2.0},
+		2: {2.0, 2.5},
+		3: {2.5, 2.5},
+		4: {2.5, 1.5},
+		5: {1.5, 1.0},
 	}
 
 	for index := 0; index < len(xs); index++ {
@@ -244,7 +244,7 @@ func TestShadeWithATransparentMaterial(t *testing.T) {
 	w.objects = append(w.objects, []Object{floor, ball}...)
 
 	r := Ray{Point(0, 0, -3), Vector(0, -math.Sqrt(2)/2, math.Sqrt(2)/2)}
-	xs := []Intersection{Intersection{t: math.Sqrt(2), object: floor}}
+	xs := []Intersection{{t: math.Sqrt(2), object: floor}}
 
 	intersection := PrepareComputations(xs[0], r, xs)
 
@@ -254,7 +254,7 @@ func TestShadeWithATransparentMaterial(t *testing.T) {
 func TestSchlickApproximationUnderTotalInternalReflection(t *testing.T) {
 	shape := MakeGlassSphere(Identity(), 1.5)
 	r := Ray{Point(0, 0, math.Sqrt(2)/2), Vector(0, 1, 0)}
-	xs := []Intersection{Intersection{t: -math.Sqrt(2) / 2, object: shape}, Intersection{t: math.Sqrt(2) / 2, object: shape}}
+	xs := []Intersection{{t: -math.Sqrt(2) / 2, object: shape}, {t: math.Sqrt(2) / 2, object: shape}}
 
 	hitData := PrepareComputations(xs[1], r, xs)
 
@@ -264,7 +264,7 @@ func TestSchlickApproximationUnderTotalInternalReflection(t *testing.T) {
 func TestSchlickApproximationWithAPerpendicularViewingAngle(t *testing.T) {
 	shape := MakeGlassSphere(Identity(), 1.5)
 	r := Ray{Point(0, 0, 0), Vector(0, 1, 0)}
-	xs := []Intersection{Intersection{t: -1, object: shape}, Intersection{t: 1, object: shape}}
+	xs := []Intersection{{t: -1, object: shape}, {t: 1, object: shape}}
 
 	hitData := PrepareComputations(xs[1], r, xs)
 
@@ -274,7 +274,7 @@ func TestSchlickApproximationWithAPerpendicularViewingAngle(t *testing.T) {
 func TestSchlickApproximationWithSmallAncgleAndN2GreaterThanN1(t *testing.T) {
 	shape := MakeGlassSphere(Identity(), 1.5)
 	r := Ray{Point(0, 0.99, -2), Vector(0, 0, 1)}
-	xs := []Intersection{Intersection{t: 1.8589, object: shape}}
+	xs := []Intersection{{t: 1.8589, object: shape}}
 
 	hitData := PrepareComputations(xs[0], r, xs)
 
@@ -298,7 +298,7 @@ func TestShadeWithReflectiveAndTransparentMaterial(t *testing.T) {
 
 	w.objects = append(w.objects, []Object{floor, ball}...)
 
-	xs := []Intersection{Intersection{t: math.Sqrt(2) / 2, object: floor}}
+	xs := []Intersection{{t: math.Sqrt(2) / 2, object: floor}}
 	hitData := PrepareComputations(xs[0], r, xs)
 
 	AssertColorEqual(Color{0.93391, 0.69643, 0.60243}, hitData.Shade(w, 5), t)

@@ -131,7 +131,7 @@ func TestTheRefractedColorWithAnOpaqueSurface(t *testing.T) {
 	w := DefaultWorld()
 	shape := w.objects[0]
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
-	xs := []Intersection{Intersection{t: 4, object: shape}, Intersection{t: 6, object: shape}}
+	xs := []Intersection{{t: 4, object: shape}, {t: 6, object: shape}}
 
 	hitData := PrepareComputations(xs[0], r, xs)
 
@@ -152,7 +152,7 @@ func TestTheRefractedColotAtTheMaximumRecursiveDepth(t *testing.T) {
 	w := World{light, []Object{shape}}
 
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
-	xs := []Intersection{Intersection{t: 4, object: shape}, Intersection{t: 5, object: shape}}
+	xs := []Intersection{{t: 4, object: shape}, {t: 5, object: shape}}
 
 	hitData := PrepareComputations(xs[0], r, xs)
 
@@ -175,7 +175,7 @@ func TestRefractedColorUnderTotalInternalRefrlection(t *testing.T) {
 
 	w := World{light, []Object{shape, otherShape}}
 	r := Ray{Point(0, 0, math.Sqrt(2)/2), Vector(0, 1, 0)}
-	xs := []Intersection{Intersection{t: -math.Sqrt(2) / 2, object: shape}, Intersection{t: math.Sqrt(2) / 2, object: shape}}
+	xs := []Intersection{{t: -math.Sqrt(2) / 2, object: shape}, {t: math.Sqrt(2) / 2, object: shape}}
 
 	hitData := PrepareComputations(xs[1], r, xs)
 
@@ -204,10 +204,10 @@ func TestRefractedColorWithRefractedRay(t *testing.T) {
 
 	r := Ray{Point(0, 0, 0.1), Vector(0, 1, 0)}
 	xs := []Intersection{
-		Intersection{t: -0.9899, object: A},
-		Intersection{t: -0.4899, object: B},
-		Intersection{t: 0.4899, object: B},
-		Intersection{t: 0.9899, object: A},
+		{t: -0.9899, object: A},
+		{t: -0.4899, object: B},
+		{t: 0.4899, object: B},
+		{t: 0.9899, object: A},
 	}
 
 	hitData := PrepareComputations(xs[2], r, xs)

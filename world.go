@@ -60,9 +60,6 @@ func (w World) Intersect(ray Ray) []Intersection {
 
 func (w World) ColorAt(r Ray, remaining int) Color {
 	color := Color{0, 0, 0}
-	if remaining <= 0 {
-		return color
-	}
 	intersections := w.Intersect(r)
 	intersection := Hit(intersections)
 

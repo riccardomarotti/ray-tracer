@@ -5,7 +5,7 @@ import (
 )
 
 type Plane struct {
-	transofrm Matrix
+	transform Matrix
 	material  Material
 }
 
@@ -22,7 +22,7 @@ func (p Plane) NormalAt(point Tuple) Tuple {
 }
 
 func (p Plane) Transform() Matrix {
-	return p.transofrm
+	return p.transform
 }
 
 func (p Plane) Material() Material {

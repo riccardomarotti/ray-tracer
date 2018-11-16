@@ -11,13 +11,13 @@ type Computations struct {
 	inside                                                    bool
 }
 
-func PrepareComputations(i Intersection, r Ray, allIntersections []Intersection) (comps Computations) {
+func PrepareComputations(intersection Intersection, r Ray, allIntersections []Intersection) (comps Computations) {
 	comps = Computations{}
-	comps.t = i.t
-	comps.object = i.object
+	comps.t = intersection.t
+	comps.object = intersection.object
 
-	rawPoint := r.Position(i.t)
-	normalVector := i.object.NormalAt(rawPoint)
+	rawPoint := r.Position(intersection.t)
+	normalVector := intersection.object.NormalAt(rawPoint)
 	point := rawPoint.Add(normalVector.Multiply(Epsilon))
 	underPoint := rawPoint.Subtract(normalVector.Multiply(Epsilon))
 
@@ -33,8 +33,8 @@ func PrepareComputations(i Intersection, r Ray, allIntersections []Intersection)
 
 	containers := []Object{}
 
-	for _, intersection := range allIntersections {
-		if areIntersectionsEqual(intersection, i) {
+	for _, i := range allIntersections {
+		if areIntersectionsEqual(i, intersection) {
 			if len(containers) == 0 {
 				comps.n1 = 1.0
 			} else {
@@ -43,13 +43,13 @@ func PrepareComputations(i Intersection, r Ray, allIntersections []Intersection)
 			}
 		}
 
-		if x := contains(containers, intersection.object); x != -1 {
+		if x := contains(containers, i.object); x != -1 {
 			containers = append(containers[:x], containers[x+1:]...)
 		} else {
-			containers = append(containers, intersection.object)
+			containers = append(containers, i.object)
 		}
 
-		if areIntersectionsEqual(intersection, i) {
+		if areIntersectionsEqual(i, intersection) {
 			if len(containers) == 0 {
 				comps.n2 = 1.0
 			} else {
@@ -85,11 +85,11 @@ func (c Computations) Shade(world World, remaining int) Color {
 	return surface.Add(reflected).Add(refracted)
 }
 
-func (i Computations) Schlick() float64 {
-	cos := i.eyeVector.Dot(i.normalVector)
+func (c Computations) Schlick() float64 {
+	cos := c.eyeVector.Dot(c.normalVector)
 
-	if i.n1 > i.n2 {
-		n := i.n1 / i.n2
+	if c.n1 > c.n2 {
+		n := c.n1 / c.n2
 		sin2Theta := n * n * (1 - cos*cos)
 		if sin2Theta > 1 {
 			return 1
@@ -97,6 +97,6 @@ func (i Computations) Schlick() float64 {
 		cos = math.Sqrt(1 - sin2Theta)
 	}
 
-	r0 := math.Pow(((i.n1 - i.n2) / (i.n1 + i.n2)), 2)
+	r0 := math.Pow(((c.n1 - c.n2) / (c.n1 + c.n2)), 2)
 	return r0 + (1-r0)*math.Pow(1-cos, 5)
 }

@@ -40,8 +40,12 @@ func (m Material) Lighting(objectTransform Matrix, light PointLight, position Tu
 	if lightDotNormal > 0 && !inShadow {
 		diffuse = actualColor.Multiply(m.diffuse).Multiply(lightDotNormal)
 		reflectVector := lightVector.Multiply(-1).Reflect(normalVector)
-		reflectDotEye := math.Pow(reflectVector.Dot(eyeVector), m.shininess)
-		specular = light.intensity.Multiply(m.specular).Multiply(reflectDotEye)
+		reflectDotEye := reflectVector.Dot(eyeVector)
+		if reflectDotEye > 0 {
+			factor := math.Pow(reflectDotEye, m.shininess)
+			specular = light.intensity.Multiply(m.specular).Multiply(factor)
+		}
+
 	}
 
 	return ambient.Add(diffuse).Add(specular)

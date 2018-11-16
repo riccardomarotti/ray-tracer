@@ -65,6 +65,6 @@ func (c Camera) Render(w World) Canvas {
 func (c Camera) writePixel(x, y int, image Canvas, w World, wg *sync.WaitGroup) {
 	defer wg.Done()
 	ray := c.RayForPixel(float64(x), float64(y))
-	color := w.ColorAt(ray, 5)
+	color := w.ColorAt(ray, 10)
 	image.WriteAt(x, y, color)
 }

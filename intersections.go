@@ -8,10 +8,8 @@ import (
 const Epsilon = 0.00001
 
 type Intersection struct {
-	t, n1, n2                                                 float64
-	object                                                    Object
-	point, eyeVector, normalVector, reflectVector, underPoint Tuple
-	inside                                                    bool
+	t      float64
+	object Object
 }
 
 func Hit(i []Intersection) (hit Intersection) {
@@ -26,79 +24,6 @@ func Hit(i []Intersection) (hit Intersection) {
 	return
 }
 
-func PrepareComputations(i Intersection, r Ray, allIntersections []Intersection) Intersection {
-	rawPoint := r.Position(i.t)
-	normalVector := i.object.NormalAt(rawPoint)
-	point := rawPoint.Add(normalVector.Multiply(Epsilon))
-	underPoint := rawPoint.Subtract(normalVector.Multiply(Epsilon))
-
-	eyeVector := r.direction.Multiply(-1)
-	inside := false
-
-	if normalVector.Dot(eyeVector) < 0 {
-		inside = true
-		normalVector = normalVector.Multiply(-1)
-	}
-
-	reflectVector := r.direction.Reflect(normalVector)
-
-	containers := []Object{}
-
-	for _, intersection := range allIntersections {
-		if areIntersectionsEqual(intersection, i) {
-			if len(containers) == 0 {
-				i.n1 = 1.0
-			} else {
-				lastIndex := len(containers) - 1
-				i.n1 = containers[lastIndex].Material().refractiveIndex
-			}
-		}
-
-		if x := contains(containers, intersection.object); x != -1 {
-			containers = append(containers[:x], containers[x+1:]...)
-		} else {
-			containers = append(containers, intersection.object)
-		}
-
-		if areIntersectionsEqual(intersection, i) {
-			if len(containers) == 0 {
-				i.n2 = 1.0
-			} else {
-				lastIndex := len(containers) - 1
-				i.n2 = containers[lastIndex].Material().refractiveIndex
-			}
-
-			break
-		}
-	}
-
-	return Intersection{
-		t:             i.t,
-		object:        i.object,
-		point:         point,
-		eyeVector:     eyeVector,
-		normalVector:  normalVector,
-		inside:        inside,
-		reflectVector: reflectVector,
-		underPoint:    underPoint,
-		n1:            i.n1,
-		n2:            i.n2,
-	}
-}
-
-func (i Intersection) Shade(world World, remaining int) Color {
-	surface := i.object.Material().Lighting(i.object.Transform(), world.light, i.point, i.eyeVector, i.normalVector, world.IsShadowed(i.point))
-	reflected := world.ReflectedColor(i, remaining-1)
-	refracted := world.RefractedColor(i, remaining-1)
-
-	material := i.object.Material()
-	if material.reflective > 0 && material.transparency > 0 {
-		reflectance := i.Schlick()
-		return surface.Add(reflected.Multiply(reflectance)).Add(refracted.Multiply(1 - reflectance))
-	}
-	return surface.Add(reflected).Add(refracted)
-}
-
 func contains(array []Object, o Object) int {
 	for i := 0; i < len(array); i++ {
 		if reflect.DeepEqual(o, array[i]) {
@@ -111,20 +36,4 @@ func contains(array []Object, o Object) int {
 
 func areIntersectionsEqual(i1, i2 Intersection) bool {
 	return (math.Abs(i1.t-i2.t) < Epsilon) && reflect.DeepEqual(i1.object, i2.object)
-}
-
-func (i Intersection) Schlick() float64 {
-	cos := i.eyeVector.Dot(i.normalVector)
-
-	if i.n1 > i.n2 {
-		n := i.n1 / i.n2
-		sin2Theta := n * n * (1 - cos*cos)
-		if sin2Theta > 1 {
-			return 1
-		}
-		cos = math.Sqrt(1 - sin2Theta)
-	}
-
-	r0 := math.Pow(((i.n1 - i.n2) / (i.n1 + i.n2)), 2)
-	return r0 + (1-r0)*math.Pow(1-cos, 5)
 }

@@ -96,9 +96,9 @@ func TestReflectedClorForNonReflectiveMaterial(t *testing.T) {
 	shape := world.objects[1]
 	hit := Intersection{t: 1, object: shape}
 
-	hit = PrepareComputations(hit, ray, nil)
+	comps := PrepareComputations(hit, ray, nil)
 
-	AssertColorEqual(Color{0, 0, 0}, world.ReflectedColor(hit, 5), t)
+	AssertColorEqual(Color{0, 0, 0}, world.ReflectedColor(comps, 5), t)
 }
 
 func TestReflectedColorWithReflectiveMaterial(t *testing.T) {
@@ -109,9 +109,9 @@ func TestReflectedColorWithReflectiveMaterial(t *testing.T) {
 	world.objects = append(world.objects, plane)
 	ray := Ray{Point(0, 0, -3), Vector(0, -math.Sqrt(2)/2, math.Sqrt(2)/2)}
 	hit := Intersection{t: math.Sqrt(2), object: plane}
-	hit = PrepareComputations(hit, ray, nil)
+	comps := PrepareComputations(hit, ray, nil)
 
-	AssertColorEqual(Color{0.19032, -.2379, 0.14274}, world.ReflectedColor(hit, 5), t)
+	AssertColorEqual(Color{0.19032, -.2379, 0.14274}, world.ReflectedColor(comps, 5), t)
 }
 
 func TestMutuallyReflectiveSurfaces(t *testing.T) {

@@ -65,8 +65,8 @@ func (w World) ColorAt(r Ray, remaining int) Color {
 
 	hit := intersection != Intersection{}
 	if hit {
-		intersection = PrepareComputations(intersection, r, intersections)
-		color = intersection.Shade(w, remaining)
+		comps := PrepareComputations(intersection, r, intersections)
+		color = comps.Shade(w, remaining)
 	}
 
 	return color
@@ -80,7 +80,7 @@ func (w World) IsShadowed(p Tuple) bool {
 	return intersection != Intersection{} && intersection.t < v.Magnitude()
 }
 
-func (w World) ReflectedColor(i Intersection, remaining int) Color {
+func (w World) ReflectedColor(i Computations, remaining int) Color {
 	if i.object.Material().reflective == 0 || remaining <= 0 {
 		return Color{0, 0, 0}
 	}
@@ -91,7 +91,7 @@ func (w World) ReflectedColor(i Intersection, remaining int) Color {
 	return color.Multiply(i.object.Material().reflective)
 }
 
-func (w World) RefractedColor(i Intersection, remaining int) Color {
+func (w World) RefractedColor(i Computations, remaining int) Color {
 	nRatio := i.n1 / i.n2
 	cosThetaI := i.eyeVector.Dot(i.normalVector)
 	sinThetaT := nRatio * nRatio * (1 - (cosThetaI * cosThetaI))

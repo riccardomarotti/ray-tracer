@@ -121,9 +121,9 @@ func TestMutuallyReflectiveSurfaces(t *testing.T) {
 	material.reflective = 1
 
 	lower := MakePlane(Identity().Translate(0, -1, 0), material)
-	uppler := MakePlane(Identity().Translate(0, 1, 0), material)
+	upper := MakePlane(Identity().Translate(0, 1, 0).RotateX(math.Pi), material)
 
-	world := World{light, []Object{lower, uppler}}
+	world := World{light, []Object{lower, upper}}
 
 	world.ColorAt(Ray{Point(0, 0, 0), Vector(0, 1, 0)}, 5)
 }

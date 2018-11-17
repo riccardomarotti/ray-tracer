@@ -108,10 +108,10 @@ func TestN1AndN2AtVariousIntersections(t *testing.T) {
 	}
 
 	for index := 0; index < len(xs); index++ {
-		hit := PrepareComputations(xs[index], ray, xs)
+		comps := PrepareComputations(xs[index], ray, xs)
 
-		AssertEqual(examples[index][0], hit.n1, t)
-		AssertEqual(examples[index][1], hit.n2, t)
+		AssertEqual(examples[index][0], comps.n1, t)
+		AssertEqual(examples[index][1], comps.n2, t)
 	}
 }
 

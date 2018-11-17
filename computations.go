@@ -73,13 +73,14 @@ func PrepareComputations(hit Intersection, r Ray, allIntersections []Intersectio
 
 func (c Computations) Shade(world World, remaining int) Color {
 	surface := c.i.object.Material().Lighting(c.i.object.Transform(), world.light, c.point, c.eyeVector, c.normalVector, world.IsShadowed(c.point))
-	reflected := world.ReflectedColor(c, remaining-1)
-	refracted := world.RefractedColor(c, remaining-1)
+	reflected := world.ReflectedColor(c, remaining)
+	refracted := world.RefractedColor(c, remaining)
 
 	material := c.i.object.Material()
 	if material.reflective > 0 && material.transparency > 0 {
 		reflectance := c.Schlick()
-		return surface.Add(reflected.Multiply(reflectance)).Add(refracted.Multiply(1 - reflectance))
+		reflected = reflected.Multiply(reflectance)
+		refracted = refracted.Multiply(1 - reflectance)
 	}
 	return surface.Add(reflected).Add(refracted)
 }

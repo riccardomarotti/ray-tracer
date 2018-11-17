@@ -79,7 +79,7 @@ func (w World) ReflectedColor(c Computations, remaining int) Color {
 	}
 
 	reflectedRay := Ray{c.point, c.reflectVector}
-	color := w.ColorAt(reflectedRay, remaining)
+	color := w.ColorAt(reflectedRay, remaining-1)
 
 	return color.Multiply(c.i.object.Material().reflective)
 }
@@ -97,5 +97,5 @@ func (w World) RefractedColor(c Computations, remaining int) Color {
 	direction := c.normalVector.Multiply(nRatio*cosThetaI - cosThetaT).Subtract(c.eyeVector.Multiply(nRatio))
 	refractRay := Ray{c.underPoint, direction}
 
-	return w.ColorAt(refractRay, remaining).Multiply(c.i.object.Material().transparency)
+	return w.ColorAt(refractRay, remaining-1).Multiply(c.i.object.Material().transparency)
 }

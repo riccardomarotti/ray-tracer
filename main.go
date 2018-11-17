@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	camera := Camera{250, 125, math.Pi / 3, ViewTransform(Point(-1.3, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0))}
+	camera := Camera{500, 250, math.Pi / 3, ViewTransform(Point(-1.3, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0))}
 	sphereMaterial := DefaultMaterial()
 	sphereMaterial.color = Color{0.2, 1, 1}
 	pattern1 := MakePerturbPattern(MakeRingPattern(Color{0.2, 1, 1}, Color{.8, 1, .8}, Identity().Scale(.05, .05, .05).RotateX(-math.Pi/3)))
@@ -62,8 +62,8 @@ func main() {
 	wall2Material := DefaultMaterial()
 	wall2Material.color = Color{.1, .1, .1}
 	wall2Material.pattern = MakeStripePattern(Color{.3, .3, .3}, Color{.4, .4, .4}, Identity().RotateY(math.Pi/2).Scale(.2, .2, .2))
-	wall2Material.specular = 0
-	wall2Material.reflective = 0
+	wall2Material.specular = 1
+	wall2Material.reflective = .5
 	wall2 := MakePlane(Identity().RotateX(-math.Pi/2).RotateZ(math.Pi/3).Translate(0, -4, 0), wall2Material)
 
 	wall3Material := DefaultMaterial()

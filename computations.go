@@ -5,16 +5,15 @@ import (
 )
 
 type Computations struct {
-	object                                                    Object
-	t, n1, n2                                                 float64
+	i                                                         Intersection
+	n1, n2                                                    float64
 	point, eyeVector, normalVector, reflectVector, underPoint Tuple
 	inside                                                    bool
 }
 
 func PrepareComputations(hit Intersection, r Ray, allIntersections []Intersection) (comps Computations) {
 	comps = Computations{}
-	comps.t = hit.t
-	comps.object = hit.object
+	comps.i = hit
 
 	rawPoint := r.Position(hit.t)
 	normalVector := hit.object.NormalAt(rawPoint)
@@ -73,11 +72,11 @@ func PrepareComputations(hit Intersection, r Ray, allIntersections []Intersectio
 }
 
 func (c Computations) Shade(world World, remaining int) Color {
-	surface := c.object.Material().Lighting(c.object.Transform(), world.light, c.point, c.eyeVector, c.normalVector, world.IsShadowed(c.point))
+	surface := c.i.object.Material().Lighting(c.i.object.Transform(), world.light, c.point, c.eyeVector, c.normalVector, world.IsShadowed(c.point))
 	reflected := world.ReflectedColor(c, remaining-1)
 	refracted := world.RefractedColor(c, remaining-1)
 
-	material := c.object.Material()
+	material := c.i.object.Material()
 	if material.reflective > 0 && material.transparency > 0 {
 		reflectance := c.Schlick()
 		return surface.Add(reflected.Multiply(reflectance)).Add(refracted.Multiply(1 - reflectance))

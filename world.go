@@ -73,29 +73,29 @@ func (w World) IsShadowed(p Tuple) bool {
 	return intersection != Intersection{} && intersection.t < v.Magnitude()
 }
 
-func (w World) ReflectedColor(i Computations, remaining int) Color {
-	if i.object.Material().reflective == 0 || remaining <= 0 {
+func (w World) ReflectedColor(c Computations, remaining int) Color {
+	if c.i.object.Material().reflective == 0 || remaining <= 0 {
 		return Color{0, 0, 0}
 	}
 
-	reflectedRay := Ray{i.point, i.reflectVector}
+	reflectedRay := Ray{c.point, c.reflectVector}
 	color := w.ColorAt(reflectedRay, remaining)
 
-	return color.Multiply(i.object.Material().reflective)
+	return color.Multiply(c.i.object.Material().reflective)
 }
 
-func (w World) RefractedColor(i Computations, remaining int) Color {
-	nRatio := i.n1 / i.n2
-	cosThetaI := i.eyeVector.Dot(i.normalVector)
+func (w World) RefractedColor(c Computations, remaining int) Color {
+	nRatio := c.n1 / c.n2
+	cosThetaI := c.eyeVector.Dot(c.normalVector)
 	sinThetaT := nRatio * nRatio * (1 - (cosThetaI * cosThetaI))
 
-	if i.object.Material().transparency == 0 || remaining <= 0 || sinThetaT > 1 {
+	if c.i.object.Material().transparency == 0 || remaining <= 0 || sinThetaT > 1 {
 		return Color{0, 0, 0}
 	}
 
 	cosThetaT := math.Sqrt(1 - sinThetaT)
-	direction := i.normalVector.Multiply(nRatio*cosThetaI - cosThetaT).Subtract(i.eyeVector.Multiply(nRatio))
-	refractRay := Ray{i.underPoint, direction}
+	direction := c.normalVector.Multiply(nRatio*cosThetaI - cosThetaT).Subtract(c.eyeVector.Multiply(nRatio))
+	refractRay := Ray{c.underPoint, direction}
 
-	return w.ColorAt(refractRay, remaining).Multiply(i.object.Material().transparency)
+	return w.ColorAt(refractRay, remaining).Multiply(c.i.object.Material().transparency)
 }

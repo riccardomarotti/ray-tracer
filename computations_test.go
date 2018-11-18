@@ -30,7 +30,7 @@ func TestShadingAnIntersectionFromTheInside(t *testing.T) {
 
 	c := comps.Shade(world, 5)
 
-	AssertColorEqual(Color{.1, .1, .1}, c, t)
+	AssertColorEqual(Color{0.90498, 0.90498, 0.90498}, c, t)
 }
 func TestShadeIsGivenAnIntersectionInShadow(t *testing.T) {
 	light := PointLight{Point(0, 0, -10), Color{1, 1, 1}}
@@ -56,7 +56,7 @@ func TestThePointIdOffset(t *testing.T) {
 	hit := Hit(intersections)
 	comps := PrepareComputations(hit, ray, intersections)
 
-	Assert(comps.point.z > -1.1 && comps.point.z < -1, "", t)
+	Assert(comps.point.z < -Epsilon/2, "", t)
 
 }
 func TestPrecomputingTheReflectionVector(t *testing.T) {
@@ -124,7 +124,7 @@ func TestTheUnderPointIsOffsetBelowTheSurface(t *testing.T) {
 
 	hitData := PrepareComputations(i, r, xs)
 
-	Assert(hitData.underPoint.z > Epsilon, "", t)
+	Assert(hitData.underPoint.z > Epsilon/2, "", t)
 }
 
 func TestShadeWithATransparentMaterial(t *testing.T) {

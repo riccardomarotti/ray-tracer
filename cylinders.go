@@ -30,9 +30,15 @@ func (cylinder Cylinder) Material() Material {
 
 func (cylinder Cylinder) NormalAt(p Tuple) Tuple {
 	objectPoint := cylinder.Transform().Inverse().MultiplyByTuple(p)
+	distance := objectPoint.x*objectPoint.x + objectPoint.z*objectPoint.z
+
+	if distance < 1 && objectPoint.y > cylinder.maximum-Epsilon {
+		return Vector(0, 1, 0)
+	} else if distance < 1 && objectPoint.y <= cylinder.minimum+Epsilon {
+		return Vector(0, -1, 0)
+	}
 
 	return Vector(objectPoint.x, 0, objectPoint.z)
-
 }
 
 func (cylinder Cylinder) Intersection(r Ray) (intersections []Intersection) {

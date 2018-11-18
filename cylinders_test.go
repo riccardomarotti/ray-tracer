@@ -114,3 +114,22 @@ func TestIntersectingTheCapsOfAClosedCylinder(t *testing.T) {
 		Assert(expectedCount == actualCount, fmt.Sprintf("Expected count: %d, but was: %d", expectedCount, actualCount), t)
 	}
 }
+
+func TestNormalVectorOnACylindersEndCap(t *testing.T) {
+	cylidner := MakeClosedCylinder(Identity(), DefaultMaterial(), 1, 2)
+
+	examples := [][2]Tuple{
+		{Point(0, 1, 0), Vector(0, -1, 0)},
+		{Point(0.5, 1, 0), Vector(0, -1, 0)},
+		{Point(0, 1, 0.5), Vector(0, -1, 0)},
+		{Point(0, 2, 0), Vector(0, 1, 0)},
+		{Point(0.5, 2, 0), Vector(0, 1, 0)},
+		{Point(0, 2, 0.5), Vector(0, 1, 0)},
+	}
+
+	for i := 0; i < len(examples); i++ {
+		n := cylidner.NormalAt(examples[i][0])
+
+		AssertTupleEqual(examples[i][1], n, t)
+	}
+}

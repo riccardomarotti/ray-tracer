@@ -1,11 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
 func TestRayMissesTheCylinder(t *testing.T) {
-	cylinder := MakeCylinder(Identity(), DefaultMaterial())
+	cylinder := MakeInfiniteCylinder(Identity(), DefaultMaterial())
 
 	examples := map[int][2]Tuple{
 		0: {Point(1, 0, 0), Vector(0, 1, 0)},
@@ -24,7 +25,7 @@ func TestRayMissesTheCylinder(t *testing.T) {
 }
 
 func TestRayStrikesTheCylinder(t *testing.T) {
-	cylinder := MakeCylinder(Identity(), DefaultMaterial())
+	cylinder := MakeInfiniteCylinder(Identity(), DefaultMaterial())
 
 	exampleRays := [][2]Tuple{
 		{Point(1, 0, -5), Vector(0, 0, 1)},
@@ -49,7 +50,7 @@ func TestRayStrikesTheCylinder(t *testing.T) {
 }
 
 func TestNormalVectorOnACylinder(t *testing.T) {
-	cylinder := MakeCylinder(Identity(), DefaultMaterial())
+	cylinder := MakeInfiniteCylinder(Identity(), DefaultMaterial())
 
 	examples := [][2]Tuple{
 		{Point(1, 0, 0), Vector(1, 0, 0)},
@@ -62,5 +63,30 @@ func TestNormalVectorOnACylinder(t *testing.T) {
 		n := cylinder.NormalAt(examples[i][0])
 
 		AssertTupleEqual(examples[i][1], n, t)
+	}
+}
+
+func TestIntersectingAConstrainedCylinder(t *testing.T) {
+	cylidner := MakeCylinder(Identity(), DefaultMaterial(), 1, 2)
+
+	examples := [][2]Tuple{
+		{Point(0, 1.5, 0), Vector(0.1, 1, 0)},
+		{Point(0, 3, -5), Vector(0, 0, 1)},
+		{Point(0, 0, -5), Vector(0, 0, 1)},
+		{Point(0, 2, -5), Vector(0, 0, 1)},
+		{Point(0, 1, -5), Vector(0, 0, 1)},
+		{Point(0, 1.5, -2), Vector(0, 0, 1)},
+	}
+
+	expectedCounts := []int{0, 0, 0, 0, 0, 2}
+
+	for i := 0; i < len(examples); i++ {
+		r := Ray{examples[i][0], examples[i][1].Normalize()}
+		xs := cylidner.Intersection(r)
+
+		expectedCount := expectedCounts[i]
+		actualCount := len(xs)
+
+		Assert(expectedCount == actualCount, fmt.Sprintf("Expected count: %d, but was: %d", expectedCount, actualCount), t)
 	}
 }

@@ -3,12 +3,17 @@ package main
 import "math"
 
 type Cylinder struct {
-	transform Matrix
-	material  Material
+	transform        Matrix
+	material         Material
+	minimum, maximum float64
 }
 
-func MakeCylinder(transform Matrix, material Material) Object {
-	return Cylinder{transform, material}
+func MakeInfiniteCylinder(transform Matrix, material Material) Object {
+	return Cylinder{transform, material, math.Inf(-1), math.Inf(1)}
+}
+
+func MakeCylinder(transform Matrix, material Material, minimum, maximum float64) Object {
+	return Cylinder{transform, material, minimum, maximum}
 }
 func (c Cylinder) Transform() Matrix {
 	return c.transform
@@ -25,9 +30,9 @@ func (c Cylinder) NormalAt(p Tuple) Tuple {
 
 }
 
-func (cylinder Cylinder) Intersection(r Ray) (intersection []Intersection) {
+func (cylinder Cylinder) Intersection(r Ray) (intersections []Intersection) {
 	transformedRay := r.Transform(cylinder.Transform().Inverse())
-	intersection = make([]Intersection, 0)
+	intersections = make([]Intersection, 0)
 
 	a := transformedRay.direction.x*transformedRay.direction.x + transformedRay.direction.z*transformedRay.direction.z
 	if math.Abs(a) < Epsilon {
@@ -46,9 +51,19 @@ func (cylinder Cylinder) Intersection(r Ray) (intersection []Intersection) {
 	t0 := (-b - math.Sqrt(delta)) / (2 * a)
 	t1 := (-b + math.Sqrt(delta)) / (2 * a)
 
-	intersection = []Intersection{
-		{t: t0, object: cylinder},
-		{t: t1, object: cylinder},
+	if t0 > t1 {
+		t0, t1 = t1, t0
 	}
+
+	y0 := transformedRay.origin.y + t0*transformedRay.direction.y
+	if (cylinder.minimum) < y0 && y0 < cylinder.maximum {
+		intersections = append(intersections, Intersection{t0, cylinder})
+	}
+
+	y1 := transformedRay.origin.y + t1*transformedRay.direction.y
+	if cylinder.minimum < y1 && y1 < cylinder.maximum {
+		intersections = append(intersections, Intersection{t1, cylinder})
+	}
+
 	return
 }

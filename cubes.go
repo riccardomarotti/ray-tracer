@@ -26,10 +26,12 @@ func (c Cube) NormalAt(p Tuple) Tuple {
 }
 
 func (c Cube) Intersection(ray Ray) (intersection []Intersection) {
+	transformedRay := ray.Transform(c.Transform().Inverse())
 	intersection = []Intersection{}
-	xTMin, xTMax := tMinMaxForAxis(ray.origin.x, ray.direction.x)
-	yTMin, yTMax := tMinMaxForAxis(ray.origin.y, ray.direction.y)
-	zTMin, zTMax := tMinMaxForAxis(ray.origin.z, ray.direction.z)
+
+	xTMin, xTMax := tMinMaxForAxis(transformedRay.origin.x, transformedRay.direction.x)
+	yTMin, yTMax := tMinMaxForAxis(transformedRay.origin.y, transformedRay.direction.y)
+	zTMin, zTMax := tMinMaxForAxis(transformedRay.origin.z, transformedRay.direction.z)
 
 	tMin := math.Max(xTMin, math.Max(yTMin, zTMin))
 	tMax := math.Min(xTMax, math.Min(yTMax, zTMax))

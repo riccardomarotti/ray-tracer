@@ -67,7 +67,7 @@ func TestNormalVectorOnACylinder(t *testing.T) {
 }
 
 func TestIntersectingAConstrainedCylinder(t *testing.T) {
-	cylidner := MakeCylinder(Identity(), DefaultMaterial(), 1, 2)
+	cylidner := MakeCylinder(Identity(), DefaultMaterial(), 1, 2, false)
 
 	examples := [][2]Tuple{
 		{Point(0, 1.5, 0), Vector(0.1, 1, 0)},
@@ -79,6 +79,30 @@ func TestIntersectingAConstrainedCylinder(t *testing.T) {
 	}
 
 	expectedCounts := []int{0, 0, 0, 0, 0, 2}
+
+	for i := 0; i < len(examples); i++ {
+		r := Ray{examples[i][0], examples[i][1].Normalize()}
+		xs := cylidner.Intersection(r)
+
+		expectedCount := expectedCounts[i]
+		actualCount := len(xs)
+
+		Assert(expectedCount == actualCount, fmt.Sprintf("Expected count: %d, but was: %d", expectedCount, actualCount), t)
+	}
+}
+
+func TestIntersectingTheCapsOfAClosedCylinder(t *testing.T) {
+	cylidner := MakeClosedCylinder(Identity(), DefaultMaterial(), 1, 2)
+
+	examples := [][2]Tuple{
+		{Point(0, 3, 0), Vector(0, -1, 0)},
+		{Point(0, 3, -2), Vector(0, -1, 2)},
+		{Point(0, 4, -2), Vector(0, -1, 1)},
+		{Point(0, 0, -2), Vector(0, 1, 2)},
+		{Point(0, -1, -2), Vector(0, 1, 1)},
+	}
+
+	expectedCounts := []int{2, 2, 2, 2, 2}
 
 	for i := 0; i < len(examples); i++ {
 		r := Ray{examples[i][0], examples[i][1].Normalize()}

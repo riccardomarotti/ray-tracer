@@ -22,7 +22,16 @@ func (c Cube) Material() Material {
 }
 
 func (c Cube) NormalAt(p Tuple) Tuple {
-	return Vector(0, 0, 0)
+	objectPoint := c.Transform().Inverse().MultiplyByTuple(p)
+
+	maxC := math.Max(math.Abs(objectPoint.x), math.Max(math.Abs(objectPoint.y), math.Abs(objectPoint.z)))
+
+	if maxC == math.Abs(objectPoint.x) {
+		return Vector(objectPoint.x, 0, 0)
+	} else if maxC == math.Abs(objectPoint.y) {
+		return Vector(0, objectPoint.y, 0)
+	}
+	return Vector(0, 0, objectPoint.z)
 }
 
 func (c Cube) Intersection(ray Ray) (intersection []Intersection) {

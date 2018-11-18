@@ -94,3 +94,24 @@ func TestRayMissesTheCube(t *testing.T) {
 		Assert(len(xs) == 0, fmt.Sprintf("Cube intersections had to be zero for ray %v", r), t)
 	}
 }
+
+func TestNormalOnACube(t *testing.T) {
+	c := MakeCube(Identity(), DefaultMaterial())
+
+	examples := map[int][2]Tuple{
+		0: {Point(1, 0.5, -0.8), Vector(1, 0, 0)},
+		1: {Point(-1, -0.2, 0.9), Vector(-1, 0, 0)},
+		2: {Point(-0.4, 1, -0.1), Vector(0, 1, 0)},
+		3: {Point(0.3, -1, -0.7), Vector(0, -1, 0)},
+		4: {Point(-0.6, 0.3, 1), Vector(0, 0, 1)},
+		5: {Point(0.4, 0.4, -1), Vector(0, 0, -1)},
+		6: {Point(1, 1, 1), Vector(1, 0, 0)},
+		7: {Point(-1, -1, -1), Vector(-1, 0, 0)},
+	}
+
+	for i := 0; i < len(examples); i++ {
+		p := examples[i][0]
+
+		AssertTupleEqual(examples[i][1], c.NormalAt(p), t)
+	}
+}

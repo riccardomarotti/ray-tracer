@@ -19,10 +19,9 @@ func (c Cylinder) Material() Material {
 }
 
 func (c Cylinder) NormalAt(p Tuple) Tuple {
-	// objectPoint := s.Transform().Inverse().MultiplyByTuple(p)
-	// objectNormal := objectPoint.Subtract(Point(0, 0, 0))
+	objectPoint := c.Transform().Inverse().MultiplyByTuple(p)
 
-	return Vector(0, 0, 0)
+	return Vector(objectPoint.x, 0, objectPoint.z)
 
 }
 

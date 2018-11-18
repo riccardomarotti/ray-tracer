@@ -47,3 +47,20 @@ func TestRayStrikesTheCylinder(t *testing.T) {
 		AssertEqual(expectedTs[i][1], xs[1].t, t)
 	}
 }
+
+func TestNormalVectorOnACylinder(t *testing.T) {
+	cylinder := MakeCylinder(Identity(), DefaultMaterial())
+
+	examples := [][2]Tuple{
+		{Point(1, 0, 0), Vector(1, 0, 0)},
+		{Point(0, 5, -1), Vector(0, 0, -1)},
+		{Point(0, -2, 1), Vector(0, 0, 1)},
+		{Point(-1, 1, 0), Vector(-1, 0, 0)},
+	}
+
+	for i := 0; i < len(examples); i++ {
+		n := cylinder.NormalAt(examples[i][0])
+
+		AssertTupleEqual(examples[i][1], n, t)
+	}
+}

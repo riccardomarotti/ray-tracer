@@ -2,7 +2,6 @@ package main
 
 import "math"
 
-// Sphere represents a sphere
 type Sphere struct {
 	transform Matrix
 	material  Material

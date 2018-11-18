@@ -14,17 +14,17 @@ func main() {
 
 	sphere := MakeSphere(Identity().Translate(-0.5, 1, 0.5), sphereMaterial)
 
-	sphere2Material := DefaultMaterial()
-	sphere2Material.diffuse = 1
-	sphere2Material.specular = 0.1
-	sphere2Material.ambient = 0
-	sphere2Material.reflective = 0
+	cylinderMaterial := DefaultMaterial()
+	cylinderMaterial.diffuse = 1
+	cylinderMaterial.specular = 0.1
+	cylinderMaterial.ambient = 0
+	cylinderMaterial.reflective = 0
 
 	gradientPattern := MakeGradientPattern(Color{0, 0.3, 0.7}, Color{0.5, 0.7, 0.3}, Identity())
 	noisePattern := MakePerturbPattern(gradientPattern)
-	sphere2Material.pattern = noisePattern
+	cylinderMaterial.pattern = noisePattern
 
-	sphere2 := MakeSphere(Identity().Translate(1.5, 0.7, -0.5).Scale(0.7, 0.7, 0.7), sphere2Material)
+	cylinder := MakeClosedCylinder(Identity().Translate(1.8, 0, -0.5).Scale(0.7, 0.7, 0.7), cylinderMaterial, 0, 1)
 
 	sphere3Material := DefaultMaterial()
 
@@ -83,7 +83,7 @@ func main() {
 	lightColor := Color{1, 1, 1}
 	light := PointLight{lightPosition, lightColor}
 
-	world := World{light, []Object{sphere, sphere2, sphere3, cube, sphere5, floor, wall1, wall2, wall3}}
+	world := World{light, []Object{sphere, cylinder, sphere3, cube, sphere5, floor, wall1, wall2, wall3}}
 	c := camera.Render(world)
 	fmt.Printf(c.PPM())
 }

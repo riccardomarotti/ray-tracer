@@ -33,15 +33,15 @@ func main() {
 	sphere3Material.pattern = MakePerturbPattern(MakeStripePattern(Color{.7, .9, .5}, Color{.7, .7, .3}, Identity().Scale(.1, .1, .1).RotateZ(math.Pi/2).RotateY(math.Pi/4)))
 	sphere3 := MakeSphere(Identity().Translate(-1.5, 0.33, -0.75).Scale(0.33, 0.33, 0.33), sphere3Material)
 
-	sphere4Material := DefaultMaterial()
+	cubeMaterial := DefaultMaterial()
 
-	sphere4Material.color = Color{.5, .3, .1}
-	sphere4Material.specular = 1
-	sphere4Material.transparency = 1
-	sphere4Material.reflective = 1
-	sphere4Material.refractiveIndex = 1
-	sphere4Material.shininess = 300
-	sphere4 := MakeSphere(Identity().Translate(-2.5, 0.25, 1.5).Scale(0.25, 0.25, 0.25), sphere4Material)
+	cubeMaterial.color = Color{.5, .3, .1}
+	cubeMaterial.specular = 1
+	cubeMaterial.transparency = 1
+	cubeMaterial.reflective = 1
+	cubeMaterial.refractiveIndex = 1
+	cubeMaterial.shininess = 300
+	cube := MakeCube(Identity().Translate(-2.5, 0.25, 1.5).Scale(0.25, 0.25, 0.25), cubeMaterial)
 
 	sphere5Material := DefaultMaterial()
 	sphere5Material.color = Color{.3, 0.3, 0.3}
@@ -83,7 +83,7 @@ func main() {
 	lightColor := Color{1, 1, 1}
 	light := PointLight{lightPosition, lightColor}
 
-	world := World{light, []Object{sphere, sphere2, sphere3, sphere4, sphere5, floor, wall1, wall2, wall3}}
+	world := World{light, []Object{sphere, sphere2, sphere3, cube, sphere5, floor, wall1, wall2, wall3}}
 	c := camera.Render(world)
 	fmt.Printf(c.PPM())
 }

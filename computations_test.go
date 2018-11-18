@@ -124,7 +124,7 @@ func TestTheUnderPointIsOffsetBelowTheSurface(t *testing.T) {
 
 	hitData := PrepareComputations(i, r, xs)
 
-	Assert(hitData.underPoint.z > Epsilon/2, "", t)
+	Assert(hitData.underPoint.z > Epsilon, "", t)
 }
 
 func TestShadeWithATransparentMaterial(t *testing.T) {
@@ -186,14 +186,13 @@ func TestShadeWithReflectiveAndTransparentMaterial(t *testing.T) {
 
 	floorMaterial := DefaultMaterial()
 	floorMaterial.reflective = 0.5
-	floorMaterial.transparency = 0.5
-	floorMaterial.ambient = 0
+	floorMaterial.transparency = .3162
 	floorMaterial.refractiveIndex = 1.5
 	floor := MakePlane(Identity().Translate(0, -1, 0), floorMaterial)
 
 	ballMaterial := DefaultMaterial()
 	ballMaterial.color = Color{1, 0, 0}
-	ballMaterial.ambient = 0.3146
+	ballMaterial.ambient = 0.5
 	ball := MakeSphere(Identity().Translate(0, -3.5, -0.5), ballMaterial)
 
 	w.objects = append(w.objects, []Object{floor, ball}...)

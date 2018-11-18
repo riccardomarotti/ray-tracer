@@ -32,14 +32,13 @@ func (p Plane) Material() Material {
 func (p Plane) Intersection(r Ray) (intersection []Intersection) {
 	localRay := r.Transform(p.Transform().Inverse())
 	intersection = make([]Intersection, 0)
-	intersection = make([]Intersection, 0)
 
 	if (math.Abs(localRay.direction.y)) >= Epsilon {
 		t := -localRay.origin.y / localRay.direction.y
 		i := Intersection{}
 		i.t = t
 		i.object = p
-		return []Intersection{i}
+		intersection = []Intersection{i}
 	}
 
 	return

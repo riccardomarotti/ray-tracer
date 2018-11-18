@@ -6,13 +6,13 @@ import (
 )
 
 func main() {
-	camera := Camera{500, 250, math.Pi / 3, ViewTransform(Point(-1.3, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0))}
+	camera := Camera{250, 125, math.Pi / 3, ViewTransform(Point(-1.3, 1.5, -5), Point(0, 1, 0), Vector(0, 1, 0))}
 	sphereMaterial := DefaultMaterial()
-	sphereMaterial.color = Color{0.2, 1, 1}
-	pattern1 := MakePerturbPattern(MakeRingPattern(Color{0.2, 1, 1}, Color{.8, 1, .8}, Identity().Scale(.05, .05, .05).RotateX(-math.Pi/3)))
-	pattern2 := MakeGradientPattern(Color{1, .5, .3}, Color{.3, .5, 1}, Identity().RotateZ(-math.Pi/3))
-	sphereMaterial.pattern = MakeBlendPattern(pattern1, pattern2)
-	sphereMaterial.reflective = 0
+	sphereMaterial.color = Color{0.2, 0.2, 0.2}
+	sphereMaterial.reflective = 1
+	sphereMaterial.refractiveIndex = 1.5
+	// sphereMaterial.transparency = 1
+
 	sphere := MakeSphere(Identity().Translate(-0.5, 1, 0.5), sphereMaterial)
 
 	sphere2Material := DefaultMaterial()
@@ -21,10 +21,10 @@ func main() {
 	sphere2Material.ambient = 0
 	sphere2Material.reflective = 0
 	sphere2Material.shininess = 1000
+	pattern1 := MakePerturbPattern(MakeRingPattern(Color{0.2, 1, 1}, Color{.8, 1, .8}, Identity().Scale(.05, .05, .05).RotateX(-math.Pi/3)))
+	pattern2 := MakeGradientPattern(Color{1, .5, .3}, Color{.3, .5, 1}, Identity().RotateZ(-math.Pi/3))
+	sphere2Material.pattern = MakeBlendPattern(pattern1, pattern2)
 
-	gradientPattern := MakeGradientPattern(Color{0, 0.3, 0.7}, Color{0.5, 0.7, 0.3}, Identity())
-	noisePattern := MakePerturbPattern(gradientPattern)
-	sphere2Material.pattern = noisePattern
 	sphere2 := MakeSphere(Identity().Translate(1.5, 0.7, -0.5).Scale(0.7, 0.7, 0.7), sphere2Material)
 
 	sphere3Material := DefaultMaterial()

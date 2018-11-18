@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestRayIntersectsCubeOnXPositiveAxis(t *testing.T) {
 	c := MakeCube(Identity(), DefaultMaterial())
@@ -70,4 +73,24 @@ func TestRayIntersectsCubeOnInside(t *testing.T) {
 	Assert(len(xs) == 2, "Ther had to be two intersections", t)
 	AssertEqual(-1, xs[0].t, t)
 	AssertEqual(1, xs[1].t, t)
+}
+
+func TestRayMissesTheCube(t *testing.T) {
+	c := MakeCube(Identity(), DefaultMaterial())
+
+	examples := map[int][2]Tuple{
+		0: {Point(-2, 0, 0), Vector(0.2673, 0.5345, 0.8018)},
+		1: {Point(0, -2, 0), Vector(0.8018, 0.2673, 0.5345)},
+		2: {Point(0, 0, -2), Vector(0.5345, 0.8018, 0.2673)},
+		3: {Point(2, 0, 2), Vector(0, 0, -1)},
+		4: {Point(0, 2, 2), Vector(0, -1, 0)},
+		5: {Point(2, 2, 0), Vector(-1, 0, 0)},
+	}
+
+	for i := 0; i < len(examples); i++ {
+		r := Ray{examples[i][0], examples[i][1]}
+		xs := c.Intersection(r)
+
+		Assert(len(xs) == 0, fmt.Sprintf("Cube intersections had to be zero for ray %v", r), t)
+	}
 }

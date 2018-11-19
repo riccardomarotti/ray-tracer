@@ -46,7 +46,7 @@ func (cylinder Cylinder) Intersection(r Ray) (intersections []Intersection) {
 	intersections = make([]Intersection, 0)
 
 	if cylinder.closed {
-		intersections = cylinder.intersectCaps(transformedRay, intersections)
+		intersections = cylinder.intersectCylinderCaps(transformedRay, intersections)
 	}
 
 	a := transformedRay.direction.x*transformedRay.direction.x + transformedRay.direction.z*transformedRay.direction.z
@@ -83,26 +83,25 @@ func (cylinder Cylinder) Intersection(r Ray) (intersections []Intersection) {
 	return
 }
 
-func checkCap(ray Ray, t float64) bool {
+func checkCylinderCap(ray Ray, t float64) bool {
 	x := ray.origin.x + t*ray.direction.x
 	z := ray.origin.z + t*ray.direction.z
 
 	return (x*x + z*z) <= 1
 }
 
-func (cylinder Cylinder) intersectCaps(ray Ray, intersections []Intersection) []Intersection {
+func (cylinder Cylinder) intersectCylinderCaps(ray Ray, intersections []Intersection) []Intersection {
 	var newIntersections []Intersection
 
 	t := (cylinder.minimum - ray.origin.y) / ray.direction.y
-	if checkCap(ray, t) {
+	if checkCylinderCap(ray, t) {
 		newIntersections = append(newIntersections, Intersection{t, cylinder})
 	}
 
 	t = (cylinder.maximum - ray.origin.y) / ray.direction.y
-	if checkCap(ray, t) {
+	if checkCylinderCap(ray, t) {
 		newIntersections = append(newIntersections, Intersection{t, cylinder})
 	}
 
 	return append(intersections, newIntersections...)
-
 }

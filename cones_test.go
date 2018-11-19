@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
@@ -57,5 +58,21 @@ func TestIntersectingAConesEndCaps(t *testing.T) {
 
 		actualCount := len(xs)
 		Assert(actualCount == expectedCounts[i], fmt.Sprintf("Expected number of intersection: %d, but was %d", expectedCounts[i], actualCount), t)
+	}
+}
+
+func TestComputingTheNormalVectorOnACone(t *testing.T) {
+	cone := MakeInfiniteCone(Identity(), DefaultMaterial())
+
+	examples := [][2]Tuple{
+		{Point(0, 0, 0), Vector(0, 0, 0)},
+		{Point(1, 1, 1), Vector(1, -math.Sqrt(2), 1)},
+		{Point(-1, -1, 0), Vector(-1, 1, 0)},
+	}
+
+	for i := 0; i < len(examples); i++ {
+		n := cone.NormalAt(examples[i][0])
+
+		AssertTupleEqual(examples[i][1], n, t)
 	}
 }

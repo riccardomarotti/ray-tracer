@@ -26,18 +26,22 @@ func (cone Cone) Material() Material {
 }
 
 func (cone Cone) NormalAt(p Tuple) Tuple {
-	// objectPoint := cone.Transform().Inverse().MultiplyByTuple(p)
-	// distance := objectPoint.x*objectPoint.x + objectPoint.z*objectPoint.z
+	objectPoint := cone.Transform().Inverse().MultiplyByTuple(p)
 
-	return Vector(0, 0, 0)
+	y := math.Sqrt(objectPoint.x*objectPoint.x + objectPoint.z*objectPoint.z)
+	if objectPoint.y > 0 {
+		y = -y
+	}
+
+	return Vector(objectPoint.x, y, objectPoint.z)
 }
 
-func (cone Cone) Intersection(r Ray) (intersections []Intersection) {
-	transformedRay := r.Transform(cone.Transform().Inverse())
+func (cone Cone) Intersection(originalRay Ray) (intersections []Intersection) {
+	transformedRay := originalRay.Transform(cone.Transform().Inverse())
 	intersections = make([]Intersection, 0)
 
 	if cone.closed {
-		intersections = append(intersections, cone.intersectConeCaps(r, intersections)...)
+		intersections = append(intersections, cone.intersectConeCaps(transformedRay, intersections)...)
 	}
 
 	dx := transformedRay.direction.x
@@ -76,8 +80,8 @@ func (cone Cone) Intersection(r Ray) (intersections []Intersection) {
 		t0, t1 = t1, t0
 	}
 
-	y0 := r.origin.y + t0*r.direction.y
-	y1 := r.origin.y + t1*r.direction.y
+	y0 := transformedRay.origin.y + t0*transformedRay.direction.y
+	y1 := transformedRay.origin.y + t1*transformedRay.direction.y
 
 	if cone.closed {
 		if y0 > cone.minimum && y0 < cone.maximum {

@@ -32,5 +32,33 @@ func TestIntersectingARayParallelToTheTriangle(t *testing.T) {
 	triangle := MakeTriangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0), Identity())
 	r := Ray{Point(0, -1, -2), Vector(0, 1, 0)}
 
-	Assert(len(triangle.Intersection(r)) == 0, "", t)
+	Assert(len(triangle.Intersection(r)) == 0, "Intersection ha d to be empty", t)
+}
+
+func TestARayMissesThep1p3Edge(t *testing.T) {
+	triangle := MakeTriangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0), Identity())
+	r := Ray{Point(1, 1, -2), Vector(0, 0, 1)}
+
+	Assert(len(triangle.Intersection(r)) == 0, "Intersection ha d to be empty", t)
+}
+
+func TestARayMissesThep1p2Edge(t *testing.T) {
+	triangle := MakeTriangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0), Identity())
+	r := Ray{Point(-1, 1, -2), Vector(0, 0, 1)}
+
+	Assert(len(triangle.Intersection(r)) == 0, "Intersection ha d to be empty", t)
+}
+
+func TestARayMissesThep2p3Edge(t *testing.T) {
+	triangle := MakeTriangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0), Identity())
+	r := Ray{Point(0, -1, -2), Vector(0, 0, 1)}
+
+	Assert(len(triangle.Intersection(r)) == 0, "Intersection ha d to be empty", t)
+}
+
+func TestARayStrikesTheTriangle(t *testing.T) {
+	triangle := MakeTriangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0), Identity())
+	r := Ray{Point(0, 0.5, -2), Vector(0, 0, 1)}
+
+	AssertEqual(2, triangle.Intersection(r)[0].t, t)
 }

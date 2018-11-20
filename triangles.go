@@ -26,15 +26,27 @@ func (t Triangle) NormalAt(p Tuple) Tuple {
 func (t Triangle) Material() Material {
 	return t.material
 }
+
 func (t Triangle) Intersection(r Ray) (intersection []Intersection) {
 	transformedRay := r.Transform(t.Transform().Inverse())
 	intersection = make([]Intersection, 0)
 
 	dirCrossE2 := transformedRay.direction.Cross(t.e2)
-	det := t.e2.Dot(dirCrossE2)
+	det := t.e1.Dot(dirCrossE2)
 
 	if math.Abs(det) > Epsilon {
-		intersection = append(intersection, Intersection{1, t})
+		f := 1 / det
+		p1ToOrigin := transformedRay.origin.Subtract(t.p1)
+		u := f * p1ToOrigin.Dot(dirCrossE2)
+		if u >= 0 && u <= 1 {
+			originCrossE1 := p1ToOrigin.Cross(t.e1)
+			v := f * transformedRay.direction.Dot(originCrossE1)
+			if v >= 0 && (u+v) <= 1 {
+
+				intersection = append(intersection, Intersection{t: f * t.e2.Dot(originCrossE1), object: t})
+			}
+		}
 	}
+
 	return
 }

@@ -16,3 +16,15 @@ func TestConstructingTheTriangle(t *testing.T) {
 	AssertTupleEqual(Vector(1, -1, 0), triangle.e2, t)
 	AssertTupleEqual(Vector(0, 0, -1), triangle.normal, t)
 }
+
+func TestFindingTheNormalOnATriangle(t *testing.T) {
+	triangle := MakeTriangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0))
+	n1 := triangle.NormalAt(Point(0, 0.5, 0))
+	n2 := triangle.NormalAt(Point(-0.5, 0.75, 0))
+	n3 := triangle.NormalAt(Point(0.5, 0.25, 0))
+
+	AssertTupleEqual(n1, triangle.normal, t)
+	AssertTupleEqual(n2, triangle.normal, t)
+	AssertTupleEqual(n3, triangle.normal, t)
+
+}

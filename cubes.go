@@ -5,13 +5,12 @@ import (
 )
 
 type Cube struct {
-	transform Matrix
-	material  Material
-	parent    *Group
+	baseObject BaseObject
+	parent     *Group
 }
 
 func MakeCube(transform Matrix, material Material) Object {
-	return Cube{transform, material, nil}
+	return Cube{BaseObject{transform, material}, nil}
 }
 
 func (c Cube) Parent() *Group {
@@ -19,43 +18,48 @@ func (c Cube) Parent() *Group {
 }
 
 func (c Cube) Transform() Matrix {
-	return c.transform
+	return c.baseObject.transform
 }
 
 func (c Cube) Material() Material {
-	return c.material
+	return c.baseObject.material
 }
 
 func (c Cube) NormalAt(p Tuple) Tuple {
-	objectPoint := c.Transform().Inverse().MultiplyByTuple(p)
+	localNormalAt := func(p Tuple) Tuple {
+		maxC := math.Max(math.Abs(p.x), math.Max(math.Abs(p.y), math.Abs(p.z)))
 
-	maxC := math.Max(math.Abs(objectPoint.x), math.Max(math.Abs(objectPoint.y), math.Abs(objectPoint.z)))
-
-	if maxC == math.Abs(objectPoint.x) {
-		return Vector(objectPoint.x, 0, 0)
-	} else if maxC == math.Abs(objectPoint.y) {
-		return Vector(0, objectPoint.y, 0)
+		if maxC == math.Abs(p.x) {
+			return Vector(p.x, 0, 0)
+		} else if maxC == math.Abs(p.y) {
+			return Vector(0, p.y, 0)
+		}
+		return Vector(0, 0, p.z)
 	}
-	return Vector(0, 0, objectPoint.z)
+
+	return c.baseObject.NormalAt(p, localNormalAt)
 }
 
-func (c Cube) Intersection(ray Ray) (intersection []Intersection) {
-	transformedRay := ray.Transform(c.Transform().Inverse())
-	intersection = []Intersection{}
+func (c Cube) Intersection(ray Ray) []Intersection {
+	localIntersection := func(r Ray) (intersection []Intersection) {
+		intersection = []Intersection{}
 
-	xTMin, xTMax := tMinMaxForAxis(transformedRay.origin.x, transformedRay.direction.x)
-	yTMin, yTMax := tMinMaxForAxis(transformedRay.origin.y, transformedRay.direction.y)
-	zTMin, zTMax := tMinMaxForAxis(transformedRay.origin.z, transformedRay.direction.z)
+		xTMin, xTMax := tMinMaxForAxis(r.origin.x, r.direction.x)
+		yTMin, yTMax := tMinMaxForAxis(r.origin.y, r.direction.y)
+		zTMin, zTMax := tMinMaxForAxis(r.origin.z, r.direction.z)
 
-	tMin := math.Max(xTMin, math.Max(yTMin, zTMin))
-	tMax := math.Min(xTMax, math.Min(yTMax, zTMax))
+		tMin := math.Max(xTMin, math.Max(yTMin, zTMin))
+		tMax := math.Min(xTMax, math.Min(yTMax, zTMax))
 
-	hit := tMax > tMin
-	if hit {
-		intersection = []Intersection{Intersection{tMin, c}, Intersection{tMax, c}}
+		hit := tMax > tMin
+		if hit {
+			intersection = []Intersection{Intersection{tMin, c}, Intersection{tMax, c}}
+		}
+
+		return
 	}
 
-	return
+	return c.baseObject.Intersection(ray, localIntersection)
 }
 
 func tMinMaxForAxis(origin, direction float64) (float64, float64) {

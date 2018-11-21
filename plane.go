@@ -5,13 +5,12 @@ import (
 )
 
 type Plane struct {
-	transform Matrix
-	material  Material
-	parent    *Group
+	baseObject BaseObject
+	parent     *Group
 }
 
 func MakePlane(transform Matrix, material Material) Object {
-	return Plane{transform, material, nil}
+	return Plane{BaseObject{transform, material}, nil}
 }
 
 func (p Plane) Parent() *Group {
@@ -19,32 +18,34 @@ func (p Plane) Parent() *Group {
 }
 
 func (p Plane) NormalAt(point Tuple) Tuple {
-	objectNormal := Vector(0, 1, 0)
-	worldNormal := p.Transform().Inverse().T().MultiplyByTuple(objectNormal)
-	worldNormal.w = 0
+	localNormalAt := func(p Tuple) Tuple {
+		return Vector(0, 1, 0)
+	}
 
-	return worldNormal.Normalize()
+	return p.baseObject.NormalAt(point, localNormalAt)
 }
 
 func (p Plane) Transform() Matrix {
-	return p.transform
+	return p.baseObject.transform
 }
 
 func (p Plane) Material() Material {
-	return p.material
+	return p.baseObject.material
 }
 
-func (p Plane) Intersection(r Ray) (intersection []Intersection) {
-	localRay := r.Transform(p.Transform().Inverse())
-	intersection = make([]Intersection, 0)
+func (p Plane) Intersection(r Ray) []Intersection {
+	localIntersect := func(r Ray) (intersection []Intersection) {
+		intersection = make([]Intersection, 0)
+		if (math.Abs(r.direction.y)) >= Epsilon {
+			t := -r.origin.y / r.direction.y
+			i := Intersection{}
+			i.t = t
+			i.object = p
+			intersection = []Intersection{i}
+		}
 
-	if (math.Abs(localRay.direction.y)) >= Epsilon {
-		t := -localRay.origin.y / localRay.direction.y
-		i := Intersection{}
-		i.t = t
-		i.object = p
-		intersection = []Intersection{i}
+		return
 	}
 
-	return
+	return p.baseObject.Intersection(r, localIntersect)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -132,4 +133,19 @@ func TestNormalVectorOnACylindersEndCap(t *testing.T) {
 
 		AssertTupleEqual(examples[i][1], n, t)
 	}
+}
+
+func TestCylinderInAGroup(t *testing.T) {
+	g := MakeGroup(Identity())
+	c := MakeCylinderInGroup(Identity(), DefaultMaterial(), 0, 1, false, g)
+
+	Assert(reflect.DeepEqual(c, g.children[0]), "", t)
+	Assert(c.Parent() == g, "", t)
+}
+
+func TestCylinderMaterial(t *testing.T) {
+	m := DefaultMaterial()
+	c := MakeInfiniteCylinder(Identity(), m)
+
+	Assert(m == c.Material(), "", t)
 }

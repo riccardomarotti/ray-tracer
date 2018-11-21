@@ -85,3 +85,27 @@ func TestFindTheNormalOnAnObjectGroup(t *testing.T) {
 	n := s.NormalAt(Point(1.7321, 1.1547, -5.5774))
 	AssertTupleEqual(Vector(0.28570, 0.42854, -0.85716), n, t)
 }
+
+func TestGroupDoesNotHaveAMaterial(t *testing.T) {
+	g := MakeGroup(Identity())
+
+	defer func() {
+		if err := recover(); err == nil {
+			t.Errorf("Groups should not have a Material")
+		}
+	}()
+
+	g.Material()
+}
+
+func TestGroupDoesNotHaveNormalAt(t *testing.T) {
+	g := MakeGroup(Identity())
+
+	defer func() {
+		if err := recover(); err == nil {
+			t.Errorf("Groups should NormalAt implemented")
+		}
+	}()
+
+	g.NormalAt(Point(0, 0, 0))
+}

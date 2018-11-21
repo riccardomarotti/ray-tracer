@@ -35,7 +35,7 @@ func (g Group) NormalAt(p Tuple) Tuple {
 }
 
 func (g Group) Material() Material {
-	return g.baseObject.material
+	panic("Groups don't have a Material")
 }
 
 func (g Group) Intersection(r Ray) []Intersection {

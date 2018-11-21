@@ -7,10 +7,15 @@ import (
 type Cube struct {
 	transform Matrix
 	material  Material
+	parent    *Group
 }
 
 func MakeCube(transform Matrix, material Material) Object {
-	return Cube{transform, material}
+	return Cube{transform, material, nil}
+}
+
+func (c Cube) Parent() *Group {
+	return c.parent
 }
 
 func (c Cube) Transform() Matrix {

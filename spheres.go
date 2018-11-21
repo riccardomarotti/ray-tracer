@@ -5,10 +5,19 @@ import "math"
 type Sphere struct {
 	transform Matrix
 	material  Material
+	parent    *Group
+}
+
+func MakeSphereInGroup(transform Matrix, material Material, group *Group) Object {
+	return Sphere{transform, material, group}
 }
 
 func MakeSphere(transform Matrix, material Material) Object {
-	return Sphere{transform, material}
+	return Sphere{transform, material, nil}
+}
+
+func (s Sphere) Parent() *Group {
+	return s.parent
 }
 
 func (s Sphere) Transform() Matrix {

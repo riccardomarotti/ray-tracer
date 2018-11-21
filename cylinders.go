@@ -7,19 +7,25 @@ type Cylinder struct {
 	material         Material
 	minimum, maximum float64
 	closed           bool
+	parent           *Group
 }
 
 func MakeInfiniteCylinder(transform Matrix, material Material) Object {
-	return Cylinder{transform, material, math.Inf(-1), math.Inf(1), false}
+	return Cylinder{transform, material, math.Inf(-1), math.Inf(1), false, nil}
 }
 
 func MakeClosedCylinder(transform Matrix, material Material, minimum, maximum float64) Object {
-	return Cylinder{transform, material, minimum, maximum, true}
+	return Cylinder{transform, material, minimum, maximum, true, nil}
 }
 
 func MakeCylinder(transform Matrix, material Material, minimum, maximum float64, closed bool) Object {
-	return Cylinder{transform, material, minimum, maximum, closed}
+	return Cylinder{transform, material, minimum, maximum, closed, nil}
 }
+
+func (cylinder Cylinder) Parent() *Group {
+	return cylinder.parent
+}
+
 func (cylinder Cylinder) Transform() Matrix {
 	return cylinder.transform
 }

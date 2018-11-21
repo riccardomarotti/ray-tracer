@@ -7,10 +7,15 @@ import (
 type Plane struct {
 	transform Matrix
 	material  Material
+	parent    *Group
 }
 
 func MakePlane(transform Matrix, material Material) Object {
-	return Plane{transform, material}
+	return Plane{transform, material, nil}
+}
+
+func (p Plane) Parent() *Group {
+	return p.parent
 }
 
 func (p Plane) NormalAt(point Tuple) Tuple {

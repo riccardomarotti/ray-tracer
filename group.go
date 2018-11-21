@@ -5,10 +5,23 @@ import "sort"
 type Group struct {
 	transform Matrix
 	children  []Object
+	parent    *Group
 }
 
-func MakeGroup(transform Matrix, children ...Object) Group {
-	return Group{transform, children}
+func MakeGroup(transform Matrix) Group {
+	return Group{transform, []Object{}, nil}
+}
+
+func MakeGroupInGroup(transform Matrix, parent *Group) Group {
+	return Group{transform, []Object{}, parent}
+}
+
+func (g Group) Parent() *Group {
+	return g.parent
+}
+
+func (g *Group) AddChildren(objects ...Object) {
+	g.children = append(g.children, objects...)
 }
 
 func (g Group) Transform() Matrix {
@@ -16,7 +29,7 @@ func (g Group) Transform() Matrix {
 }
 
 func (g Group) NormalAt(p Tuple) Tuple {
-	return Vector(0, 0, 0)
+	panic("NormalAt should n ot be called on a Group")
 }
 
 func (g Group) Material() Material {

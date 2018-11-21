@@ -7,6 +7,7 @@ type Triangle struct {
 	e1, e2, normal Tuple
 	material       Material
 	transform      Matrix
+	parent         *Group
 }
 
 func MakeTriangle(p1, p2, p3 Tuple, transofrm Matrix, material Material) Triangle {
@@ -14,6 +15,10 @@ func MakeTriangle(p1, p2, p3 Tuple, transofrm Matrix, material Material) Triangl
 	e2 := p3.Subtract(p1)
 	normal := e2.Cross(e1).Normalize()
 	return Triangle{p1: p1, p2: p2, p3: p3, e1: e1, e2: e2, normal: normal, transform: transofrm, material: material}
+}
+
+func (t Triangle) Parent() *Group {
+	return t.parent
 }
 
 func (t Triangle) Transform() Matrix {

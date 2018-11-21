@@ -8,11 +8,10 @@ import (
 
 func TestGroupWithAChild(t *testing.T) {
 	g := MakeGroup(Identity())
-	s := MakeSphereInGroup(Identity(), DefaultMaterial(), &g)
-	g.AddChildren(s)
+	s := MakeSphereInGroup(Identity(), DefaultMaterial(), g)
 
 	Assert(reflect.DeepEqual(s, g.children[0]), "", t)
-	Assert(s.Parent() == &g, "", t)
+	Assert(s.Parent() == g, "", t)
 }
 
 func TestIntersectingARayWithAnEmptyGroup(t *testing.T) {
@@ -25,16 +24,15 @@ func TestIntersectingARayWithAnEmptyGroup(t *testing.T) {
 }
 
 func TestIntersectingARayWithANonEmptyGroup(t *testing.T) {
-	g := MakeGroup(Identity())
-	s1 := MakeSphereInGroup(Identity(), DefaultMaterial(), &g)
-	s2 := MakeSphereInGroup(Identity().Translate(0, 0, -3), DefaultMaterial(), &g)
-	s3 := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), &g)
-
-	g.AddChildren(s1, s2, s3)
+	g0 := MakeGroup(Identity())
+	g := MakeGroupInGroup(Identity(), g0)
+	s1 := MakeSphereInGroup(Identity(), DefaultMaterial(), g)
+	s2 := MakeSphereInGroup(Identity().Translate(0, 0, -3), DefaultMaterial(), g)
+	MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), g)
 
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
 
-	xs := g.Intersection(r)
+	xs := g0.Intersection(r)
 
 	Assert(len(xs) == 4, "", t)
 	Assert(reflect.DeepEqual(s2, xs[0].object), "", t)
@@ -45,8 +43,7 @@ func TestIntersectingARayWithANonEmptyGroup(t *testing.T) {
 
 func TestIntersectingATransformedGroup(t *testing.T) {
 	g := MakeGroup(Identity().Scale(2, 2, 2))
-	s := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), &g)
-	g.AddChildren(s)
+	MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), g)
 
 	r := Ray{Point(10, 0, -10), Vector(0, 0, 1)}
 
@@ -57,11 +54,11 @@ func TestIntersectingATransformedGroup(t *testing.T) {
 
 func TestConvertingAPointFromWorldToObjectSpace(t *testing.T) {
 	g1 := MakeGroup(Identity().RotateY(math.Pi / 2))
-	g2 := MakeGroupInGroup(Identity().Scale(2, 2, 2), &g1)
+	g2 := MakeGroupInGroup(Identity().Scale(2, 2, 2), g1)
 
 	g1.AddChildren(g2)
 
-	s := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), &g2)
+	s := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), g2)
 
 	p := WorldToObject(s, Point(-2, 0, -10))
 
@@ -70,10 +67,10 @@ func TestConvertingAPointFromWorldToObjectSpace(t *testing.T) {
 
 func TestConvertingANormalFroObjectToWorldSpace(t *testing.T) {
 	g1 := MakeGroup(Identity().RotateY(math.Pi / 2))
-	g2 := MakeGroupInGroup(Identity().Scale(1, 2, 3), &g1)
+	g2 := MakeGroupInGroup(Identity().Scale(1, 2, 3), g1)
 	g1.AddChildren(g2)
 
-	s := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), &g2)
+	s := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), g2)
 
 	n := NormalToWorld(s, Vector(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3))
 
@@ -82,8 +79,8 @@ func TestConvertingANormalFroObjectToWorldSpace(t *testing.T) {
 
 func TestFindTheNormalOnAnObjectGroup(t *testing.T) {
 	g1 := MakeGroup(Identity().RotateY(math.Pi / 2))
-	g2 := MakeGroupInGroup(Identity().Scale(1, 2, 3), &g1)
-	s := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), &g2)
+	g2 := MakeGroupInGroup(Identity().Scale(1, 2, 3), g1)
+	s := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), g2)
 
 	n := s.NormalAt(Point(1.7321, 1.1547, -5.5774))
 	AssertTupleEqual(Vector(0.28570, 0.42854, -0.85716), n, t)

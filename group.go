@@ -8,12 +8,14 @@ type Group struct {
 	parent     *Group
 }
 
-func MakeGroup(transform Matrix) Group {
-	return Group{BaseObject{transform, DefaultMaterial()}, []Object{}, nil}
+func MakeGroup(transform Matrix) *Group {
+	return &Group{BaseObject{transform, DefaultMaterial()}, []Object{}, nil}
 }
 
-func MakeGroupInGroup(transform Matrix, parent *Group) Group {
-	return Group{BaseObject{transform, DefaultMaterial()}, []Object{}, parent}
+func MakeGroupInGroup(transform Matrix, parent *Group) *Group {
+	g := &Group{BaseObject{transform, DefaultMaterial()}, []Object{}, parent}
+	parent.AddChildren(g)
+	return g
 }
 
 func (g Group) Parent() *Group {

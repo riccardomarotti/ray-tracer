@@ -21,6 +21,12 @@ func MakeCylinder(transform Matrix, material Material, minimum, maximum float64,
 	return Cylinder{BaseObject{transform, material}, minimum, maximum, closed, nil}
 }
 
+func MakeCylinderInGroup(transform Matrix, material Material, minimum, maximum float64, closed bool, g *Group) Object {
+	c := Cylinder{BaseObject{transform, material}, minimum, maximum, closed, g}
+	g.AddChildren(c)
+	return c
+}
+
 func (cylinder Cylinder) Parent() *Group {
 	return cylinder.parent
 }

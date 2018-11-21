@@ -8,7 +8,9 @@ type Sphere struct {
 }
 
 func MakeSphereInGroup(transform Matrix, material Material, group *Group) Object {
-	return Sphere{BaseObject{transform, material}, group}
+	s := Sphere{BaseObject{transform, material}, group}
+	group.AddChildren(s)
+	return s
 }
 
 func MakeSphere(transform Matrix, material Material) Object {

@@ -3,23 +3,22 @@ package main
 import "math"
 
 type Cylinder struct {
-	transform        Matrix
-	material         Material
+	baseObject       BaseObject
 	minimum, maximum float64
 	closed           bool
 	parent           *Group
 }
 
 func MakeInfiniteCylinder(transform Matrix, material Material) Object {
-	return Cylinder{transform, material, math.Inf(-1), math.Inf(1), false, nil}
+	return Cylinder{BaseObject{transform, material}, math.Inf(-1), math.Inf(1), false, nil}
 }
 
 func MakeClosedCylinder(transform Matrix, material Material, minimum, maximum float64) Object {
-	return Cylinder{transform, material, minimum, maximum, true, nil}
+	return Cylinder{BaseObject{transform, material}, minimum, maximum, true, nil}
 }
 
 func MakeCylinder(transform Matrix, material Material, minimum, maximum float64, closed bool) Object {
-	return Cylinder{transform, material, minimum, maximum, closed, nil}
+	return Cylinder{BaseObject{transform, material}, minimum, maximum, closed, nil}
 }
 
 func (cylinder Cylinder) Parent() *Group {
@@ -27,66 +26,72 @@ func (cylinder Cylinder) Parent() *Group {
 }
 
 func (cylinder Cylinder) Transform() Matrix {
-	return cylinder.transform
+	return cylinder.baseObject.transform
 }
 
 func (cylinder Cylinder) Material() Material {
-	return cylinder.material
+	return cylinder.baseObject.material
 }
 
 func (cylinder Cylinder) NormalAt(p Tuple) Tuple {
-	objectPoint := cylinder.Transform().Inverse().MultiplyByTuple(p)
-	distance := objectPoint.x*objectPoint.x + objectPoint.z*objectPoint.z
+	localNormalAt := func(p Tuple) Tuple {
+		distance := p.x*p.x + p.z*p.z
 
-	if distance < 1 && objectPoint.y > cylinder.maximum-Epsilon {
-		return Vector(0, 1, 0)
-	} else if distance < 1 && objectPoint.y <= cylinder.minimum+Epsilon {
-		return Vector(0, -1, 0)
+		if distance < 1 && p.y > cylinder.maximum-Epsilon {
+			return Vector(0, 1, 0)
+		} else if distance < 1 && p.y <= cylinder.minimum+Epsilon {
+			return Vector(0, -1, 0)
+		}
+
+		return Vector(p.x, 0, p.z)
 	}
 
-	return Vector(objectPoint.x, 0, objectPoint.z)
+	return cylinder.baseObject.NormalAt(p, localNormalAt)
 }
 
-func (cylinder Cylinder) Intersection(r Ray) (intersections []Intersection) {
-	transformedRay := r.Transform(cylinder.Transform().Inverse())
-	intersections = make([]Intersection, 0)
+func (cylinder Cylinder) Intersection(r Ray) []Intersection {
+	localIntersect := func(r Ray) (intersections []Intersection) {
+		intersections = make([]Intersection, 0)
 
-	if cylinder.closed {
-		intersections = cylinder.intersectCaps(transformedRay, intersections)
-	}
+		if cylinder.closed {
+			intersections = cylinder.intersectCaps(r, intersections)
+		}
 
-	a := transformedRay.direction.x*transformedRay.direction.x + transformedRay.direction.z*transformedRay.direction.z
-	if math.Abs(a) < Epsilon {
+		a := r.direction.x*r.direction.x + r.direction.z*r.direction.z
+		if math.Abs(a) < Epsilon {
+			return
+		}
+
+		b := 2*r.origin.x*r.direction.x + 2*r.origin.z*r.direction.z
+		c := r.origin.x*r.origin.x + r.origin.z*r.origin.z - 1
+
+		delta := b*b - 4*a*c
+
+		if delta < 0 {
+			return
+		}
+
+		t0 := (-b - math.Sqrt(delta)) / (2 * a)
+		t1 := (-b + math.Sqrt(delta)) / (2 * a)
+
+		if t0 > t1 {
+			t0, t1 = t1, t0
+		}
+
+		y0 := r.origin.y + t0*r.direction.y
+		if (cylinder.minimum) < y0 && y0 < cylinder.maximum {
+			intersections = append(intersections, Intersection{t0, cylinder})
+		}
+
+		y1 := r.origin.y + t1*r.direction.y
+		if cylinder.minimum < y1 && y1 < cylinder.maximum {
+			intersections = append(intersections, Intersection{t1, cylinder})
+		}
+
 		return
 	}
 
-	b := 2*transformedRay.origin.x*transformedRay.direction.x + 2*transformedRay.origin.z*transformedRay.direction.z
-	c := transformedRay.origin.x*transformedRay.origin.x + transformedRay.origin.z*transformedRay.origin.z - 1
-
-	delta := b*b - 4*a*c
-
-	if delta < 0 {
-		return
-	}
-
-	t0 := (-b - math.Sqrt(delta)) / (2 * a)
-	t1 := (-b + math.Sqrt(delta)) / (2 * a)
-
-	if t0 > t1 {
-		t0, t1 = t1, t0
-	}
-
-	y0 := transformedRay.origin.y + t0*transformedRay.direction.y
-	if (cylinder.minimum) < y0 && y0 < cylinder.maximum {
-		intersections = append(intersections, Intersection{t0, cylinder})
-	}
-
-	y1 := transformedRay.origin.y + t1*transformedRay.direction.y
-	if cylinder.minimum < y1 && y1 < cylinder.maximum {
-		intersections = append(intersections, Intersection{t1, cylinder})
-	}
-
-	return
+	return cylinder.baseObject.Intersection(r, localIntersect)
 }
 
 func checkCap(ray Ray, t float64) bool {

@@ -3,17 +3,17 @@ package main
 import "sort"
 
 type Group struct {
-	transform Matrix
-	children  []Object
-	parent    *Group
+	baseObject BaseObject
+	children   []Object
+	parent     *Group
 }
 
 func MakeGroup(transform Matrix) Group {
-	return Group{transform, []Object{}, nil}
+	return Group{BaseObject{transform, DefaultMaterial()}, []Object{}, nil}
 }
 
 func MakeGroupInGroup(transform Matrix, parent *Group) Group {
-	return Group{transform, []Object{}, parent}
+	return Group{BaseObject{transform, DefaultMaterial()}, []Object{}, parent}
 }
 
 func (g Group) Parent() *Group {
@@ -25,7 +25,7 @@ func (g *Group) AddChildren(objects ...Object) {
 }
 
 func (g Group) Transform() Matrix {
-	return g.transform
+	return g.baseObject.transform
 }
 
 func (g Group) NormalAt(p Tuple) Tuple {
@@ -33,20 +33,21 @@ func (g Group) NormalAt(p Tuple) Tuple {
 }
 
 func (g Group) Material() Material {
-	return Material{}
+	return g.baseObject.material
 }
 
-func (g Group) Intersection(r Ray) (intersections []Intersection) {
-	intersections = make([]Intersection, 0)
-	transformedRay := r.Transform(g.Transform().Inverse())
+func (g Group) Intersection(r Ray) []Intersection {
+	localIntersect := func(r Ray) (intersections []Intersection) {
+		for _, child := range g.children {
+			intersections = append(intersections, child.Intersection(r)...)
+		}
 
-	for _, child := range g.children {
-		intersections = append(intersections, child.Intersection(transformedRay)...)
+		sort.Slice(intersections, func(i, j int) bool {
+			return intersections[i].t < intersections[j].t
+		})
+
+		return intersections
 	}
 
-	sort.Slice(intersections, func(i, j int) bool {
-		return intersections[i].t < intersections[j].t
-	})
-
-	return intersections
+	return g.baseObject.Intersection(r, localIntersect)
 }

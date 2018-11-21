@@ -9,21 +9,25 @@ type Triangle struct {
 	transform      Matrix
 }
 
-func MakeTriangle(p1, p2, p3 Tuple, transofrm Matrix) Triangle {
+func MakeTriangle(p1, p2, p3 Tuple, transofrm Matrix, material Material) Triangle {
 	e1 := p2.Subtract(p1)
 	e2 := p3.Subtract(p1)
 	normal := e2.Cross(e1).Normalize()
-	return Triangle{p1: p1, p2: p2, p3: p3, e1: e1, e2: e2, normal: normal, transform: transofrm}
+	return Triangle{p1: p1, p2: p2, p3: p3, e1: e1, e2: e2, normal: normal, transform: transofrm, material: material}
 }
 
 func (t Triangle) Transform() Matrix {
 	return t.transform
 }
+
 func (t Triangle) NormalAt(p Tuple) Tuple {
-	return t.normal
+	worldNormal := t.Transform().Inverse().T().MultiplyByTuple(t.normal)
+	worldNormal.w = 0
+	return worldNormal
 }
 
 func (t Triangle) Material() Material {
+
 	return t.material
 }
 

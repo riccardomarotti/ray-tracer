@@ -190,7 +190,7 @@ func TestRefractedColorWithRefractedRay(t *testing.T) {
 		diffuse:   0.7,
 		specular:  0.2,
 		shininess: 200,
-		pattern:   MakeTestPattern(Identity()),
+		pattern:   MakeStripePattern(Color{0, 0, 0}, Color{1, 1, 1}, Identity()),
 	}
 
 	materialB := DefaultMaterial()

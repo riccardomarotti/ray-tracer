@@ -62,3 +62,10 @@ func TestARayStrikesTheTriangle(t *testing.T) {
 
 	AssertEqual(2, triangle.Intersection(r)[0].t, t)
 }
+
+func TestTriangleMaterial(t *testing.T) {
+	m := DefaultMaterial()
+	triangle := MakeTriangle(Point(0, 0, 0), Point(1, 2, 3), Point(4, 5, 6), Identity(), m)
+
+	Assert(m == triangle.Material(), "", t)
+}

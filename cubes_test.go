@@ -115,3 +115,10 @@ func TestNormalOnACube(t *testing.T) {
 		AssertTupleEqual(examples[i][1], c.NormalAt(p), t)
 	}
 }
+
+func TestCubeMaterial(t *testing.T) {
+	m := DefaultMaterial()
+	c := MakeCube(Identity(), m)
+
+	Assert(m == c.Material(), "", t)
+}

@@ -32,7 +32,7 @@ func (s Sphere) NormalAt(p Tuple) Tuple {
 		return p.Subtract(Point(0, 0, 0))
 	}
 
-	return s.baseObject.NormalAt(p, localNormalAt)
+	return s.baseObject.NormalAt(p, s, localNormalAt)
 }
 
 func (s Sphere) Intersection(r Ray) (intersection []Intersection) {

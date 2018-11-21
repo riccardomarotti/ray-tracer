@@ -46,7 +46,7 @@ func (cylinder Cylinder) NormalAt(p Tuple) Tuple {
 		return Vector(p.x, 0, p.z)
 	}
 
-	return cylinder.baseObject.NormalAt(p, localNormalAt)
+	return cylinder.baseObject.NormalAt(p, cylinder, localNormalAt)
 }
 
 func (cylinder Cylinder) Intersection(r Ray) []Intersection {

@@ -80,11 +80,11 @@ func TestConvertingANormalFroObjectToWorldSpace(t *testing.T) {
 	AssertTupleEqual(Vector(0.28571, 0.42857, -0.85714), n, t)
 }
 
-// func TestFindTheNormalOnAnObjectGroup(t *testing.T) {
-// 	g1 := MakeGroup(Identity().RotateY(math.Pi / 2))
-// 	g2 := MakeGroupInGroup(Identity().Scale(1, 2, 3), &g1)
-// 	s := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), &g2)
+func TestFindTheNormalOnAnObjectGroup(t *testing.T) {
+	g1 := MakeGroup(Identity().RotateY(math.Pi / 2))
+	g2 := MakeGroupInGroup(Identity().Scale(1, 2, 3), &g1)
+	s := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), &g2)
 
-// 	n := s.NormalAt(Point(1.7321, 1.1547, -5.5774))
-// 	AssertTupleEqual(Vector(0.2857, 0.4286, -0.8571), n, t)
-// }
+	n := s.NormalAt(Point(1.7321, 1.1547, -5.5774))
+	AssertTupleEqual(Vector(0.28570, 0.42854, -0.85716), n, t)
+}

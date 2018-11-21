@@ -22,7 +22,7 @@ func (p Plane) NormalAt(point Tuple) Tuple {
 		return Vector(0, 1, 0)
 	}
 
-	return p.baseObject.NormalAt(point, localNormalAt)
+	return p.baseObject.NormalAt(point, p, localNormalAt)
 }
 
 func (p Plane) Transform() Matrix {

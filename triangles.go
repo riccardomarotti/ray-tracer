@@ -29,7 +29,7 @@ func (t Triangle) NormalAt(p Tuple) Tuple {
 		return t.normal
 	}
 
-	return t.baseObject.NormalAt(p, localNormalAt)
+	return t.baseObject.NormalAt(p, t, localNormalAt)
 }
 
 func (t Triangle) Material() Material {

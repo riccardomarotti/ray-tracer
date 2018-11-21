@@ -18,13 +18,11 @@ func (o BaseObject) Intersection(ray Ray, localIntersect func(Ray) []Intersectio
 	return localIntersect(localRay)
 }
 
-func (o BaseObject) NormalAt(p Tuple, localNormalAt func(p Tuple) Tuple) Tuple {
-	localPoint := o.transform.Inverse().MultiplyByTuple(p)
+func (o BaseObject) NormalAt(p Tuple, object Object, localNormalAt func(p Tuple) Tuple) Tuple {
+	localPoint := WorldToObject(object, p)
 	localNormal := localNormalAt(localPoint)
-	worldNormal := o.transform.Inverse().T().MultiplyByTuple(localNormal)
-	worldNormal.w = 0
 
-	return worldNormal.Normalize()
+	return NormalToWorld(object, localNormal)
 }
 
 func WorldToObject(o Object, p Tuple) Tuple {

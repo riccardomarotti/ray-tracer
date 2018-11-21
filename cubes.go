@@ -37,7 +37,7 @@ func (c Cube) NormalAt(p Tuple) Tuple {
 		return Vector(0, 0, p.z)
 	}
 
-	return c.baseObject.NormalAt(p, localNormalAt)
+	return c.baseObject.NormalAt(p, c, localNormalAt)
 }
 
 func (c Cube) Intersection(ray Ray) []Intersection {

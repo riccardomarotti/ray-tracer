@@ -17,3 +17,15 @@ func WorldToObject(o Object, p Tuple) Tuple {
 
 	return o.Transform().Inverse().MultiplyByTuple(p)
 }
+
+func NormalToWorld(o Object, v Tuple) Tuple {
+	normal := o.Transform().Inverse().T().MultiplyByTuple(v)
+	normal.w = 0
+	normal = normal.Normalize()
+
+	if o.Parent() != nil {
+		normal = NormalToWorld(o.Parent(), normal)
+	}
+
+	return normal
+}

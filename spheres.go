@@ -3,17 +3,16 @@ package main
 import "math"
 
 type Sphere struct {
-	transform Matrix
-	material  Material
-	parent    *Group
+	baseObject BaseObject
+	parent     *Group
 }
 
 func MakeSphereInGroup(transform Matrix, material Material, group *Group) Object {
-	return Sphere{transform, material, group}
+	return Sphere{BaseObject{transform, material}, group}
 }
 
 func MakeSphere(transform Matrix, material Material) Object {
-	return Sphere{transform, material, nil}
+	return Sphere{BaseObject{transform, material}, nil}
 }
 
 func (s Sphere) Parent() *Group {
@@ -21,46 +20,49 @@ func (s Sphere) Parent() *Group {
 }
 
 func (s Sphere) Transform() Matrix {
-	return s.transform
+	return s.baseObject.transform
 }
 
 func (s Sphere) Material() Material {
-	return s.material
+	return s.baseObject.material
 }
 
 func (s Sphere) NormalAt(p Tuple) Tuple {
-	objectPoint := s.Transform().Inverse().MultiplyByTuple(p)
-	objectNormal := objectPoint.Subtract(Point(0, 0, 0))
-	worldNormal := s.Transform().Inverse().T().MultiplyByTuple(objectNormal)
-	worldNormal.w = 0
-	return worldNormal.Normalize()
+	localNormalAt := func(p Tuple) Tuple {
+		return p.Subtract(Point(0, 0, 0))
+	}
+
+	return s.baseObject.NormalAt(p, localNormalAt)
 }
 
 func (s Sphere) Intersection(r Ray) (intersection []Intersection) {
-	transformedRay := r.Transform(s.Transform().Inverse())
-	intersection = make([]Intersection, 0)
+	localIntersect := func(r Ray) (intersection []Intersection) {
+		intersection = make([]Intersection, 0)
 
-	sphereToRay := transformedRay.origin.Subtract(Point(0, 0, 0))
-	b := 2 * transformedRay.direction.Dot(sphereToRay)
-	a := transformedRay.direction.Dot(transformedRay.direction)
-	c := sphereToRay.Dot(sphereToRay) - 1
+		sphereToRay := r.origin.Subtract(Point(0, 0, 0))
+		b := 2 * r.direction.Dot(sphereToRay)
+		a := r.direction.Dot(r.direction)
+		c := sphereToRay.Dot(sphereToRay) - 1
 
-	delta := b*b - 4*a*c
+		delta := b*b - 4*a*c
 
-	if delta >= 0 {
-		t1 := (-b - math.Sqrt(delta)) / (2 * a)
-		t2 := (-b + math.Sqrt(delta)) / (2 * a)
-		if t1 > t2 {
-			t1, t2 = t2, t1
+		if delta >= 0 {
+			t1 := (-b - math.Sqrt(delta)) / (2 * a)
+			t2 := (-b + math.Sqrt(delta)) / (2 * a)
+			if t1 > t2 {
+				t1, t2 = t2, t1
+			}
+
+			i1 := Intersection{t: t1, object: s}
+			i2 := Intersection{t: t2, object: s}
+
+			intersection = []Intersection{i1, i2}
 		}
 
-		i1 := Intersection{t: t1, object: s}
-		i2 := Intersection{t: t2, object: s}
-
-		intersection = []Intersection{i1, i2}
+		return
 	}
 
-	return
+	return s.baseObject.Intersection(r, localIntersect)
 }
 
 func MakeGlassSphere(transformation Matrix, refractiveIndex float64) Object {

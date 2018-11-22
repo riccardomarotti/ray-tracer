@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"reflect"
 	"testing"
 )
 
@@ -61,5 +62,22 @@ func AssertMatrixEqual(expected Matrix, actual Matrix, t *testing.T) {
 func Assert(trueCondition bool, message string, t *testing.T) {
 	if !trueCondition {
 		t.Errorf(message)
+	}
+}
+
+func AssertTrianglesEqual(expected, actual interface{}, t *testing.T) {
+	areEqual := reflect.TypeOf(expected) == reflect.TypeOf(actual)
+
+	p1expected := reflect.ValueOf(&expected).Elem().Elem().FieldByName("p1").String()
+	p2expected := reflect.ValueOf(&expected).Elem().Elem().FieldByName("p2").String()
+	p3expected := reflect.ValueOf(&expected).Elem().Elem().FieldByName("p3").String()
+	p1actual := reflect.ValueOf(&actual).Elem().Elem().FieldByName("p1").String()
+	p2actual := reflect.ValueOf(&actual).Elem().Elem().FieldByName("p2").String()
+	p3actual := reflect.ValueOf(&actual).Elem().Elem().FieldByName("p3").String()
+
+	areEqual = areEqual && p1expected == p1actual && p2expected == p2actual && p3expected == p3actual
+
+	if !areEqual {
+		t.Errorf("Triangles differ\nExpected: %v\nActual:   %v", expected, actual)
 	}
 }

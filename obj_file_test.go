@@ -9,7 +9,7 @@ import (
 func TestEmptyInout(t *testing.T) {
 	input := ""
 
-	output, discardedLinesCount, err := ParseObjFile(input)
+	output, discardedLinesCount, err := ParseObjString(input)
 
 	Assert(discardedLinesCount == 0, fmt.Sprintf("Discarded lines had to be 0, but where %d", discardedLinesCount), t)
 	Assert(err == "", err, t)
@@ -19,7 +19,7 @@ func TestEmptyInout(t *testing.T) {
 func TestIgnoringUnrecognizedLines(t *testing.T) {
 	input := "not parsable things\nwith two lines"
 
-	_, discardedLinesCount, err := ParseObjFile(input)
+	_, discardedLinesCount, err := ParseObjString(input)
 
 	Assert(discardedLinesCount == 2, fmt.Sprintf("Discarded lines had to be 2, but where %d", discardedLinesCount), t)
 	Assert(err == "", "Errors occurred during parsing", t)
@@ -31,7 +31,7 @@ v -1.0000 0.5000 0.0000
 v 1 0 0
 v 1 1 0`
 
-	output, discardedLinesCount, err := ParseObjFile(input)
+	output, discardedLinesCount, err := ParseObjString(input)
 
 	Assert(discardedLinesCount == 0, fmt.Sprintf("Discarded lines had to be 0, but where %d", discardedLinesCount), t)
 	Assert(err == "", err, t)
@@ -48,7 +48,7 @@ v 1 1 0
 f 1 2 3
 f 1 3 4
 `
-	output, discardedLinesCount, err := ParseObjFile(input)
+	output, discardedLinesCount, err := ParseObjString(input)
 
 	Assert(discardedLinesCount == 2, fmt.Sprintf("Discarded lines had to be 2, but where %d", discardedLinesCount), t)
 	Assert(err == "", err, t)
@@ -77,7 +77,7 @@ v 0 2 0
 
 f 1 2 3 4 5
 `
-	output, _, _ := ParseObjFile(input)
+	output, _, _ := ParseObjString(input)
 
 	g := output.groups[0]
 	t1 := g.children[0]
@@ -100,20 +100,10 @@ f 1 2 3 4 5
 }
 
 func TestTrianglesInGroup(t *testing.T) {
-	input := `v -1 1 0
-v -1 0 0
-v 1 0 0
-v 1 1 0
+	output, _, _ := ObjFileToGroups("triangles.obj")
 
-g FirstGroup
-f 1 2 3
-g SecondGroup
-f 1 3 4
-`
-	output, _, _ := ParseObjFile(input)
-
-	g1 := output.groups[1]
-	g2 := output.groups[2]
+	g1 := output[1]
+	g2 := output[2]
 	t1 := g1.children[0]
 	t2 := g2.children[0]
 

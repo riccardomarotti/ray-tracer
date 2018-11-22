@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"strconv"
 	"strings"
 )
@@ -11,7 +12,22 @@ type Obj struct {
 	groups   []Group
 }
 
-func ParseObjFile(input string) (output Obj, discardedLinesCount int, errors string) {
+func ObjFileToGroups(filename string) (groups []Group, discardeLineCount int, errors string) {
+	dat, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+
+	output, linesDiscarded, e := ParseObjString(string(dat))
+
+	groups = output.groups
+	discardeLineCount = linesDiscarded
+	errors = e
+
+	return
+}
+
+func ParseObjString(input string) (output Obj, discardedLinesCount int, errors string) {
 	lines := strings.Split(input, "\n")
 	discardedLinesCount = 0
 

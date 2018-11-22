@@ -42,8 +42,8 @@ func ParseObjString(input string) (output Obj, discardedLinesCount int, errors s
 	}
 
 	output.vertices = []Tuple{Tuple{}}
-	defaultGroup := Group{}
-	output.groups = []Group{defaultGroup}
+	defaultGroup := MakeGroup(Identity())
+	output.groups = []Group{*defaultGroup}
 
 	for _, line := range lines {
 		if len(line) > 0 {

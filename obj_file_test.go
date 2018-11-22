@@ -66,6 +66,7 @@ f 1 3 4
 
 	AssertTrianglesEqual(expectedT1, t1, t)
 	AssertTrianglesEqual(expectedT2, t2, t)
+	AssertMatrixEqual(Identity(), g.Transform(), t)
 }
 
 func TestParsingPolygonData(t *testing.T) {

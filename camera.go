@@ -1,7 +1,9 @@
 package main
 
 import (
+	"log"
 	"math"
+	"os"
 	"sync"
 )
 
@@ -51,20 +53,26 @@ func (c Camera) RayForPixel(x, y float64) Ray {
 func (c Camera) Render(w World) Canvas {
 	image := MakeCanvas(c.hsize, c.vsize)
 
+	totalPixelCount := c.vsize * c.hsize
+	currentPixelCount := 0
+	l := log.New(os.Stderr, "", 0)
+	l.Printf("%d / %d", currentPixelCount, totalPixelCount)
 	var wg sync.WaitGroup
 	for y := 0; y < c.vsize; y++ {
 		for x := 0; x < c.hsize; x++ {
 			wg.Add(1)
-			go c.writePixel(x, y, image, w, &wg)
+			go func(x, y int) {
+				defer func() {
+					wg.Done()
+					currentPixelCount++
+					l.Printf("%d / %d", currentPixelCount, totalPixelCount)
+				}()
+				ray := c.RayForPixel(float64(x), float64(y))
+				color := w.ColorAt(ray, 5)
+				image.WriteAt(x, y, color)
+			}(x, y)
 		}
 	}
 	wg.Wait()
 	return image
-}
-
-func (c Camera) writePixel(x, y int, image Canvas, w World, wg *sync.WaitGroup) {
-	defer wg.Done()
-	ray := c.RayForPixel(float64(x), float64(y))
-	color := w.ColorAt(ray, 10)
-	image.WriteAt(x, y, color)
 }

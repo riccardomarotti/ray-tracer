@@ -7,8 +7,8 @@ import (
 )
 
 type Obj struct {
-	vertices     []Tuple
-	defaultGroup Group
+	vertices []Tuple
+	groups   []Group
 }
 
 func ParseObjFile(input string) (output Obj, discardedLinesCount int, errors string) {
@@ -26,6 +26,8 @@ func ParseObjFile(input string) (output Obj, discardedLinesCount int, errors str
 	}
 
 	output.vertices = []Tuple{Tuple{}}
+	defaultGroup := Group{}
+	output.groups = []Group{defaultGroup}
 
 	for _, line := range lines {
 		if len(line) > 0 {
@@ -44,8 +46,11 @@ func ParseObjFile(input string) (output Obj, discardedLinesCount int, errors str
 					tIndex, _ := strconv.ParseInt(values[i], 10, 64)
 					vertices = append(vertices, output.vertices[tIndex])
 				}
+				groupsCount := len(output.groups)
+				fanTriangulation(vertices, &output.groups[groupsCount-1])
+			case 'g':
+				output.groups = append(output.groups, Group{})
 
-				fanTriangulation(vertices, &output.defaultGroup)
 			default:
 				discardedLinesCount++
 			}

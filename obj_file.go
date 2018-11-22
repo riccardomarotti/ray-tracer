@@ -12,13 +12,13 @@ type Obj struct {
 	groups   []Group
 }
 
-func ObjFileToGroups(filename string) (groups []Group, discardeLineCount int, errors string) {
+func ObjFileToGroups(filename string, transofrm Matrix) (groups []Group, discardeLineCount int, errors string) {
 	dat, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
 
-	output, linesDiscarded, e := ParseObjString(string(dat))
+	output, linesDiscarded, e := ParseObjString(string(dat), transofrm)
 
 	groups = output.groups
 	discardeLineCount = linesDiscarded
@@ -27,7 +27,7 @@ func ObjFileToGroups(filename string) (groups []Group, discardeLineCount int, er
 	return
 }
 
-func ParseObjString(input string) (output Obj, discardedLinesCount int, errors string) {
+func ParseObjString(input string, transform Matrix) (output Obj, discardedLinesCount int, errors string) {
 	lines := strings.Split(input, "\n")
 	discardedLinesCount = 0
 
@@ -42,7 +42,7 @@ func ParseObjString(input string) (output Obj, discardedLinesCount int, errors s
 	}
 
 	output.vertices = []Tuple{Tuple{}}
-	defaultGroup := MakeGroup(Identity())
+	defaultGroup := MakeGroup(transform)
 	output.groups = []Group{*defaultGroup}
 
 	for _, line := range lines {
@@ -65,7 +65,7 @@ func ParseObjString(input string) (output Obj, discardedLinesCount int, errors s
 				groupsCount := len(output.groups)
 				fanTriangulation(vertices, &output.groups[groupsCount-1])
 			case 'g':
-				output.groups = append(output.groups, Group{})
+				output.groups = append(output.groups, *MakeGroup(transform))
 
 			default:
 				discardedLinesCount++

@@ -63,7 +63,9 @@ func ParseObjString(input string, transform Matrix) (output Obj, discardedLinesC
 					vertices = append(vertices, output.vertices[tIndex])
 				}
 				groupsCount := len(output.groups)
-				fanTriangulation(vertices, &output.groups[groupsCount-1])
+				for i := 1; i < len(vertices)-1; i++ {
+					MakeTriangleInGroup(vertices[0], vertices[i], vertices[i+1], Identity(), DefaultMaterial(), &output.groups[groupsCount-1])
+				}
 			case 'g':
 				output.groups = append(output.groups, *MakeGroup(transform))
 
@@ -73,16 +75,6 @@ func ParseObjString(input string, transform Matrix) (output Obj, discardedLinesC
 		} else {
 			discardedLinesCount++
 		}
-	}
-
-	return
-}
-
-func fanTriangulation(vertices []Tuple, g *Group) (triangles []Triangle) {
-	triangles = []Triangle{}
-
-	for i := 0; i < len(vertices)-1; i++ {
-		triangles = append(triangles, MakeTriangleInGroup(vertices[1], vertices[i], vertices[i+1], Identity(), DefaultMaterial(), g))
 	}
 
 	return

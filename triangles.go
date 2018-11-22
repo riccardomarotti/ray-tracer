@@ -13,7 +13,7 @@ func MakeTriangle(p1, p2, p3 Tuple, transofrm Matrix, material Material) Triangl
 	e1 := p2.Subtract(p1)
 	e2 := p3.Subtract(p1)
 	normal := e2.Cross(e1).Normalize()
-	return Triangle{p1: p1, p2: p2, p3: p3, e1: e1, e2: e2, normal: normal, baseObject: BaseObject{transofrm, material}}
+	return Triangle{p1: p1, p2: p2, p3: p3, e1: e1, e2: e2, normal: normal, baseObject: BaseObject{transofrm, material}, parent: nil}
 }
 
 func MakeTriangleInGroup(p1, p2, p3 Tuple, transofrm Matrix, material Material, group *Group) Triangle {

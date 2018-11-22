@@ -28,19 +28,18 @@ func main() {
 
 	hexagonMaterial := DefaultMaterial()
 
-	hexagonMaterial.color = Color{1, 0.8, 0.1}
+	hexagonMaterial.color = Color{.5, .3, .1}
 	hexagonMaterial.specular = 1
-	hexagonMaterial.pattern = MakePerturbPattern(MakeStripePattern(Color{.7, .9, .5}, Color{.7, .7, .3}, Identity().Scale(.1, .1, .1).RotateZ(math.Pi/2).RotateY(math.Pi/4)))
+	hexagonMaterial.transparency = 0
+	hexagonMaterial.reflective = 1
+	hexagonMaterial.refractiveIndex = .9
+	hexagonMaterial.shininess = 300
 	hex := hexagon(Identity().Translate(-1.7, 0.125, 0).Scale(0.5, 0.5, 0.5), hexagonMaterial)
 
 	cubeMaterial := DefaultMaterial()
-
-	cubeMaterial.color = Color{.5, .3, .1}
+	cubeMaterial.color = Color{1, 0.8, 0.1}
 	cubeMaterial.specular = 1
-	cubeMaterial.transparency = 1
-	cubeMaterial.reflective = 1
-	cubeMaterial.refractiveIndex = 1
-	cubeMaterial.shininess = 300
+	cubeMaterial.pattern = MakePerturbPattern(MakeStripePattern(Color{.7, .9, .5}, Color{.7, .7, .3}, Identity().Scale(.1, .1, .1).RotateZ(math.Pi/2).RotateY(math.Pi/4)))
 	cube := MakeCube(Identity().Translate(-2.5, 0.25, 1.5).Scale(0.25, 0.25, 0.25), cubeMaterial)
 
 	sphere5Material := DefaultMaterial()

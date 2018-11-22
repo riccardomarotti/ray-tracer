@@ -12,13 +12,13 @@ type Obj struct {
 	groups   []Group
 }
 
-func ObjFileToGroups(filename string, transofrm Matrix) (groups []Group, discardeLineCount int, errors string) {
+func ObjFileToGroups(filename string, transofrm Matrix, material Material) (groups []Group, discardeLineCount int, errors string) {
 	dat, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
 	}
 
-	output, linesDiscarded, e := ParseObjString(string(dat), transofrm)
+	output, linesDiscarded, e := ParseObjString(string(dat), transofrm, material)
 
 	groups = output.groups
 	discardeLineCount = linesDiscarded
@@ -27,7 +27,7 @@ func ObjFileToGroups(filename string, transofrm Matrix) (groups []Group, discard
 	return
 }
 
-func ParseObjString(input string, transform Matrix) (output Obj, discardedLinesCount int, errors string) {
+func ParseObjString(input string, transform Matrix, material Material) (output Obj, discardedLinesCount int, errors string) {
 	lines := strings.Split(input, "\n")
 	discardedLinesCount = 0
 
@@ -64,7 +64,7 @@ func ParseObjString(input string, transform Matrix) (output Obj, discardedLinesC
 				}
 				groupsCount := len(output.groups)
 				for i := 1; i < len(vertices)-1; i++ {
-					MakeTriangleInGroup(vertices[0], vertices[i], vertices[i+1], Identity(), DefaultMaterial(), &output.groups[groupsCount-1])
+					MakeTriangleInGroup(vertices[0], vertices[i], vertices[i+1], Identity(), material, &output.groups[groupsCount-1])
 				}
 			case 'g':
 				output.groups = append(output.groups, *MakeGroup(transform))

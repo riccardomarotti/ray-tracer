@@ -38,17 +38,30 @@ func ParseObjFile(input string) (output Obj, discardedLinesCount int, errors str
 				output.vertices = append(output.vertices, Point(x, y, z))
 			case 'f':
 				values := strings.Split(line, " ")
-				t1index, _ := strconv.ParseInt(values[1], 10, 64)
-				t2index, _ := strconv.ParseInt(values[2], 10, 64)
-				t3index, _ := strconv.ParseInt(values[3], 10, 64)
 
-				MakeTriangleInGroup(output.vertices[t1index], output.vertices[t2index], output.vertices[t3index], Identity(), DefaultMaterial(), &output.defaultGroup)
+				vertices := []Tuple{}
+				for i := 1; i < len(values); i++ {
+					tIndex, _ := strconv.ParseInt(values[i], 10, 64)
+					vertices = append(vertices, output.vertices[tIndex])
+				}
+
+				fanTriangulation(vertices, &output.defaultGroup)
 			default:
 				discardedLinesCount++
 			}
 		} else {
 			discardedLinesCount++
 		}
+	}
+
+	return
+}
+
+func fanTriangulation(vertices []Tuple, g *Group) (triangles []Triangle) {
+	triangles = []Triangle{}
+
+	for i := 0; i < len(vertices)-1; i++ {
+		triangles = append(triangles, MakeTriangleInGroup(vertices[1], vertices[i], vertices[i+1], Identity(), DefaultMaterial(), g))
 	}
 
 	return

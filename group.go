@@ -1,19 +1,23 @@
 package main
 
-import "sort"
+import (
+	"math"
+	"sort"
+)
 
 type Group struct {
 	baseObject BaseObject
 	children   []Object
 	parent     *Group
+	bounds     Bounds
 }
 
 func MakeGroup(transform Matrix) *Group {
-	return &Group{BaseObject{transform, DefaultMaterial()}, []Object{}, nil}
+	return &Group{BaseObject{transform, DefaultMaterial()}, []Object{}, nil, Bounds{}}
 }
 
 func MakeGroupInGroup(transform Matrix, parent *Group) *Group {
-	g := &Group{BaseObject{transform, DefaultMaterial()}, []Object{}, parent}
+	g := &Group{BaseObject{transform, DefaultMaterial()}, []Object{}, parent, Bounds{}}
 	parent.AddChildren(g)
 	return g
 }
@@ -51,5 +55,55 @@ func (g Group) Intersection(r Ray) []Intersection {
 		return intersections
 	}
 
+	boundingBoxIntersections := g.bounds.Intersection(r, g)
+	if len(boundingBoxIntersections) == 0 {
+		return []Intersection{}
+	}
+
 	return g.baseObject.Intersection(r, localIntersect)
+}
+
+func (g Group) Bounds() Bounds {
+	return g.bounds
+}
+
+func (g *Group) CalculateBounds() {
+	allBounds := []Bounds{}
+	for _, child := range g.children {
+		childBounds := child.Bounds()
+		allBounds = append(allBounds, Bounds{childBounds.min, childBounds.max})
+	}
+
+	minx := math.Inf(1)
+	miny := math.Inf(1)
+	minz := math.Inf(1)
+	maxx := math.Inf(-1)
+	maxy := math.Inf(-1)
+	maxz := math.Inf(-1)
+
+	for _, bounds := range allBounds {
+		if bounds.min.x < minx {
+			minx = bounds.min.x
+		}
+		if bounds.min.y < miny {
+			miny = bounds.min.y
+		}
+		if bounds.min.z < minz {
+			minz = bounds.min.z
+		}
+
+		if bounds.max.x > maxx {
+			maxx = bounds.max.x
+		}
+
+		if bounds.max.y > maxy {
+			maxy = bounds.max.y
+		}
+
+		if bounds.max.z > maxz {
+			maxz = bounds.max.z
+		}
+	}
+
+	g.bounds = Bounds{Point(minx, miny, minz), Point(maxx, maxy, maxz)}
 }

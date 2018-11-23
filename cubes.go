@@ -13,6 +13,16 @@ func MakeCube(transform Matrix, material Material) Object {
 	return Cube{BaseObject{transform, material}, nil}
 }
 
+func MakeCubeInGroup(transform Matrix, material Material, group *Group) Object {
+	c := Cube{BaseObject{transform, material}, group}
+	group.AddChildren(c)
+	return c
+}
+
+func (c Cube) Bounds() Bounds {
+	localBounds := Bounds{Point(-1, -1, -1), Point(1, 1, 1)}
+	return c.baseObject.Bounds(localBounds, c)
+}
 func (c Cube) Parent() *Group {
 	return c.parent
 }

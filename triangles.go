@@ -25,6 +25,19 @@ func MakeTriangleInGroup(p1, p2, p3 Tuple, transofrm Matrix, material Material, 
 	return t
 }
 
+func (t Triangle) Bounds() Bounds {
+	minX := math.Min(t.p1.x, math.Min(t.p2.x, t.p3.x))
+	minY := math.Min(t.p1.y, math.Min(t.p2.y, t.p3.y))
+	minZ := math.Min(t.p1.z, math.Min(t.p2.z, t.p3.z))
+
+	maxX := math.Max(t.p1.x, math.Max(t.p2.x, t.p3.x))
+	maxY := math.Max(t.p1.y, math.Max(t.p2.y, t.p3.y))
+	maxZ := math.Max(t.p1.z, math.Max(t.p2.z, t.p3.z))
+
+	localBounds := Bounds{Point(minX, minY, minZ), Point(maxX, maxY, maxZ)}
+	return t.baseObject.Bounds(localBounds, t)
+}
+
 func (t Triangle) Parent() *Group {
 	return t.parent
 }

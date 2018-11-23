@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"reflect"
 	"testing"
@@ -32,6 +33,9 @@ func TestIntersectingARayWithANonEmptyGroup(t *testing.T) {
 
 	r := Ray{Point(0, 0, -5), Vector(0, 0, 1)}
 
+	g.CalculateBounds()
+	g0.CalculateBounds()
+
 	xs := g0.Intersection(r)
 
 	Assert(len(xs) == 4, "", t)
@@ -43,13 +47,14 @@ func TestIntersectingARayWithANonEmptyGroup(t *testing.T) {
 
 func TestIntersectingATransformedGroup(t *testing.T) {
 	g := MakeGroup(Identity().Scale(2, 2, 2))
-	MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), g)
+	MakeCubeInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), g)
 
 	r := Ray{Point(10, 0, -10), Vector(0, 0, 1)}
 
+	g.CalculateBounds()
 	xs := g.Intersection(r)
 
-	Assert(len(xs) == 2, "", t)
+	Assert(len(xs) == 2, fmt.Sprintf("Expected %d intersections, received %d", 2, len(xs)), t)
 }
 
 func TestConvertingAPointFromWorldToObjectSpace(t *testing.T) {
@@ -108,4 +113,26 @@ func TestGroupDoesNotHaveNormalAt(t *testing.T) {
 	}()
 
 	g.NormalAt(Point(0, 0, 0))
+}
+
+func TestBoundsSphere(t *testing.T) {
+	g := MakeGroup(Identity())
+	MakeSphereInGroup(Identity(), DefaultMaterial(), g)
+
+	g.CalculateBounds()
+	bounds := g.Bounds()
+
+	AssertTupleEqual(Point(-1, -1, -1), bounds.min, t)
+	AssertTupleEqual(Point(1, 1, 1), bounds.max, t)
+}
+
+func TestBoundsSphereWithTransform(t *testing.T) {
+	g := MakeGroup(Identity().Scale(.5, .5, .5))
+	MakeSphereInGroup(Identity().Scale(2, 2, 2), DefaultMaterial(), g)
+
+	g.CalculateBounds()
+	bounds := g.Bounds()
+
+	AssertTupleEqual(Point(-1, -1, -1), bounds.min, t)
+	AssertTupleEqual(Point(1, 1, 1), bounds.max, t)
 }

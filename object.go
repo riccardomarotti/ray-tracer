@@ -6,11 +6,16 @@ type Object interface {
 	Material() Material
 	Intersection(Ray) []Intersection
 	Parent() *Group
+	Bounds() Bounds
 }
 
 type BaseObject struct {
 	transform Matrix
 	material  Material
+}
+
+func (o BaseObject) Bounds(localBounds Bounds, object Object) Bounds {
+	return BoundsToWorld(object, Bounds{localBounds.min, localBounds.max})
 }
 
 func (o BaseObject) Intersection(ray Ray, localIntersect func(Ray) []Intersection) []Intersection {
@@ -45,4 +50,17 @@ func NormalToWorld(o Object, v Tuple) Tuple {
 	}
 
 	return normal
+}
+
+func BoundsToWorld(o Object, b Bounds) Bounds {
+	min := o.Transform().Inverse().MultiplyByTuple(b.min)
+	max := o.Transform().Inverse().MultiplyByTuple(b.max)
+
+	bounds := Bounds{min, max}
+
+	if o.Parent() != nil {
+		bounds = BoundsToWorld(o.Parent(), bounds)
+	}
+
+	return bounds
 }

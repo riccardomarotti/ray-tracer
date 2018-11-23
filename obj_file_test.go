@@ -61,8 +61,8 @@ f 1 3 4
 	p2 := Point(-1, .5, 0)
 	p3 := Point(1, 0, 0)
 	p4 := Point(1, 1, 0)
-	expectedT1 := MakeTriangleInGroup(p1, p2, p3, Identity(), DefaultMaterial(), &g)
-	expectedT2 := MakeTriangleInGroup(p1, p3, p4, Identity(), DefaultMaterial(), &g)
+	expectedT1 := MakeTriangleInGroup(p1, p2, p3, Identity(), DefaultMaterial(), g)
+	expectedT2 := MakeTriangleInGroup(p1, p3, p4, Identity(), DefaultMaterial(), g)
 
 	AssertTrianglesEqual(expectedT1, t1, t)
 	AssertTrianglesEqual(expectedT2, t2, t)
@@ -91,9 +91,9 @@ f 1 2 3 4 5
 	p4 := Point(1, 1, 0)
 	p5 := Point(0, 2, 0)
 
-	expectedT1 := MakeTriangleInGroup(p1, p2, p3, Identity(), DefaultMaterial(), &g)
-	expectedT2 := MakeTriangleInGroup(p1, p3, p4, Identity(), DefaultMaterial(), &g)
-	expectedT3 := MakeTriangleInGroup(p1, p4, p5, Identity(), DefaultMaterial(), &g)
+	expectedT1 := MakeTriangleInGroup(p1, p2, p3, Identity(), DefaultMaterial(), g)
+	expectedT2 := MakeTriangleInGroup(p1, p3, p4, Identity(), DefaultMaterial(), g)
+	expectedT3 := MakeTriangleInGroup(p1, p4, p5, Identity(), DefaultMaterial(), g)
 
 	AssertTrianglesEqual(expectedT1, t1, t)
 	AssertTrianglesEqual(expectedT2, t2, t)
@@ -113,8 +113,8 @@ func TestTrianglesInGroup(t *testing.T) {
 	p3 := Point(1, 0, 0)
 	p4 := Point(1, 1, 0)
 
-	expectedT1 := MakeTriangleInGroup(p1, p2, p3, Identity(), DefaultMaterial(), &g1)
-	expectedT2 := MakeTriangleInGroup(p1, p3, p4, Identity(), DefaultMaterial(), &g2)
+	expectedT1 := MakeTriangleInGroup(p1, p2, p3, Identity(), DefaultMaterial(), g1)
+	expectedT2 := MakeTriangleInGroup(p1, p3, p4, Identity(), DefaultMaterial(), g2)
 
 	AssertTrianglesEqual(expectedT1, t1, t)
 	AssertTrianglesEqual(expectedT2, t2, t)

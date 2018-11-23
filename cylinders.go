@@ -27,6 +27,11 @@ func MakeCylinderInGroup(transform Matrix, material Material, minimum, maximum f
 	return c
 }
 
+func (cylinder Cylinder) Bounds() Bounds {
+	localBounds := Bounds{Point(-1, cylinder.minimum, -1), Point(1, cylinder.maximum, 1)}
+	return cylinder.baseObject.Bounds(localBounds, cylinder)
+}
+
 func (cylinder Cylinder) Parent() *Group {
 	return cylinder.parent
 }

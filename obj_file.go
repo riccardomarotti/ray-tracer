@@ -9,10 +9,10 @@ import (
 
 type Obj struct {
 	vertices []Tuple
-	groups   []Group
+	groups   []*Group
 }
 
-func ObjFileToGroups(filename string, transofrm Matrix, material Material) (groups []Group, discardeLineCount int, errors string) {
+func ObjFileToGroups(filename string, transofrm Matrix, material Material) (groups []*Group, discardeLineCount int, errors string) {
 	dat, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
@@ -43,7 +43,7 @@ func ParseObjString(input string, transform Matrix, material Material) (output O
 
 	output.vertices = []Tuple{Tuple{}}
 	defaultGroup := MakeGroup(transform)
-	output.groups = []Group{*defaultGroup}
+	output.groups = []*Group{defaultGroup}
 
 	for _, line := range lines {
 		if len(line) > 0 {
@@ -64,10 +64,10 @@ func ParseObjString(input string, transform Matrix, material Material) (output O
 				}
 				groupsCount := len(output.groups)
 				for i := 1; i < len(vertices)-1; i++ {
-					MakeTriangleInGroup(vertices[0], vertices[i], vertices[i+1], Identity(), material, &output.groups[groupsCount-1])
+					MakeTriangleInGroup(vertices[0], vertices[i], vertices[i+1], Identity(), material, output.groups[groupsCount-1])
 				}
 			case 'g':
-				output.groups = append(output.groups, *MakeGroup(transform))
+				output.groups = append(output.groups, MakeGroup(transform))
 
 			default:
 				discardedLinesCount++
@@ -75,6 +75,10 @@ func ParseObjString(input string, transform Matrix, material Material) (output O
 		} else {
 			discardedLinesCount++
 		}
+	}
+
+	for _, g := range output.groups {
+		g.CalculateBounds()
 	}
 
 	return

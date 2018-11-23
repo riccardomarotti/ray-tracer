@@ -13,6 +13,11 @@ func MakePlane(transform Matrix, material Material) Object {
 	return Plane{BaseObject{transform, material}, nil}
 }
 
+func (p Plane) Bounds() Bounds {
+	localBounds := Bounds{Point(-math.Inf(-1), 0, math.Inf(-1)), Point(math.Inf(1), 0, math.Inf(1))}
+	return p.baseObject.Bounds(localBounds, p)
+}
+
 func (p Plane) Parent() *Group {
 	return p.parent
 }

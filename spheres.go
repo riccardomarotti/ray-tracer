@@ -13,6 +13,11 @@ func MakeSphereInGroup(transform Matrix, material Material, group *Group) Object
 	return s
 }
 
+func (s Sphere) Bounds() Bounds {
+	localBounds := Bounds{min: Point(-1, -1, -1), max: Point(1, 1, 1)}
+	return s.baseObject.Bounds(localBounds, s)
+}
+
 func MakeSphere(transform Matrix, material Material) Object {
 	return Sphere{BaseObject{transform, material}, nil}
 }

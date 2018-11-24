@@ -35,7 +35,7 @@ func (c Cube) Material() Material {
 	return c.baseObject.material
 }
 
-func (c Cube) NormalAt(p Tuple) Tuple {
+func (c Cube) NormalAt(p Tuple, i Intersection) Tuple {
 	localNormalAt := func(p Tuple) Tuple {
 		maxC := math.Max(math.Abs(p.x), math.Max(math.Abs(p.y), math.Abs(p.z)))
 

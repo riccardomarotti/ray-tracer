@@ -2,7 +2,7 @@ package main
 
 type Object interface {
 	Transform() Matrix
-	NormalAt(p Tuple) Tuple
+	NormalAt(p Tuple, i Intersection) Tuple
 	Material() Material
 	Intersection(Ray) []Intersection
 	Parent() *Group

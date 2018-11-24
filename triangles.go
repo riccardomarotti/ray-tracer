@@ -5,6 +5,7 @@ import "math"
 type Triangle struct {
 	p1, p2, p3     Tuple
 	e1, e2, normal Tuple
+	n1, n2, n3     Tuple
 	baseObject     BaseObject
 	parent         *Group
 }
@@ -14,6 +15,13 @@ func MakeTriangle(p1, p2, p3 Tuple, transofrm Matrix, material Material) Triangl
 	e2 := p3.Subtract(p1)
 	normal := e2.Cross(e1).Normalize()
 	return Triangle{p1: p1, p2: p2, p3: p3, e1: e1, e2: e2, normal: normal, baseObject: BaseObject{transofrm, material}, parent: nil}
+}
+
+func MakeSmoothTriangle(p1, p2, p3, n1, n2, n3 Tuple, transofrm Matrix, material Material) Triangle {
+	e1 := p2.Subtract(p1)
+	e2 := p3.Subtract(p1)
+	normal := e2.Cross(e1).Normalize()
+	return Triangle{p1: p1, p2: p2, p3: p3, n1: n1, n2: n2, n3: n3, e1: e1, e2: e2, normal: normal, baseObject: BaseObject{transofrm, material}, parent: nil}
 }
 
 func MakeTriangleInGroup(p1, p2, p3 Tuple, transofrm Matrix, material Material, group *Group) Triangle {
@@ -46,8 +54,17 @@ func (t Triangle) Transform() Matrix {
 	return t.baseObject.transform
 }
 
-func (t Triangle) NormalAt(p Tuple) Tuple {
+func (t Triangle) NormalAt(p Tuple, i Intersection) Tuple {
 	localNormalAt := func(p Tuple) Tuple {
+		hasN1 := t.n1 != Tuple{}
+		hasN2 := t.n2 != Tuple{}
+		hasN3 := t.n3 != Tuple{}
+		if hasN1 && hasN2 && hasN3 {
+			a := t.n2.Multiply(i.u)
+			b := t.n3.Multiply(i.v)
+			c := t.n1.Multiply(1 - i.u - i.v)
+			return a.Add(b).Add(c)
+		}
 		return t.normal
 	}
 

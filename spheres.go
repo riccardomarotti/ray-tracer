@@ -34,7 +34,7 @@ func (s Sphere) Material() Material {
 	return s.baseObject.material
 }
 
-func (s Sphere) NormalAt(p Tuple) Tuple {
+func (s Sphere) NormalAt(p Tuple, i Intersection) Tuple {
 	localNormalAt := func(p Tuple) Tuple {
 		return p.Subtract(Point(0, 0, 0))
 	}

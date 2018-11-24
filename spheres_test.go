@@ -35,21 +35,21 @@ func TestIntersectingATranslatedSphereWithARay(t *testing.T) {
 
 func TestNormalOnSphereAtAPointOnTheXAxis(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
-	n := s.NormalAt(Point(1, 0, 0))
+	n := s.NormalAt(Point(1, 0, 0), Intersection{})
 
 	AssertTupleEqual(Vector(1, 0, 0), n, t)
 }
 
 func TestNormalOnSphereAtAPointOnTheYAxis(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
-	n := s.NormalAt(Point(0, 1, 0))
+	n := s.NormalAt(Point(0, 1, 0), Intersection{})
 
 	AssertTupleEqual(Vector(0, 1, 0), n, t)
 }
 
 func TestNormalOnSphereAtAPointOnTheZAxis(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
-	n := s.NormalAt(Point(0, 0, 1))
+	n := s.NormalAt(Point(0, 0, 1), Intersection{})
 
 	AssertTupleEqual(Vector(0, 0, 1), n, t)
 }
@@ -58,7 +58,7 @@ func TestNormalOnSphereAtANonAxialPoint(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
 	xyz := math.Sqrt(3) / 3
 
-	n := s.NormalAt(Point(xyz, xyz, xyz))
+	n := s.NormalAt(Point(xyz, xyz, xyz), Intersection{})
 
 	AssertTupleEqual(Vector(xyz, xyz, xyz), n, t)
 }
@@ -67,7 +67,7 @@ func TestNormalIsANormalizedVector(t *testing.T) {
 	s := MakeSphere(Identity(), DefaultMaterial())
 	xyz := math.Sqrt(3) / 3
 
-	n := s.NormalAt(Point(xyz, xyz, xyz))
+	n := s.NormalAt(Point(xyz, xyz, xyz), Intersection{})
 
 	AssertTupleEqual(n.Normalize(), n, t)
 }
@@ -75,7 +75,7 @@ func TestNormalIsANormalizedVector(t *testing.T) {
 func TestComputingTheNormalOnATranslatedSphere(t *testing.T) {
 	s := MakeSphere(Identity().Translate(0, 1, 0), DefaultMaterial())
 
-	n := s.NormalAt(Point(0, 1.70711, -0.70711))
+	n := s.NormalAt(Point(0, 1.70711, -0.70711), Intersection{})
 
 	AssertTupleEqual(Vector(0, 0.70711, -0.70711), n, t)
 }
@@ -83,7 +83,7 @@ func TestComputingTheNormalOnATranslatedSphere(t *testing.T) {
 func TestComputingTheNormalOnAScaledSphere(t *testing.T) {
 	s := MakeSphere(Identity().Scale(1, 0.5, 1), DefaultMaterial())
 
-	n := s.NormalAt(Point(0, math.Sqrt(2)/2, -math.Sqrt(2)/2))
+	n := s.NormalAt(Point(0, math.Sqrt(2)/2, -math.Sqrt(2)/2), Intersection{})
 
 	AssertTupleEqual(Vector(0, 0.97014, -0.24254), n, t)
 }

@@ -22,7 +22,7 @@ func (p Plane) Parent() *Group {
 	return p.parent
 }
 
-func (p Plane) NormalAt(point Tuple) Tuple {
+func (p Plane) NormalAt(point Tuple, i Intersection) Tuple {
 	localNormalAt := func(p Tuple) Tuple {
 		return Vector(0, 1, 0)
 	}

@@ -35,7 +35,7 @@ func (g Group) Transform() Matrix {
 	return g.baseObject.transform
 }
 
-func (g Group) NormalAt(p Tuple) Tuple {
+func (g Group) NormalAt(p Tuple, i Intersection) Tuple {
 	panic("NormalAt should n ot be called on a Group")
 }
 

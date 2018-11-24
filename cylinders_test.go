@@ -61,7 +61,7 @@ func TestNormalVectorOnACylinder(t *testing.T) {
 	}
 
 	for i := 0; i < len(examples); i++ {
-		n := cylinder.NormalAt(examples[i][0])
+		n := cylinder.NormalAt(examples[i][0], Intersection{})
 
 		AssertTupleEqual(examples[i][1], n, t)
 	}
@@ -129,7 +129,7 @@ func TestNormalVectorOnACylindersEndCap(t *testing.T) {
 	}
 
 	for i := 0; i < len(examples); i++ {
-		n := cylidner.NormalAt(examples[i][0])
+		n := cylidner.NormalAt(examples[i][0], Intersection{})
 
 		AssertTupleEqual(examples[i][1], n, t)
 	}

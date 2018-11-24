@@ -87,7 +87,7 @@ func TestFindTheNormalOnAnObjectGroup(t *testing.T) {
 	g2 := MakeGroupInGroup(Identity().Scale(1, 2, 3), g1)
 	s := MakeSphereInGroup(Identity().Translate(5, 0, 0), DefaultMaterial(), g2)
 
-	n := s.NormalAt(Point(1.7321, 1.1547, -5.5774))
+	n := s.NormalAt(Point(1.7321, 1.1547, -5.5774), Intersection{})
 	AssertTupleEqual(Vector(0.28570, 0.42854, -0.85716), n, t)
 }
 
@@ -112,7 +112,7 @@ func TestGroupDoesNotHaveNormalAt(t *testing.T) {
 		}
 	}()
 
-	g.NormalAt(Point(0, 0, 0))
+	g.NormalAt(Point(0, 0, 0), Intersection{})
 }
 
 func TestBoundsSphere(t *testing.T) {

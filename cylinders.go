@@ -44,7 +44,7 @@ func (cylinder Cylinder) Material() Material {
 	return cylinder.baseObject.material
 }
 
-func (cylinder Cylinder) NormalAt(p Tuple) Tuple {
+func (cylinder Cylinder) NormalAt(p Tuple, i Intersection) Tuple {
 	localNormalAt := func(p Tuple) Tuple {
 		distance := p.x*p.x + p.z*p.z
 

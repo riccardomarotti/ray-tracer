@@ -112,7 +112,7 @@ func TestNormalOnACube(t *testing.T) {
 	for i := 0; i < len(examples); i++ {
 		p := examples[i][0]
 
-		AssertTupleEqual(examples[i][1], c.NormalAt(p), t)
+		AssertTupleEqual(examples[i][1], c.NormalAt(p, Intersection{}), t)
 	}
 }
 

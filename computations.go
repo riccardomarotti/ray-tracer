@@ -16,7 +16,7 @@ func PrepareComputations(hit Intersection, r Ray, allIntersections []Intersectio
 	comps.i = hit
 
 	rawPoint := r.Position(hit.t)
-	normalVector := hit.object.NormalAt(rawPoint)
+	normalVector := hit.object.NormalAt(rawPoint, comps.i)
 	point := rawPoint.Add(normalVector.Multiply(Epsilon))
 	underPoint := rawPoint.Subtract(normalVector.Multiply(Epsilon))
 

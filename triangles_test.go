@@ -19,13 +19,13 @@ func TestConstructingTheTriangle(t *testing.T) {
 
 func TestFindingTheNormalOnATriangle(t *testing.T) {
 	triangle := MakeTriangle(Point(0, 1, 0), Point(-1, 0, 0), Point(1, 0, 0), Identity(), DefaultMaterial())
-	n1 := triangle.NormalAt(Point(0, 0.5, 0))
-	n2 := triangle.NormalAt(Point(-0.5, 0.75, 0))
-	n3 := triangle.NormalAt(Point(0.5, 0.25, 0))
+	n1 := triangle.NormalAt(Point(0, 0.5, 0), Intersection{})
+	n2 := triangle.NormalAt(Point(-0.5, 0.75, 0), Intersection{})
+	n3 := triangle.NormalAt(Point(0.5, 0.25, 0), Intersection{})
 
-	AssertTupleEqual(n1, triangle.normal, t)
-	AssertTupleEqual(n2, triangle.normal, t)
-	AssertTupleEqual(n3, triangle.normal, t)
+	AssertTupleEqual(triangle.normal, n1, t)
+	AssertTupleEqual(triangle.normal, n2, t)
+	AssertTupleEqual(triangle.normal, n3, t)
 
 }
 func TestIntersectingARayParallelToTheTriangle(t *testing.T) {
@@ -82,4 +82,22 @@ func TestIntersectionStoresUandV(t *testing.T) {
 
 	AssertEqual(0.45, xs[0].u, t)
 	AssertEqual(0.25, xs[0].v, t)
+}
+
+func TestTriangleUsesUandVToInterpolateNormals(t *testing.T) {
+	p1 := Point(0, 1, 0)
+	p2 := Point(-1, 0, 0)
+	p3 := Point(1, 0, 0)
+	n1 := Vector(0, 1, 0)
+	n2 := Vector(-1, 0, 0)
+	n3 := Vector(1, 0, 0)
+
+	tri := MakeSmoothTriangle(p1, p2, p3, n1, n2, n3, Identity(), DefaultMaterial())
+	r := Ray{Point(-0.2, 0.3, -2), Vector(0, 0, 1)}
+
+	i := tri.Intersection(r)[0]
+
+	n := tri.NormalAt(Point(0, 0, 0), i)
+
+	AssertTupleEqual(Vector(-0.5547, 0.83205, 0), n, t)
 }

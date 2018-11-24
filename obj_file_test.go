@@ -121,3 +121,37 @@ func TestTrianglesInGroup(t *testing.T) {
 	AssertMatrixEqual(Identity(), g1.Transform(), t)
 	AssertMatrixEqual(Identity(), g2.Transform(), t)
 }
+
+func TestFacesWithNormals(t *testing.T) {
+	input := `
+v 0 1 0
+v -1 0 0 
+v 1 0 0
+
+vn -1 0 0
+vn 1 0 0
+vn 0 1 0 
+
+f 1//3 2//1 3//2
+f 1/0/3 2/102/1 3/14/2
+`
+
+	output, _, _ := ParseObjString(input, Identity(), DefaultMaterial())
+
+	g := output.groups[0]
+	t1 := g.children[0]
+	t2 := g.children[1]
+
+	p1 := Point(0, 1, 0)
+	p2 := Point(-1, 0, 0)
+	p3 := Point(1, 0, 0)
+	n1 := Vector(-1, 0, 0)
+	n2 := Vector(1, 0, 0)
+	n3 := Vector(0, 1, 0)
+
+	expectedT1 := MakeSmoothTriangle(p1, p2, p3, n3, n1, n2, Identity(), DefaultMaterial(), g)
+	expectedT2 := MakeSmoothTriangle(p1, p2, p3, n3, n1, n2, Identity(), DefaultMaterial(), g)
+
+	AssertTrianglesEqual(expectedT1, t1, t)
+	AssertTrianglesEqual(expectedT2, t2, t)
+}

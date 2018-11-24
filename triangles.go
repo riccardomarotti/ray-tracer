@@ -17,11 +17,15 @@ func MakeTriangle(p1, p2, p3 Tuple, transofrm Matrix, material Material) Triangl
 	return Triangle{p1: p1, p2: p2, p3: p3, e1: e1, e2: e2, normal: normal, baseObject: BaseObject{transofrm, material}, parent: nil}
 }
 
-func MakeSmoothTriangle(p1, p2, p3, n1, n2, n3 Tuple, transofrm Matrix, material Material) Triangle {
+func MakeSmoothTriangle(p1, p2, p3, n1, n2, n3 Tuple, transofrm Matrix, material Material, group *Group) Triangle {
 	e1 := p2.Subtract(p1)
 	e2 := p3.Subtract(p1)
 	normal := e2.Cross(e1).Normalize()
-	return Triangle{p1: p1, p2: p2, p3: p3, n1: n1, n2: n2, n3: n3, e1: e1, e2: e2, normal: normal, baseObject: BaseObject{transofrm, material}, parent: nil}
+	t := Triangle{p1: p1, p2: p2, p3: p3, n1: n1, n2: n2, n3: n3, e1: e1, e2: e2, normal: normal, baseObject: BaseObject{transofrm, material}, parent: group}
+	if group != nil {
+		group.AddChildren(t)
+	}
+	return t
 }
 
 func MakeTriangleInGroup(p1, p2, p3 Tuple, transofrm Matrix, material Material, group *Group) Triangle {

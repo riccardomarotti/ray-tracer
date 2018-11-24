@@ -92,7 +92,7 @@ func TestTriangleUsesUandVToInterpolateNormals(t *testing.T) {
 	n2 := Vector(-1, 0, 0)
 	n3 := Vector(1, 0, 0)
 
-	tri := MakeSmoothTriangle(p1, p2, p3, n1, n2, n3, Identity(), DefaultMaterial())
+	tri := MakeSmoothTriangle(p1, p2, p3, n1, n2, n3, Identity(), DefaultMaterial(), nil)
 	r := Ray{Point(-0.2, 0.3, -2), Vector(0, 0, 1)}
 
 	i := tri.Intersection(r)[0]

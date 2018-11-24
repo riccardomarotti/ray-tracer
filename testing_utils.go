@@ -66,18 +66,40 @@ func Assert(trueCondition bool, message string, t *testing.T) {
 }
 
 func AssertTrianglesEqual(expected, actual interface{}, t *testing.T) {
-	areEqual := reflect.TypeOf(expected) == reflect.TypeOf(actual)
-
-	p1expected := reflect.ValueOf(&expected).Elem().Elem().FieldByName("p1").String()
-	p2expected := reflect.ValueOf(&expected).Elem().Elem().FieldByName("p2").String()
-	p3expected := reflect.ValueOf(&expected).Elem().Elem().FieldByName("p3").String()
-	p1actual := reflect.ValueOf(&actual).Elem().Elem().FieldByName("p1").String()
-	p2actual := reflect.ValueOf(&actual).Elem().Elem().FieldByName("p2").String()
-	p3actual := reflect.ValueOf(&actual).Elem().Elem().FieldByName("p3").String()
-
-	areEqual = areEqual && p1expected == p1actual && p2expected == p2actual && p3expected == p3actual
-
-	if !areEqual {
+	if reflect.TypeOf(expected) != reflect.TypeOf(actual) {
 		t.Errorf("Triangles differ\nExpected: %v\nActual:   %v", expected, actual)
 	}
+
+	p1expected := parameterFromInterface("p1", &expected)
+	p2expected := parameterFromInterface("p2", &expected)
+	p3expected := parameterFromInterface("p3", &expected)
+
+	p1actual := parameterFromInterface("p1", &actual)
+	p2actual := parameterFromInterface("p2", &actual)
+	p3actual := parameterFromInterface("p3", &actual)
+
+	n1expected := parameterFromInterface("n1", &expected)
+	n2expected := parameterFromInterface("n2", &expected)
+	n3expected := parameterFromInterface("n3", &expected)
+
+	n1actual := parameterFromInterface("n1", &actual)
+	n2actual := parameterFromInterface("n2", &actual)
+	n3actual := parameterFromInterface("n3", &actual)
+
+	AssertTupleEqual(p1expected, p1actual, t)
+	AssertTupleEqual(p2expected, p2actual, t)
+	AssertTupleEqual(p3expected, p3actual, t)
+
+	AssertTupleEqual(n1expected, n1actual, t)
+	AssertTupleEqual(n2expected, n2actual, t)
+	AssertTupleEqual(n3expected, n3actual, t)
+
+}
+
+func parameterFromInterface(parameterName string, i *interface{}) Tuple {
+	x := reflect.ValueOf(i).Elem().Elem().FieldByName(parameterName).FieldByName("x").Float()
+	y := reflect.ValueOf(i).Elem().Elem().FieldByName(parameterName).FieldByName("y").Float()
+	z := reflect.ValueOf(i).Elem().Elem().FieldByName(parameterName).FieldByName("z").Float()
+
+	return Point(x, y, z)
 }

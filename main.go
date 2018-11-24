@@ -83,7 +83,7 @@ func main() {
 	light := PointLight{lightPosition, lightColor}
 
 	world := World{light, []Object{sphere, hex, sphere5, cylinder, cube, wall1, wall2, wall3, floor}}
-	c := camera.Render(world)
+	c := camera.Render(world, true)
 	fmt.Printf(c.PPM())
 }
 

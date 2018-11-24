@@ -18,7 +18,7 @@ func (b Bounds) Intersection(ray Ray, o Object) []Intersection {
 
 	hit := tMax > tMin
 	if hit {
-		intersection = []Intersection{Intersection{tMin, o}, Intersection{tMax, o}}
+		intersection = []Intersection{Intersection{t: tMin, object: o}, Intersection{t: tMax, object: o}}
 	}
 
 	return intersection

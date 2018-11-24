@@ -63,7 +63,7 @@ func (c Cube) Intersection(ray Ray) []Intersection {
 
 		hit := tMax > tMin
 		if hit {
-			intersection = []Intersection{Intersection{tMin, c}, Intersection{tMax, c}}
+			intersection = []Intersection{Intersection{t: tMin, object: c}, Intersection{t: tMax, object: c}}
 		}
 
 		return

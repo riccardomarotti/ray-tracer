@@ -91,12 +91,12 @@ func (cylinder Cylinder) Intersection(r Ray) []Intersection {
 
 		y0 := r.origin.y + t0*r.direction.y
 		if (cylinder.minimum) < y0 && y0 < cylinder.maximum {
-			intersections = append(intersections, Intersection{t0, cylinder})
+			intersections = append(intersections, Intersection{t: t0, object: cylinder})
 		}
 
 		y1 := r.origin.y + t1*r.direction.y
 		if cylinder.minimum < y1 && y1 < cylinder.maximum {
-			intersections = append(intersections, Intersection{t1, cylinder})
+			intersections = append(intersections, Intersection{t: t1, object: cylinder})
 		}
 
 		return
@@ -117,12 +117,12 @@ func (cylinder Cylinder) intersectCaps(ray Ray, intersections []Intersection) []
 
 	t := (cylinder.minimum - ray.origin.y) / ray.direction.y
 	if checkCap(ray, t) {
-		newIntersections = append(newIntersections, Intersection{t, cylinder})
+		newIntersections = append(newIntersections, Intersection{t: t, object: cylinder})
 	}
 
 	t = (cylinder.maximum - ray.origin.y) / ray.direction.y
 	if checkCap(ray, t) {
-		newIntersections = append(newIntersections, Intersection{t, cylinder})
+		newIntersections = append(newIntersections, Intersection{t: t, object: cylinder})
 	}
 
 	return append(intersections, newIntersections...)

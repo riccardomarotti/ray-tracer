@@ -8,8 +8,8 @@ import (
 const Epsilon = 0.00001
 
 type Intersection struct {
-	t      float64
-	object Object
+	t, u, v float64
+	object  Object
 }
 
 func Hit(i []Intersection) (hit Intersection) {

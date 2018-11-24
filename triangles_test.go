@@ -69,3 +69,17 @@ func TestTriangleMaterial(t *testing.T) {
 
 	Assert(m == triangle.Material(), "", t)
 }
+
+func TestIntersectionStoresUandV(t *testing.T) {
+	p1 := Point(0, 1, 0)
+	p2 := Point(-1, 0, 0)
+	p3 := Point(1, 0, 0)
+
+	tri := MakeTriangle(p1, p2, p3, Identity(), DefaultMaterial())
+	r := Ray{Point(-0.2, 0.3, -2), Vector(0, 0, 1)}
+
+	xs := tri.Intersection(r)
+
+	AssertEqual(0.45, xs[0].u, t)
+	AssertEqual(0.25, xs[0].v, t)
+}

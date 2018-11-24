@@ -74,7 +74,7 @@ func (t Triangle) Intersection(r Ray) []Intersection {
 				originCrossE1 := p1ToOrigin.Cross(t.e1)
 				v := f * transformedRay.direction.Dot(originCrossE1)
 				if v >= 0 && (u+v) <= 1 {
-					intersections = append(intersections, Intersection{t: f * t.e2.Dot(originCrossE1), object: t})
+					intersections = append(intersections, Intersection{t: f * t.e2.Dot(originCrossE1), object: t, u: u, v: v})
 				}
 			}
 		}

@@ -53,8 +53,8 @@ func NormalToWorld(o Object, v Tuple) Tuple {
 }
 
 func BoundsToWorld(o Object, b Bounds) Bounds {
-	min := o.Transform().Inverse().MultiplyByTuple(b.min)
-	max := o.Transform().Inverse().MultiplyByTuple(b.max)
+	min := o.Transform().MultiplyByTuple(b.min)
+	max := o.Transform().MultiplyByTuple(b.max)
 
 	bounds := Bounds{min, max}
 

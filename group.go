@@ -6,18 +6,19 @@ import (
 )
 
 type Group struct {
-	baseObject BaseObject
-	children   []Object
-	parent     *Group
-	bounds     Bounds
+	baseObject        BaseObject
+	children          []Object
+	parent            *Group
+	bounds            Bounds
+	ignoreBoundingBox bool
 }
 
 func MakeGroup(transform Matrix) *Group {
-	return &Group{BaseObject{transform, DefaultMaterial()}, []Object{}, nil, Bounds{}}
+	return &Group{BaseObject{transform, DefaultMaterial()}, []Object{}, nil, Bounds{}, false}
 }
 
 func MakeGroupInGroup(transform Matrix, parent *Group) *Group {
-	g := &Group{BaseObject{transform, DefaultMaterial()}, []Object{}, parent, Bounds{}}
+	g := &Group{BaseObject{transform, DefaultMaterial()}, []Object{}, parent, Bounds{}, false}
 	parent.AddChildren(g)
 	return g
 }
@@ -55,9 +56,11 @@ func (g Group) Intersection(r Ray) []Intersection {
 		return intersections
 	}
 
-	boundingBoxIntersections := g.bounds.Intersection(r, g)
-	if len(boundingBoxIntersections) == 0 {
-		return []Intersection{}
+	if !g.ignoreBoundingBox {
+		boundingBoxIntersections := g.bounds.Intersection(r, g)
+		if len(boundingBoxIntersections) == 0 {
+			return []Intersection{}
+		}
 	}
 
 	return g.baseObject.Intersection(r, localIntersect)

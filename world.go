@@ -40,16 +40,8 @@ func WorldWithAmbientSetTo(a float64) World {
 
 func (w World) Intersect(ray Ray) []Intersection {
 	var intersections []Intersection
-	channel := make(chan []Intersection)
 	for _, object := range w.objects {
-		go func(o Object) {
-			channel <- o.Intersection(ray)
-		}(object)
-
-	}
-
-	for i := 0; i < len(w.objects); i++ {
-		intersections = append(intersections, <-channel...)
+		intersections = append(intersections, object.Intersection(ray)...)
 	}
 
 	sort.Slice(intersections, func(i, j int) bool {

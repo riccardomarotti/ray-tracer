@@ -50,12 +50,19 @@ func (c Camera) RayForPixel(x, y float64) Ray {
 	return Ray{origin, direction}
 }
 
-func (c Camera) Render(w World) Canvas {
+func (c Camera) Render(w World, showProgress bool) Canvas {
 	image := MakeCanvas(c.hsize, c.vsize)
 
 	totalPixelCount := c.vsize * c.hsize
 	currentPixelCount := 0
-	l := log.New(os.Stderr, "", 0)
+	var l *log.Logger
+	if showProgress {
+		l = log.New(os.Stderr, "", 0)
+	} else {
+		logfile, _ := os.Open(os.DevNull)
+		defer logfile.Close()
+		l = log.New(logfile, "", 0)
+	}
 	l.Printf("%d / %d", currentPixelCount, totalPixelCount)
 	var wg sync.WaitGroup
 	for y := 0; y < c.vsize; y++ {

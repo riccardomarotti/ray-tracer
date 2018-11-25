@@ -11,4 +11,6 @@ This image shows the current development progress:
 
 ![](example.png?raw=true)
 
+The pumpkin is taken from here: https://groups.csail.mit.edu/graphics/classes/6.837/F03/models/
+
 https://github.com/larspensjo/Go-simplex-noise is used for [Simplex Noise](https://en.wikipedia.org/wiki/Simplex_noise).

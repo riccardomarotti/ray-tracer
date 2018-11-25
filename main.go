@@ -100,7 +100,7 @@ func hexagonSide(g *Group, transform Matrix, material Material) *Group {
 	side := MakeGroupInGroup(transform, g)
 	hexagonCorner(side, material)
 	hexagonEdge(side, material)
-
+	side.ignoreBoundingBox = true
 	return side
 }
 
@@ -111,5 +111,6 @@ func hexagon(transform Matrix, material Material) Object {
 		hexagonSide(hex, Identity().RotateY(float64(i)*math.Pi/3), material)
 	}
 
+	hex.ignoreBoundingBox = true
 	return hex
 }

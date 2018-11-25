@@ -70,7 +70,7 @@ func ParseObjString(input string, transform Matrix, material Material) (output O
 				vertices := []Tuple{}
 				normals := []Tuple{}
 				for i := 1; i < len(values); i++ {
-					XXX := func(a string) (i1, i3 int64) {
+					getIndexes := func(a string) (i1, i3 int64) {
 						v := strings.Split(a, "/")
 						i1, _ = strconv.ParseInt(v[0], 10, 64)
 						if len(v) > 2 {
@@ -81,7 +81,7 @@ func ParseObjString(input string, transform Matrix, material Material) (output O
 						return i1, i3
 					}
 
-					tIndex, nIndex := XXX(values[i])
+					tIndex, nIndex := getIndexes(values[i])
 					vertices = append(vertices, output.vertices[tIndex])
 					normals = append(normals, output.normals[nIndex])
 				}
